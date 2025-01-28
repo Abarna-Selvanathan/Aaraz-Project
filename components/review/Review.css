@@ -1,0 +1,147 @@
+.review {
+    background-color: #f5f0fa;
+    list-style: none;
+    padding: 10px;
+    max-width: 30%;
+    border-radius: 10px;
+    text-align: center;
+    margin: 30px auto; 
+    position: relative;
+  }
+  
+  .reviewButton button {
+    margin-top: 20px;
+    margin: 2%;
+    display: inline-block;
+    background-color: #4c394f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  
+  }
+  
+  .reviewButton button:hover {
+    background-color: #BCB8CE;
+    color: #4C394F;
+    font-weight: bold;
+  }
+  
+  .rating {
+    background-color: #f5f0fa;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px #BCB8CE;
+    padding: 20px;
+    text-align: center;
+    max-width: 30%; 
+    margin: 30px auto; 
+  }
+  
+  .rating h2 {
+    font-size: 2rem;
+    color: #4C394F;
+    margin-bottom: 10px;
+  }
+  
+  .rating p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 15px; 
+  }
+  .rating .stars {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px; 
+  }
+  .rating .star {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .rating .star:hover {
+    color: #f39c12;
+  }
+  
+  .rating .star.selected {
+    color: #f39c12;
+  }
+  
+  .rating .submit-rating {
+    background-color: #4C394F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .rating .submit-rating:hover {
+    background-color: #BCB8CE;
+    color: #4C394F;
+    font-weight: bold;
+  }
+  
+  .recommendtext {
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px #BCB8CE;
+    padding: 40px; 
+    text-align: center;
+    max-width: 30%; 
+    margin: 30px auto;
+  }
+  .recommend-textarea::placeholder {
+    color: #bcb8ce;
+    font-size: 0.9rem;
+  }
+  .recommend-textarea {
+    width: 90%;
+    height: 100px;
+    margin-top: 10px; 
+    padding: 10px; 
+    font-size: 1rem;
+    border: 1px solid #4c394f;
+    border-radius: 5px;
+    resize: none;
+  }
+  
+  .recommend-textarea:focus {
+    outline: none;
+    border: 1px solid #4C394F;
+  }
+  
+  .submit-comment {
+    background-color: #4C394F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-comment:hover {
+    background-color: #BCB8CE;
+    color: #4C394F;
+    font-weight: bold;
+  }
+  
+  .reviews {
+    text-align: center;
+    color: #4C394F;
+  }
+  
+  .reviews h1 {
+    font-size: 3rem; 
+    color: #4C394F;
+    margin-bottom: 20px; 
+  }

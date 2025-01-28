@@ -1,0 +1,223 @@
+.ProductReview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 2%;
+    gap: 3%;
+  }
+  
+  .Illustrationimg img {
+    border-radius: 10px;
+    margin-right: 20px;
+  }
+  
+  .Illustrationimg img:hover{
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px #BCB8CE;
+  }
+  
+  
+  
+  .Illustrationtext h1 {
+    font-size: 3rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .Illustrationtext .stock {
+    color: #4CAF50;
+    font-size: 2rem;
+    margin:1%;
+    
+  }
+  
+  .Illustrationtext .price {
+    font-size: 2rem;
+    font-weight: bold;
+    margin:1%;
+  }
+  
+  .Illustrationtext .Quantity {
+    font-size: 1.3rem;
+    margin:1%;
+    
+  }
+  
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    margin:1% ;
+  }
+  
+  #quantity {
+    width: 70px;
+    text-align: center;
+    font-size: 1.5rem;
+    border: 1px solid #BCB8CE;
+    border-radius: 5px;
+    background-color: #BCB8CE;
+  }
+  
+  .buttons {
+    display: grid;
+    gap: 15px;
+    padding: 10px;
+  }
+  
+  .add-to-cart {
+    background-color: #bcb8ce;
+    color: #4c394f;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-to-cart:hover {
+    background-color: #4C394F;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .buy-now {
+    padding: 10px 20px;
+    background-color: #4C394F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: background-color 0.3s ease;
+    
+  }
+  
+  .buy-now:hover {
+    background-color: #BCB8CE;
+    color: #4C394F;
+    font-weight: bold;
+  }
+  
+  .Related {
+    border-radius: 10px;
+    margin: 10% 20%;
+    
+  }
+  
+  
+  .RelatedCollections h1 {
+    font-size: 2.5rem;
+    margin: 3% 0;
+    
+    text-align: center;
+    color: #4c394f;
+  }
+  
+  .Relatedproducts {
+    display: grid;
+    gap: 2%;
+    grid-template-columns: 1fr 1fr 1fr ;
+    padding: 0 10%;
+  }
+  
+  .Relatedproduct {
+    background-color: #f5f0fa;
+    border: 1px solid #BCB8CE;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px #BCB8CE;
+    text-align: center;
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  }
+  
+  .Relatedproduct:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px #BCB8CE;
+  }
+  
+  .Relatedproduct img {
+  
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .Relatedproduct h3 {
+    font-size: 1.2rem;
+    color: #4C394F;
+    margin-bottom: 5px;
+  }
+  
+  .Relatedproduct p {
+    font-size: 1rem;
+    color: #4C394F;
+  }
+  
+  
+  
+  .RelatedDetails {
+    flex: 1;
+    float: right;
+    margin: 0 20%;
+    
+  }
+  
+  .Relatedtext , a{
+    list-style: none;
+    
+    font-size: 1.3rem;
+    color: #4C394F;
+  }
+  
+  .Relatedtext li {
+    margin: 10px 0;
+  }
+  
+  .Relatedtext  p {
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    transition: color 0.3s;
+  }
+  
+  .Relatedtext  p:hover {
+    text-decoration: underline;
+  
+  }
+  .Relatedtext  div {
+    display: none;
+    margin-top: 5px;
+    color: #555;
+  }
+  
+  .Relatedtext .open div {
+    display: block;
+  }
+
+  .home-icons{
+    display: flex;
+    justify-content: space-between;
+    
+  }
+  .buy-now {
+    padding: 6px 11px;
+    background-color: #4C394F;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+    
+  }
+  
+  .buy-now:hover {
+    background-color: #BCB8CE;
+    color: #4C394F;
+    font-weight: bold;
+  }
+  
+  

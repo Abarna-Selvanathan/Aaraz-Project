@@ -1,0 +1,287 @@
+ /* payment page */
+
+ .payment-container {
+  max-width: 60%;
+  margin: 20px auto;
+  padding: 20px;
+  color: #4c394f;
+  background-color: #f6f0ff;
+  border-radius: 10px;
+}
+
+.payment-form section {
+  margin-bottom: 20px;
+}
+/* contact */
+.contact {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  
+
+}
+.contact a {
+  text-decoration: none;
+  color: #4c394f;
+  font-size: 2rem;
+  margin-top: 13px;
+  display: inline-block;
+}
+.contact a:hover{
+  text-decoration: underline;
+  font-weight: bold;
+}
+.contact-section h3{
+  font-size: 2rem;
+  margin-bottom: 10px;
+  margin-right:80% ;
+
+}
+.contact-section input{
+  width: 98%;
+  
+}
+/* delivery */
+.delivery-section {
+  padding: 0;
+  border-radius: 10px;
+  width: 100%;
+  margin: 0;
+}
+
+.delivery-section h3 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  margin-right:80% ;
+
+}
+
+.delivery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.names {
+  display: flex;
+  gap: 15px;
+  
+}
+.city-grid {
+  display: flex;
+  gap: 15px;
+}
+
+.input-field-address-field, .input-field-phone-field{
+  width: 96.5%;
+  padding: 10px 19px; 
+  border: 1px solid #4c394f;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: white; 
+  
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #4c394f;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: white; 
+  
+}
+
+.input-field::placeholder {
+  color: #bcb8ce;
+  font-size: 0.9rem;
+}
+.input-field-address-field::placeholder, .input-field-phone-field::placeholder{
+  color: #bcb8ce;
+  font-size: 0.9rem;
+}
+.save-info {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+
+}
+/* save-info */
+.save-info input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  margin-bottom: 8%;
+}
+.save-info label {
+  font-size: 1.1rem;
+  color: #5c4d6f;
+  cursor: pointer;
+  padding-bottom: 8%;
+  margin: 0%;
+}
+/* payment method */
+
+.payment-method-section h3{
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  margin-right:80% ;
+  width: 40%;
+  
+}
+.payment-methods {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.payment-method {
+  flex: 1;
+  padding: 10px;
+  background-color: #e0d9ed;
+  color: #4c394f;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.payment-method:hover {
+  background-color: #4c394f;
+  color: white;
+  font-weight: bold;
+}
+.card-details{
+  background-color: #e0d9ed;
+  padding: 5%;
+  margin-bottom: 4%;
+  border-radius: 5px;
+}
+.card-details .input-field {
+  margin-bottom: 10px;
+}
+
+.input-field-card{
+  width: 100%;
+  padding: 1%;
+  margin: 1% 0;
+  border: 1px solid #4c394f;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: white; 
+}
+.input-field-card::placeholder {
+  color: #bcb8ce;
+  font-size: 0.9rem;
+}
+
+.pay-now-button {
+  width: 50%;
+  padding: 1% 5%;
+  background-color: #4C394F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 2rem;
+  transition: background-color 0.3s ease;
+  margin-left: 25%;
+}
+
+.pay-now-button:hover {
+  background-color: #bcb8ce;
+  color: #4c394f;
+  font-weight: bold;
+}
+
+/* Order Summary Section */
+.order-summary-section {
+    padding: 20px;
+    color: #4c394f;
+    background-color: #f6f0ff;
+    border-radius: 10px;
+}
+
+.order-summary-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #4c394f;
+    text-align: left;
+}
+
+.summary-order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.image-container {
+    position: relative;
+}
+
+.image-container img {
+    margin-left: 10%;
+    border-radius: 5px;
+
+}
+
+.summary-qty {
+    position: absolute;
+    top: -10px;
+    right: -20px;
+    background-color: #4c394f;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+}
+
+.item-title {
+    flex: 1;
+    margin-left: 5%;
+    font-size: 2rem;
+    color: #4c394f;
+}
+
+.item-price {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-right: 10%;
+    color: #4c394f;
+}
+
+.discount-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.apply-button {
+    padding: 0px 20px;
+    margin: 0;
+    background-color: #bcb8ce;
+    color: #4c394f;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.apply-button:hover {
+    background-color: #4c394f;
+    color: #fff;
+    font-weight: bold;
+}
+
+.total-section {
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #4c394f;
+    margin-left: 1%;
+}

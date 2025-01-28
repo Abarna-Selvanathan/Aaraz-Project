@@ -1,0 +1,28 @@
+.terms-conditions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2% 0;  
+    
+
+}
+.terms-conditions h1 {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 2%;
+    font-size: 3rem;
+}
+
+.terms-conditions-parah {
+    
+    font-size: 1.5rem;
+    text-align: left; 
+    width: 35%; 
+}
+
+.terms-conditions-parah p::before {
+    content: "-"; 
+    color: #4C394F; 
+    padding-right: 5px;
+  }
+  

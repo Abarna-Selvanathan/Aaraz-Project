@@ -1,0 +1,147 @@
+body {
+    margin: 0;
+    padding: 0;    font-family: 'poppins';
+    background-color: #DBD9E8;
+    color: #4C394F;
+    height: 100vh; 
+  }
+  
+  
+  /* Sidebar */
+  .sidebar {
+    width: 300px;
+    height: 500px;
+    background-color: #f5f0fa;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+  
+  }
+  
+  .sidebar h1 {
+    font-size: 24px;
+    padding: 20px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+  }
+  
+  .sidebar ul li {
+    padding: 15px 20px;
+    cursor: pointer;
+    font-size: 2rem;
+  }
+  
+  .sidebar ul li:hover {
+    background-color: #DBD9E8;
+    font-weight: bold;
+  }
+  
+  /* Admin Footer */
+  .sidebar .admin-footer {
+    margin-top: auto;
+    padding: 15px 20px;
+    border-top: 1px solid #ddd;
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+  }
+  .topbar-logo img{
+    border-radius: 48%;
+    margin: 1%;
+    margin-left: 10vw;
+  }
+  .top-bar {
+    background-color: #f5f0fa;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .top-bar input[type="search"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10vw;
+  }
+  .home{
+    display: flex;
+    justify-content: space-between;
+  
+  }
+  .background{
+    background-color: #f5f0fa;
+    width: 85vw;
+    height: 23.1vw;
+    margin-top: 0.8vw;
+    margin-left: 0.8vw;
+  
+    flex: 1;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  
+  .background-products{
+    background-color: #f5f0fa;
+    width: 85vw;
+    height: 37vw;
+    margin-top: 0.8vw;
+    margin-left: 0.8vw;
+  
+    flex: 1;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .table-container {
+    margin: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+  
+  .user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 16px;
+    text-align: left;
+  }
+  
+  .user-table thead {
+    background-color: #f5f0fa;
+    border-bottom: 2px solid #4C394F;
+  }
+  
+  .user-table th,
+  .user-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+  }
+  
+  .user-table th {
+    font-weight: bold;
+    color: #4C394F;
+    background-color: #DBD9E8;
+    border-color:#4C394F ;
+    padding: 20px 20px;
+  }
+  .user-table td {
+    border-color:#4C394F ;
+    padding: 20px 0;
+  }
+  
+  
+  .user-table tbody tr:hover {
+    background-color: #DBD9E8;
+  }
+  
