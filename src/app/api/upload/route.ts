@@ -16,7 +16,7 @@ interface ProductData {
   description:string;
   price:number;
   stock:number; 
-  productType:string, 
+  productType:string,  
   image:string;
 }
 
