@@ -18,7 +18,7 @@ const Home: React.FC = () => {
     const fetchUser = async () => {
       try {
         const { data } = await axios.get('/api/cookie');
-        console.log(data)
+        console.log(data) 
         setType(data?.user?.userType)
         
       } catch (error) {
@@ -59,14 +59,14 @@ const Home: React.FC = () => {
   return (
     <div>
       {/* Hero Section */}
-      <div className="hero">
+      {/* <div className="hero">
         <Image 
           src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622755/AARAZ/Image/k4n4ljjhyl6wgmsq2bmd.png" 
           alt="Personalized Gift" 
           width={1920} 
           height={500} 
         />
-      </div>
+      </div> */}
       
       {/* New Launch Section */}
       <section className="section">
@@ -74,7 +74,7 @@ const Home: React.FC = () => {
         <div className="cards">
           {products.slice(0, 4).map((product) => (
             <div className="card" key={product._id}>
-              <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/rexnx5hnev2xys9v0om0.jpg" alt={product.name} width={300} height={300} />
+              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/rexnx5hnev2xys9v0om0.jpg" alt={product.name} width={300} height={300} /> */}
               <h3>{product.productName}</h3>
               <p>Rs {product.price}</p>
               <div className='home-icons'>
@@ -101,7 +101,7 @@ const Home: React.FC = () => {
         <div className="cards">
           {products.slice(0, 4).map((product) => (
             <div className="card" key={product._id}>
-              <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/rexnx5hnev2xys9v0om0.jpg" alt={product.name} width={300} height={300} />
+              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/rexnx5hnev2xys9v0om0.jpg" alt={product.name} width={300} height={300} /> */}
               <div className="saleprice">20%</div>
               <h3>{product.productName}</h3>
               <p>Rs {product.price}</p>
@@ -129,28 +129,28 @@ const Home: React.FC = () => {
         <div className="Collections-cards">
           <div className="card">
             <Link href="/handmadegift">
-              <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622755/AARAZ/Image/krmdhti2gqths6tjiypa.jpg" alt="Handmade Gifts" width={300} height={300} />
+              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622755/AARAZ/Image/krmdhti2gqths6tjiypa.jpg" alt="Handmade Gifts" width={300} height={300} /> */}
               <h3>Handmade Gifts</h3>
             </Link>
           </div>
 
           <div className="card">
             <Link href="/resinart">
-              <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622745/AARAZ/Image/qtuuvauj6cczi01x7pn5.jpg" alt="Resin Arts" width={300} height={300} />
+              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622745/AARAZ/Image/qtuuvauj6cczi01x7pn5.jpg" alt="Resin Arts" width={300} height={300} /> */}
               <h3>Resin Arts</h3>
             </Link>
           </div>
 
           <div className="card">  
             <Link href="/frame">
-              <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/rexnx5hnev2xys9v0om0.jpg" alt="Frames" width={300} height={300} />
+              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/rexnx5hnev2xys9v0om0.jpg" alt="Frames" width={300} height={300} /> */}
               <h3> Frames</h3>
             </Link>
           </div>
 
           <div className="card">
             <Link href="/walletcard">
-              <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622748/AARAZ/Image/xhh06ijphbytc8hhcfc6.png" alt="Wallet Cards" width={300} height={300} />
+              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622748/AARAZ/Image/xhh06ijphbytc8hhcfc6.png" alt="Wallet Cards" width={300} height={300} /> */}
               <h3>Wallet Cards</h3>
             </Link>
           </div>

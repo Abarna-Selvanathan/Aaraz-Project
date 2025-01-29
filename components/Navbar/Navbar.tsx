@@ -20,22 +20,26 @@ const Navbar: React.FC = () => {
   const [search, setSearch] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
 
+  const [savedUserId, setSavedUserId] = useState(null);
+  const [error, setError] = useState(null);
+  
   useEffect(() => {
     const getUser = async () => {
       try {
-        const token = await axios.get('/api/cookie');
-        const savedUserId = token.id
-        console.log(savedUserId)
-      } catch (error) {
-        
+        const response = await axios.get('/api/cookie');
+        console.log(response)
+        const userId = response.data.user;
+        setSavedUserId(userId);
+        console.log(userId);
+      } catch (error: any) {
+        setError(error);
+        console.error('Failed to fetch user data:', error);
       }
-    }
+    };
 
     getUser();
-  }, [])
+  }, []);
 
-
-  // Define the state for controlling dropdown visibility
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [collectionDropdownOpen, setCollectionDropdownOpen] = useState(false);
 
