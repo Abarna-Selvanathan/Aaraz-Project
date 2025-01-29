@@ -13,7 +13,7 @@ cloudinary.v2.config({
 interface ProductData {
   productName: string;
   description: string;
-  price: string;  // Price will be a string from the frontend, we will parse it to number later
+  price: number;
   stock: string;
   productType: string;
   image: string;
@@ -24,21 +24,12 @@ export async function POST(req: NextRequest) {
   try {
     // Parse JSON body data from the request
     const body = await req.json();
-    const { productName, description, price, stock, image, productType }: ProductData = body.data;
+    const { productName, description, price, stock, productType, image }: ProductData = body.data;
 
     // Validate required fields
     if (!productName || !price || !image) {
       return new Response(
-        JSON.stringify({ error: 'Missing product details: productName, price, or image' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Validate price (ensure it's a number)
-    const parsedPrice = parseFloat(price); // Parse the price string to a number
-    if (isNaN(parsedPrice)) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid price value' }),
+        JSON.stringify({ error: 'Missing required fields: productName, price, or image' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -47,18 +38,28 @@ export async function POST(req: NextRequest) {
     await DBconnect();
 
     // Upload the base64 image to Cloudinary
-    const uploadResponse = await cloudinary.v2.uploader.upload(image, {
-      folder: 'Aaraz',
-    });
+    let uploadedImageUrl = '';
+    try {
+      const uploadResponse = await cloudinary.v2.uploader.upload(image, {
+        folder: 'Aaraz',
+      });
+      uploadedImageUrl = uploadResponse.secure_url;
+    } catch (uploadError) {
+      console.error('Cloudinary upload error:', uploadError);
+      return new Response(
+        JSON.stringify({ error: 'Image upload failed. Please try again.' }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Save product details to MongoDB
     const newProduct = await Product.create({
       productName,
       description,
-      price: parsedPrice, // Store price as a number
+      price, // Already a number from frontend
       stock,
       productType,
-      image: uploadResponse.secure_url, // URL of the uploaded image
+      image: uploadedImageUrl, // URL of the uploaded image
     });
 
     // Return success response
@@ -68,7 +69,6 @@ export async function POST(req: NextRequest) {
     );
   } catch (error: any) {
     console.error('Error uploading product:', error.message);
-    // Return error response with more specific messages
     return new Response(
       JSON.stringify({
         error: 'Failed to upload product',

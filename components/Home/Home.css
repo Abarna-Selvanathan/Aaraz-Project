@@ -2,7 +2,7 @@
 .section {
     margin: 20px 0;
     padding: 20px;
-    background-color: #f5f0fa;
+    /* background-color: #f5f0fa; */
     box-shadow: 0 2px 8px #BCB8CE(0, 0, 0, 0.1);
   }
   .section h1 , .Collections-section h1{

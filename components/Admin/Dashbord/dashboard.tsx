@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+
 import Image from 'next/image';
-// import jwt, { JwtPayload } from "jsonwebtoken";
-import Link from 'next/link';
+import Logo from "../../../public/Image/logo.png"
 import '../../../components/Admin/Dashbord/dashboard.css';
 import Users from '../User/user';
 import Payments from "@/pages/admin/payment";
@@ -19,38 +21,88 @@ const Dashboard: React.FC = () => {
   const [isProductOpen, setIsProductOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [isOrderOpen, setIsOrderOpen] = useState(false);
+  const [isDeliveryOpen, setIsDeliveryOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
-  const [isDeliveryOpen, setIsDeliveryOpen] = useState(false);
+  const [userType, setType] = useState("admin");
+  
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchUser = async () => {
+      try {
+        const { data } = await axios.get('/api/cookie');
+        console.log(data) 
+        setType(data?.user?.userType)
+        
+      } catch (error) {
+       
+      }
+    };
+    fetchUser();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const router = useRouter();
+
+  if (userType === 'customer') {
+    router.push('/')
+  }
 
   const handleUser = () => {
     setIsUserOpen(true);
     setIsAnalyticsOpen(false);
+    setIsProductOpen(false);
+    setIsOrderOpen(false);
+    setIsDeliveryOpen(false);
     setIsPaymentOpen(false)
   };
 
   const handleAnalytic = () => {
     setIsUserOpen(false);
     setIsAnalyticsOpen(true);
+    setIsAnalyticsOpen(false);
+    setIsProductOpen(false);
+    setIsOrderOpen(false);
+    setIsDeliveryOpen(false);
+    setIsPaymentOpen(false)
   };
 
   const handleProduct = () => {
     setIsProductOpen(true);
     setIsAnalyticsOpen(false);
+    setIsUserOpen(false);
+    setIsOrderOpen(false);
+    setIsDeliveryOpen(false);
+    setIsPaymentOpen(false)
   };
 
   const handlePayment = () => {
     setIsPaymentOpen(true);
     setIsAnalyticsOpen(false);
+    setIsUserOpen(false);
+    setIsProductOpen(false);
+    setIsOrderOpen(false);
+    setIsDeliveryOpen(false)
   };
   const handleOrder = () => {
     setIsOrderOpen(true);
     setIsAnalyticsOpen(false);
+    setIsUserOpen(false);
+    setIsProductOpen(false);
+    setIsDeliveryOpen(false);
+    setIsPaymentOpen(false)
   };
 
   const handleDelivery = () => {
     setIsDeliveryOpen(true);
     setIsAnalyticsOpen(false);
+    setIsUserOpen(false);
+    setIsProductOpen(false);
+    setIsOrderOpen(false);
+    setIsPaymentOpen(false)
   };
 
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
@@ -74,12 +126,12 @@ const Dashboard: React.FC = () => {
     <div className="main-content">
       <div className="top-bar">
         <div className="topbar-logo">
-          {/* <Image
-            src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622745/AARAZ/Image/jxccsnz9anadyjr7qqeb.png"
+          <Image
+            src={Logo}
             alt="Logo"
             width={100}
             height={100}
-          /> */}
+          />
         </div>
         <input type="search" placeholder="Search..." />
       </div>
@@ -132,7 +184,7 @@ const Dashboard: React.FC = () => {
 
         {isUserOpen && <Users />}
         
-        {/* {isProductOpen && <Product/>} */}
+        {isProductOpen && <Product/>}
         {isPaymentOpen && <Payments/>}
         {isOrderOpen && <Orders/>}
         {isDeliveryOpen && <DeliveryDetails/>}

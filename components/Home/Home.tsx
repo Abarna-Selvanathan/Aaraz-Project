@@ -10,51 +10,50 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
 const Home: React.FC = () => {
-  
-  const [products, setProducts] = useState<any[]>([]); 
-  const [userType, setType] = useState("customer");
+  const [products, setProducts] = useState<any[]>([]);
+  const [userType, setUserType] = useState<string>("customer");
+  const router = useRouter();
+
+  // Fetch User Data
   useEffect(() => {
-    let isMounted = true;
     const fetchUser = async () => {
       try {
         const { data } = await axios.get('/api/cookie');
-        console.log(data) 
-        setType(data?.user?.userType)
-        
+        console.log("User Data:", data);
+        if (data?.user?.userType) {
+          setUserType(data.user.userType);
+        }
       } catch (error) {
-       
+        console.error("Error fetching user:", error);
       }
     };
     fetchUser();
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
-  const router = useRouter();
+  // Redirect Admin to Dashboard
+  useEffect(() => {
+    if (userType === 'admin') {
+      router.push('/admin/dashboard');
+    }
+  }, [userType]); // Run this effect when userType changes
 
-  if (userType === 'admin') {
-    router.push('/admin/dashboard')
-  }
+  // Fetch Products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/product'); // Corrected the API endpoint to /api/products
+        const response = await fetch('/api/product');
         const data = await response.json();
-        setProducts(data); 
+        setProducts(data.products); // ✅ Ensure correct API response handling
       } catch (error: any) {
-        console.error('Error feabarnarohanabarnarohantching products:', error.message);
+        console.error('Error fetching products:', error.message);
       }
     };
-  
     fetchProducts();
   }, []);
-  const handleBuyNow = () => {
-    // console.log(`Proceed to checkout with ${quantity} items.`);
-    // Replace with actual buy-now logic.
-  };
 
-  
+  const handleBuyNow = () => {
+    console.log(`Proceed to checkout`);
+  };
 
   return (
     <div>
@@ -74,25 +73,24 @@ const Home: React.FC = () => {
         <div className="cards">
           {products.slice(0, 4).map((product) => (
             <div className="card" key={product._id}>
-              <Image src={product.image} alt={product.name} width={300} height={300} />
+              {product.image && (
+                <Image src={product.image} alt={product.productName} width={300} height={300} />
+              )}
               <h3>{product.productName}</h3>
               <p>Rs {product.price}</p>
               <div className='home-icons'>
                   <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
+                    <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem' }}></div>
                   </Link>
                   <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
+                    <div className="buttons">
+                      <button className="buy-now" onClick={handleBuyNow}>Buy Now</button>
+                    </div>
                   </Link>
                 </div>
             </div>
           ))}
         </div>
-        
       </section>
 
       {/* Offers Section */}
@@ -101,26 +99,22 @@ const Home: React.FC = () => {
         <div className="cards">
           {products.slice(0, 4).map((product) => (
             <div className="card" key={product._id}>
-              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/rexnx5hnev2xys9v0om0.jpg" alt={product.name} width={300} height={300} /> */}
               <div className="saleprice">20%</div>
               <h3>{product.productName}</h3>
               <p>Rs {product.price}</p>
               <div className='home-icons'>
                   <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
+                    <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem' }}></div>
                   </Link>
                   <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
+                    <div className="buttons">
+                      <button className="buy-now" onClick={handleBuyNow}>Buy Now</button>
+                    </div>
                   </Link>
                 </div>
             </div>
           ))}
         </div>
-        
       </section>
 
       {/* Collections Section */}
@@ -129,28 +123,21 @@ const Home: React.FC = () => {
         <div className="Collections-cards">
           <div className="card">
             <Link href="/handmadegift">
-              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622755/AARAZ/Image/krmdhti2gqths6tjiypa.jpg" alt="Handmade Gifts" width={300} height={300} /> */}
               <h3>Handmade Gifts</h3>
             </Link>
           </div>
-
           <div className="card">
             <Link href="/resinart">
-              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622745/AARAZ/Image/qtuuvauj6cczi01x7pn5.jpg" alt="Resin Arts" width={300} height={300} /> */}
               <h3>Resin Arts</h3>
             </Link>
           </div>
-
           <div className="card">  
             <Link href="/frame">
-              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/rexnx5hnev2xys9v0om0.jpg" alt="Frames" width={300} height={300} /> */}
               <h3> Frames</h3>
             </Link>
           </div>
-
           <div className="card">
             <Link href="/walletcard">
-              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622748/AARAZ/Image/xhh06ijphbytc8hhcfc6.png" alt="Wallet Cards" width={300} height={300} /> */}
               <h3>Wallet Cards</h3>
             </Link>
           </div>

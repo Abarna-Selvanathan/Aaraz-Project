@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 export const POST = async (req: NextRequest)=> {
   try {
-    await DBconnect();
+    await DBconnect(); 
 
     // Parse and validate the request body
     const body = await req.json();

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import "../../Admin/Product-from/productfrom.css"; // Adjusted to your new path
+import "../../Admin/Product-from/productfrom.css";
 
 interface Product {
   productName: string;
   description: string;
   price: number;
-  stock: string;
+  stock: string;  // Keep stock as a string
   productType: string;
   image: string;
 }
@@ -21,7 +21,7 @@ export default function AddProduct() {
     productName: '',
     description: '',
     price: 0,
-    stock: '',
+    stock: '',  // Keep stock as string
     productType: '',
     image: '',
   });
@@ -50,6 +50,12 @@ export default function AddProduct() {
     e.preventDefault();
     setMessage('');
 
+    // // Validate stock (check if it's a valid number)
+    // if (!/^\d+$/.test(product.stock)) {
+    //   setMessage('Stock must be a valid number');
+    //   return;
+    // }
+
     try {
       const response = await fetch('/api/upload', {
         method: 'POST',
@@ -70,7 +76,7 @@ export default function AddProduct() {
           productName: '',
           description: '',
           price: 0,
-          stock: '',
+          stock: '',  // Reset stock as string
           productType: '',
           image: '',
         });
@@ -127,12 +133,18 @@ export default function AddProduct() {
         />
         <input
           type="text"
-          placeholder="Stock"
+          placeholder="Stock Status"
           value={product.stock}
           onChange={(e) => setProduct({ ...product, stock: e.target.value })}
           required
           className="inputField"
+          // list="stock-options"
         />
+        {/* <datalist id="stock-options">
+          <option value="In Stock" />
+          <option value="Out of Stock" />
+        </datalist> */}
+
         <button type="submit" className="submitButton">
           Add Product
         </button>

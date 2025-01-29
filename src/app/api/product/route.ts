@@ -2,20 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 import DBconnect from "../../../../lib/dbConnect";
 import Product from "../../../../models/Product"; 
 
-// Handle GET requests (Fetch all products)
-export const GET = async (): Promise<NextResponse> => {
+
+
+export const GET = async (req: NextRequest): Promise<NextResponse> => {
   try {
-    await DBconnect();
-    const products = await Product.find();
-    return NextResponse.json(products, { status: 201 });
-  } catch (error: unknown) {
-    console.error("Error fetching products:", (error as Error).message);
+    await DBconnect(); 
+
+    const products = await Product.find(); 
     return NextResponse.json(
-      { message: "Failed to fetch products.", error: (error as Error).message },
+      { products },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Error fetching products:", error.message);
+    return NextResponse.json(
+      { message: "Failed to fetch products.", error: error.message },
       { status: 500 }
-    ); 
+    );
   }
 };
+
 
 // Handle POST requests (Add a new Product)
 export const POST = async (req: NextRequest): Promise<NextResponse> => {
@@ -75,7 +81,7 @@ export const PATCH = async (req: NextRequest): Promise<NextResponse> => {
       { message: "Failed to update Product.", error: (error as Error).message },
       { status: 500 }
     );
-  }
+  } 
 };
 
 // Handle DELETE requests (Delete a Product)
