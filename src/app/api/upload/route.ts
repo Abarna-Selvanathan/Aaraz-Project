@@ -11,13 +11,12 @@ cloudinary.v2.config({
 });
 
 interface ProductData {
- 
   productName: string;
-  description:string;
-  price:number;
-  stock:number; 
-  productType:string,  
-  image:string;
+  description: string;
+  price: string;  // Price will be a string from the frontend, we will parse it to number later
+  stock: string;
+  productType: string;
+  image: string;
 }
 
 // Named POST export for the App Directory structure
@@ -25,12 +24,21 @@ export async function POST(req: NextRequest) {
   try {
     // Parse JSON body data from the request
     const body = await req.json();
-    const { productName,description, price, stock, image }: ProductData = body.data;
+    const { productName, description, price, stock, image, productType }: ProductData = body.data;
 
-    // Validate required fields 
+    // Validate required fields
     if (!productName || !price || !image) {
       return new Response(
         JSON.stringify({ error: 'Missing product details: productName, price, or image' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate price (ensure it's a number)
+    const parsedPrice = parseFloat(price); // Parse the price string to a number
+    if (isNaN(parsedPrice)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid price value' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -39,8 +47,7 @@ export async function POST(req: NextRequest) {
     await DBconnect();
 
     // Upload the base64 image to Cloudinary
-    const Image: string = image;
-    const uploadResponse = await cloudinary.v2.uploader.upload(Image, {
+    const uploadResponse = await cloudinary.v2.uploader.upload(image, {
       folder: 'Aaraz',
     });
 
@@ -48,8 +55,9 @@ export async function POST(req: NextRequest) {
     const newProduct = await Product.create({
       productName,
       description,
-      price,
+      price: parsedPrice, // Store price as a number
       stock,
+      productType,
       image: uploadResponse.secure_url, // URL of the uploaded image
     });
 
@@ -60,9 +68,12 @@ export async function POST(req: NextRequest) {
     );
   } catch (error: any) {
     console.error('Error uploading product:', error.message);
-    // Return error response
+    // Return error response with more specific messages
     return new Response(
-      JSON.stringify({ error: 'Failed to upload product', details: error.message }),
+      JSON.stringify({
+        error: 'Failed to upload product',
+        details: error.message || 'Unknown error',
+      }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }

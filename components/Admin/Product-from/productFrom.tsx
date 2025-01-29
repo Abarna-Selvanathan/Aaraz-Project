@@ -1,100 +1,143 @@
-import React, { useState } from "react";
-import axios from "axios";
-import "../../Admin/Product-from/productfrom.css"
-import "../../../src/app/globals.css";
+import { useState } from 'react';
+import Image from 'next/image';
+import "../../Admin/Product-from/productfrom.css"; // Adjusted to your new path
 
- 
+interface Product {
+  productName: string;
+  description: string;
+  price: number;
+  stock: string;
+  productType: string;
+  image: string;
+}
 
-const ProductForm = () => {
-  const [productName, setProductName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [stock, setStock] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+interface ApiResponse {
+  product?: Product;
+  error?: string;
+}
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+export default function AddProduct() {
+  const [product, setProduct] = useState<Product>({
+    productName: '',
+    description: '',
+    price: 0,
+    stock: '',
+    productType: '',
+    image: '',
+  });
+  const [preview, setPreview] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = (event: ProgressEvent<FileReader>) => {
+        const result = event.target?.result;
+        if (typeof result === 'string') {
+          setPreview(result); // Base64 string
+          setProduct((prevProduct) => ({
+            ...prevProduct,
+            image: result,
+          }));
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setMessage('');
 
     try {
-      if (!image) {
-        alert("Please upload an image");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("image", image);
-
-      const uploadResponse = await axios.post("/api/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: product }),
       });
 
-      const imageUrl = uploadResponse.data.url;
-
-      const productData = {
-        productName,
-        description,
-        price,
-        stock,
-        image: imageUrl,
-      };
-
-      const productResponse = await axios.post("/api/product", productData);
-
-      if (productResponse.status === 201) {
-        alert("Product added successfully!");
-        setProductName("");
-        setDescription("");
-        setPrice("");
-        setStock("");
-        setImage(null);
+      if (!response.ok) {
+        const result: ApiResponse = await response.json();
+        setMessage(result.error || 'Error adding product');
+        console.error(result.error);
+      } else {
+        const result: ApiResponse = await response.json();
+        setMessage('Product added successfully');
+        console.log('Product added:', result.product);
+        // Optionally, reset the form
+        setProduct({
+          productName: '',
+          description: '',
+          price: 0,
+          stock: '',
+          productType: '',
+          image: '',
+        });
+        setPreview('');
       }
-    } catch (error:any) {
-      console.error("Error adding product:", error.response || error);
-      alert("Failed to add the product. Please try again.");
+    } catch (err) {
+      setMessage('Error adding product');
+      console.error('Error:', err);
     }
   };
 
   return (
-    
-    <form onSubmit={handleSubmit} className="product-form">
-      <input
-        type="text"
-        placeholder="Product Name"
-        value={productName}
-        onChange={(e) => setProductName(e.target.value)}
-        required
-      />
-      <textarea
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        required
-      />
-      <input
-        type="number"
-        placeholder="Price"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-        required
-      />
-      <input
-        type="number"
-        placeholder="Stock"
-        value={stock}
-        onChange={(e) => setStock(e.target.value)}
-        required
-      />
-      <input type="file" onChange={handleFileChange} required />
-      <button type="submit">Add Product</button>
-    </form>
+    <div>
+      <h1 className="title">Add Product</h1>
+      <form onSubmit={handleSubmit} className="addProductForm">
+        <input
+          type="text"
+          placeholder="Product Name"
+          value={product.productName}
+          onChange={(e) => setProduct({ ...product, productName: e.target.value })}
+          required
+          className="inputField"
+        />
+        <input
+          type="number"
+          placeholder="Product Price"
+          value={product.price}
+          onChange={(e) => setProduct({ ...product, price: parseFloat(e.target.value) })}
+          required
+          className="inputField"
+        />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          required
+          className="inputField"
+        />
+        {preview && <Image src={preview} alt="Preview" width={200} height={200} />}
+        <textarea
+          placeholder="Description"
+          value={product.description}
+          onChange={(e) => setProduct({ ...product, description: e.target.value })}
+          required
+          className="inputField"
+        />
+        <input
+          type="text"
+          placeholder="Product Type"
+          value={product.productType}
+          onChange={(e) => setProduct({ ...product, productType: e.target.value })}
+          required
+          className="inputField"
+        />
+        <input
+          type="text"
+          placeholder="Stock"
+          value={product.stock}
+          onChange={(e) => setProduct({ ...product, stock: e.target.value })}
+          required
+          className="inputField"
+        />
+        <button type="submit" className="submitButton">
+          Add Product
+        </button>
+        {message && <p className="message">{message}</p>}
+      </form>
+    </div>
   );
-};
-
-export default ProductForm;
+}

@@ -74,7 +74,7 @@ const Home: React.FC = () => {
         <div className="cards">
           {products.slice(0, 4).map((product) => (
             <div className="card" key={product._id}>
-              {/* <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/rexnx5hnev2xys9v0om0.jpg" alt={product.name} width={300} height={300} /> */}
+              <Image src={product.image} alt={product.name} width={300} height={300} />
               <h3>{product.productName}</h3>
               <p>Rs {product.price}</p>
               <div className='home-icons'>
