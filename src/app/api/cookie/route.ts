@@ -26,6 +26,7 @@ export async function GET() {
         }
 
         const tokenPayload = decodedToken.payload;
+        console.log(tokenPayload)
 
         return NextResponse.json(
             { message: 'Token payload extracted', user: tokenPayload },

@@ -11,6 +11,7 @@ import { BiSearch } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const Navbar: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,19 +21,18 @@ const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const getUser = async () => {
       try {
-        const decoded = jwt.decode(token) as JwtPayload | null;
-        if (decoded && decoded.email) {
-          setIsLoggedIn(true);
-          setUserName(decoded.email.split("@")[0]);
-        }
+        const token = await axios.get('/api/cookie');
+        const savedUserId = token.id
+        console.log(savedUserId)
       } catch (error) {
-        console.error("Error decoding token:", error);
+        
       }
     }
-  }, []);
+
+    getUser();
+  }, [])
 
 
   // Define the state for controlling dropdown visibility

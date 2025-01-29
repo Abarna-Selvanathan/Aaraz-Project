@@ -36,7 +36,6 @@ const Home: React.FC = () => {
   if (userType === 'admin') {
     router.push('/admin/dashboard')
   }
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {

@@ -4,7 +4,7 @@ function DeliveryPage (){
     <div>
      
       <DeliveryDetails/>
-     
+      
     
     </div>
   );

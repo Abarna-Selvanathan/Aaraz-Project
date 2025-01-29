@@ -8,7 +8,7 @@ const userSchema = new Schema(
             type: String,
             unique: true,
             sparse: true,
-            required: false,
+            required: false, 
             match: [/.+@.+\..+/, "Invalid email format"]
         },
         phoneNumber: { type: [Number], required: true, unique: true },

@@ -1,86 +1,69 @@
-import "../../../components/Admin/User/user.css";
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+'use client';
+
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import './user.css';
 
 interface User {
-  username: string;
-  userId: string;
-  email: string; 
+  _id: string;
+  name: string;
+  userType: string;
+  email: string;
   phoneNumber: string;
   address: string;
 }
 
 const Users: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]); 
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('/api/admin/user');
-        const data: User[] = await response.json();
-        setUsers(data);
+        const response = await axios.get('/api/user');
+        if (response.status === 200) { 
+          setUsers(response.data.users); 
+        } else {
+          console.error('Unexpected response status:', response.status);
+        }
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error('Error fetching users:', error);
       }
     };
+    
 
     fetchUsers();
-  }, []);
+  }, []); // Empty dependency array ensures this runs only once on mount
+
   return (
     <div className="main-content">
-      {/* Top Bar */}
-      <div className="top-bar">
-        <div className="topbar-logo">
-          {/* Using Next.js Image component */}
-          <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622745/AARAZ/Image/jxccsnz9anadyjr7qqeb.png" alt="Logo" width={50} height={50} />
-        </div>
-        <input type="search" placeholder="Search..." />
-      </div>
-
-      {/* Sidebar and Main Content */}
-      <div className="home">
-        {/* Sidebar */}
-        <div className="sidebar">
-          <ul>
-            <li><Link href="/admin/dashboard" style={{ color: "#4C394F" }}>Analytics</Link></li>
-            <li><Link href="/admin/product" style={{ color: "#4C394F" }}>Products</Link></li>
-            <li><Link href="/admin/user" style={{ color: "#4C394F" }}>Users</Link></li>
-            <li><Link href="/admin/order" style={{ color: "#4C394F" }}>Orders</Link></li>
-            <li><Link href="/admin/payment" style={{ color: "#4C394F" }}>Payments</Link></li>
-            <li><Link href="/admin/delivery" style={{ color: "#4C394F" }}>Delivery Details</Link></li>
-          </ul>
-          <div className="admin-footer">Admin</div>
-        </div>
-
-        {/* Users Section */}
-        <div className="analytics">
-          <div className="background-products">
-            <h1>Users</h1>
-            <div className="table-container">
-              <table className="user-table">
-                <thead>
-                  <tr>
-                    <th>Username</th>
-                    <th>User ID</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Address</th>
+      <div className="analytics">
+        <div className="background-products">
+          <h1>Users</h1>
+          <div className="table-container">
+            <table className="user-table">
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>User Name</th>
+                  <th> User Type</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>Address</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user._id}> {/* Unique key */}
+                    <td>{user._id}</td>
+                    <td>{user.name}</td>
+                    <td>{user. userType}</td>
+                    <td>{user.email}</td>
+                    <td>{user.phoneNumber}</td>
+                    <td>{user.address}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {users.map((user, index) => (
-                    <tr key={index}>
-                      <td>{user.username}</td>
-                      <td>{user.userId}</td>
-                      <td>{user.email}</td>
-                      <td>{user.phoneNumber}</td>
-                      <td>{user.address}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

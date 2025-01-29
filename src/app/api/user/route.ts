@@ -67,11 +67,10 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
   try {
     await DBconnect();
 
-    // Retrieve all users
-    const users = await UserSchema.find({});
+    const users = await UserSchema.find();
     return NextResponse.json(
-      { users },
-      { status: 201 }
+      { users }, // Wrap users array in an object
+      { status: 200 } // Use 200 for successful GET requests
     );
   } catch (error: any) {
     console.error("Error fetching users:", error.message);
