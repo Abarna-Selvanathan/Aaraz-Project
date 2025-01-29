@@ -7,12 +7,13 @@ import './Home.css';
 import Link from 'next/link';
 import "../../src/app/globals.css";
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 const Home: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [userType, setUserType] = useState<string>("customer");
   const router = useRouter();
+  const { id } = useParams(); // For fetching single product by ID
 
   // Fetch User Data
   useEffect(() => {
@@ -37,7 +38,7 @@ const Home: React.FC = () => {
     }
   }, [userType]); // Run this effect when userType changes
 
-  // Fetch Products
+  // Fetch Products (All Products)
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -50,6 +51,23 @@ const Home: React.FC = () => {
     };
     fetchProducts();
   }, []);
+
+  // Fetch Single Product (if ID exists)
+  const [singleProduct, setSingleProduct] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (id) {
+      const fetchSingleProduct = async () => {
+        try {
+          const response = await axios.get(`/api/product/${id}`);
+          setSingleProduct(response.data.product);
+        } catch (error) {
+          console.error('Error fetching single product:', error);
+        }
+      };
+      fetchSingleProduct();
+    }
+  }, [id]); // Only fetch when `id` is present
 
   const handleBuyNow = () => {
     console.log(`Proceed to checkout`);
@@ -116,6 +134,31 @@ const Home: React.FC = () => {
           ))}
         </div>
       </section>
+
+      {/* Single Product Display (if `id` is available) */}
+      {singleProduct && (
+        <section className="section">
+          <h1>Product Details</h1>
+          <div className="product-detail">
+            {singleProduct.image && (
+              <Image src={singleProduct.image} alt={singleProduct.productName} width={300} height={300} />
+            )}
+            <h3>{singleProduct.productName}</h3>
+            <p>{singleProduct.description}</p>
+            <p>Rs {singleProduct.price}</p>
+            <div className='home-icons'>
+              <Link href="/cart">
+                <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem' }}></div>
+              </Link>
+              <Link href="/payment">
+                <div className="buttons">
+                  <button className="buy-now" onClick={handleBuyNow}>Buy Now</button>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Collections Section */}
       <section className="Collections-section">
