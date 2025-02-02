@@ -11,8 +11,10 @@ import Payments from "@/pages/admin/payment";
 import Product from '@/pages/admin/product';
 import Orders from '@/pages/admin/order';
 import DeliveryDetails from '@/pages/admin/delivery';
+import DashboardPage from '@/pages/admin/dashboard';
 
-const Dashboard: React.FC = () => {
+
+const Navbar: React.FC = () => {
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(true);
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [isProductOpen, setIsProductOpen] = useState(false);
@@ -100,42 +102,64 @@ const Dashboard: React.FC = () => {
     setIsPaymentOpen(false);
   };
 
-  // const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  // const toggleUserDropdown = () => {
-  //   setUserDropdownOpen(!userDropdownOpen);
-  // };
+const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const toggleUserDropdown = () => {
+    setUserDropdownOpen(!userDropdownOpen);
+  };
+const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    setUserName("");
+    window.location.href = "/login";
+  };
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem("token");
-  //   setIsLoggedIn(false);
-  //   setUserName("");
-  //   window.location.href = "/login";
-  // };
-
-  return (
-    <div className="main-content">
-      
-
-      <div className="content">
-        {isAnalyticsOpen && (
-          <div className="analytics">
-            <h1>Analytics</h1>
-            <div className="analytics-cards">
-              <div className="analytics-card">Products</div>
-              <div className="analytics-card">Users</div>
-              <div className="analytics-card">Orders</div>
-            </div>
+return(
+    <div className="navbar">
+    <div className="navbar-logo">
+      <Image
+        src={Logo}
+        alt="Logo"
+        width={100}
+        height={100}
+      />
+    </div>
+    <div className="navbar-links">
+      <ul>
+        <li onClick={handleAnalytic}>Analytics</li>
+        <li onClick={handleProduct}>Products</li>
+        <li onClick={handleUser}>User</li>
+        <li onClick={handleOrder}>Orders</li>
+        <li onClick={handlePayment}>Payments</li>
+        <li onClick={handleDelivery}>Delivery Details</li>
+      </ul>
+    </div>
+    <div className="navbar-search">
+      <input type="search" placeholder="Search..." />
+    </div>
+    <div className="navbar-user">
+      <div className="dropdown">
+      {/* <div className="fa fa-user" style={{ color: "black" }}></div> */}
+        <button className="dropdown-btn" onClick={toggleUserDropdown} style={{ color: "red" }}>{userName}</button>
+        {userDropdownOpen && (
+          <div className="dropdown-content">
+            <button
+              onClick={handleLogout}
+              style={{ cursor: "pointer", background: "none", border: "none", color: "black", fontSize: "1rem" }}
+            >
+              Logout
+            </button>
           </div>
         )}
-
+      </div>
+    </div>
+        {isAnalyticsOpen && <DashboardPage/>}
         {isUserOpen && <Users />}
         {isProductOpen && <Product />}
         {isPaymentOpen && <Payments />}
         {isOrderOpen && <Orders />}
         {isDeliveryOpen && <DeliveryDetails />}
-      </div>
-    </div>
-  );
-};
+      
+  </div>  
+)}
 
-export default Dashboard;
+export default Navbar;

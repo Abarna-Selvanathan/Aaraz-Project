@@ -1,46 +1,54 @@
-
 footer {
-  display: flex;
-  border-top: 1px solid #BCB8CE;
-  justify-content: space-between;
+  padding: 2rem 0;
+  background-color: #BCB8CE;
+  
 }
 
 .footer-link {
   display: flex;
-  flex-direction: row;
-  gap: 2%;
-  margin-left: 5%;
-  width: 60%;
+  justify-content: space-evenly;
 }
 
 .footer-link a {
-  color: #4C394F;
+  color: #444;
   text-decoration: none;
-  padding-top: 2%;
+  font-size: 1rem;
+  padding: 0.3rem 0;
+  transition: color 0.3s ease;
+  display: block;
 }
+ .FAQ, .Our-mission{
+  color: black;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+  display: block;
+ }
+ .FAQ h2, .Our-mission h2{
+  margin: 0 20%;
 
-.footer-link a:focus,
-.footer-link a:active {
-  outline: none; 
-  text-decoration: none; 
-}
-.footer-link a::before {
-  content: "·"; 
-  color: #4C394F; 
-  padding-right: 5px;
-}
+ }
+ .FAQ li, .Our-mission p, .Info {
+  color: #444;
+  padding: 0.4rem 0;
+  margin: 0 20%;
+ }
 
-.footer-logo {
-  position: relative;
-}
-
-.footer-logo img{
-  position: absolute;
-  border-radius: 50%;
-  top: 1.5vh;
-  right: 15vw;
-}
+ .footer-bottom{
+  margin-top: 4% ;
+  padding: 2% 0;
+  border-top: 1px solid #9a97a5;
+  color: #444;
+  text-align: center;
+  font-size: 1rem ;
+ }
  
-
+@media (max-width: 768px) {
+  .footer-link {
+    grid-template-columns: repeat(2, 1fr);
+    width: 60%;
+  }
   
-  
+  .footer-logo {
+    width: 40%;
+  }
+}

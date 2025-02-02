@@ -1,30 +1,70 @@
-import { useCart } from '../context/CartContext';
+'use client';
 
-const CartPage = () => {
-  const { cart, clearCart } = useCart();
+import { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+interface Product {
+  productId: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+interface CartContextType {
+  cart: Product[];
+  addToCart: (product: Product) => void;
+  removeFromCart: (productId: string) => void;
+  fetchCart: () => void;
+}
+
+const CartContext = createContext<CartContextType | undefined>(undefined);
+
+export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+  const [cart, setCart] = useState<Product[]>([]);
+  const userId = 'user123'; // Replace with actual user authentication logic
+
+  const fetchCart = async () => {
+    try {
+      const response = await axios.get(`/cart/${userId}`);
+      setCart(response.data.items || []);
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+  };
+
+  const addToCart = async (product: Product) => {
+    try {
+      await axios.post('/cart', { userId, product });
+      fetchCart();
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
+  };
+
+  const removeFromCart = async (productId: string) => {
+    try {
+      await axios.delete(`/cart/${userId}/${productId}`);
+      fetchCart();
+    } catch (error) {
+      console.error('Error removing from cart:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
 
   return (
-    <div>
-      <h1>Your Cart</h1>
-      {cart.length === 0 ? (
-        <p>Your cart is empty!</p>
-      ) : (
-        <>
-          {cart.map((item) => (
-            <div key={item.id} style={{ border: '1px solid #ccc', padding: '10px', margin: '10px' }}>
-              <h3>{item.name}</h3>
-              <p>Price: {item.price} LKR</p>
-              <p>Quantity: {item.quantity}</p>
-            </div>
-          ))}
-          <h2>Total: {total} LKR</h2>
-          <button onClick={clearCart}>Clear Cart</button>
-        </>
-      )}
-    </div>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, fetchCart }}>
+      {children}
+    </CartContext.Provider>
   );
 };
 
-export default CartPage;
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};

@@ -1,169 +1,239 @@
+/* General Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #fff;
+  color: #000;
+}
 
-.section {
-    margin: 20px 0;
-    padding: 20px;
-    /* background-color: #f5f0fa; */
-    box-shadow: 0 2px 8px #BCB8CE(0, 0, 0, 0.1);
-  }
-  .section h1 , .Collections-section h1{
-    font-size: 3rem;
-    color: #4C394F;
-    margin-bottom: 20px;
-    margin-left: 25Vw;
-  }
-  .section h1:hover{
-    transform: translateY(-5px);
-  }
-  .Collections-section{
-    margin: 20px 0;
-    padding: 20px;
-    background-color: #f5f0fa;
-    box-shadow: 0 2px 8px #BCB8CE(0, 0, 0, 0.1);
-  }
-  .Collections-cards{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    margin-left: 21vw;
-    padding: 2vw;
+/* Hero Section */
+.hero img {
+  width: 100%;
+  height: auto;
+}
+
+/* About Section */
+.about {
+  text-align: center;
+ margin: 2% 0;
+}
+
+.about h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.about p {
+  font-size: 1.2rem;
+  color: #444;
+}
+
+/* Sections */
+.section, .Collections-section {
+  margin: 5% 0;
+}
+
+.section h1, .Collections-section h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Card Layout */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+}
+
+.card {
+  color: #000;
+  padding: 5px;
+  border-radius: 12px;
+  width: 250px;
+  text-align: left;
+  /* transition: transform 0.3s ease-in-out; */
+  position: relative;
+}
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+
+.card .hover-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  opacity: 0;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.card .hover-img:hover {
+  opacity: 1;
+}
+
+.card:hover .default-img {
+  opacity: 0;
+}
+
+
+
+.card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 2px;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.card p {
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Sale Price Tag */
+.saleprice {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #444;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* Home Icons */
+.home-icons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.fas.fa-cart-plus {
+  cursor: pointer;
+  color: #000;
+  font-size: 1.5rem;
+}
+.fas.fa-cart-plus:hover{
+  font-weight: bold;
+}
+/* Buttons */
+.buttons .buy-now {
+  display: inline-block;
+  padding: 12px 35px;
+  background: transparent;
+  border: 2px solid #000;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: #000;
+
+}
+
+.buttons .buy-now:hover {
+  border:2px solid #000;
+}
+.split-section{
+  padding: 20px;
+  background-color: #f5f0fa;
+
+}
+.collection{
+  margin: 5% 32%;
+  align-items: center;
+}
+
+
+.handmadegift, .resinart, .frame, .walletcard {
+  display: flex;
+  justify-content: space-around;
+  gap: 6%;
+ 
+  
+}
+.content-side{
+  padding: 10% 0;
+  z-index: 1;
+}
+
+.image-side{
+
+  background-size: cover;
+  background-position: center;
+}
+
+/* Text Styling */
+.section-tagline {
+  font-size: 2.5rem;
+  letter-spacing: 5px;
+  color: black;
+  font-weight: 600;
+  
+}
+
+
+
+/* */
+
+.section-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+
+/* Button Styling */
+.collection-button {
+  display: inline-block;
+  padding: 12px 35px;
+  background: transparent;
+  border: 2px solid #000;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: #000;
+}
+
+.collection-button:hover {
+  border: 3px solid #000;
+  
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .split-section {
+    flex-direction: column;
+    min-height: auto;
   }
   
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 2vw;
-    
+  .content-side, .image-side {
+    width: 100%;
+    flex: none;
+    padding: 2rem;
   }
   
-  .card {
-    background-color: #f5f0fa;
-    border: 1px solid #BCB8CE;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px #BCB8CE(0, 0, 0, 0.1);
-    text-align: center;
-    padding: 20px;
-    transition: transform 0.3s ease;
+  .image-side {
+    height: 400px;
+    order: -1;
   }
   
-  .card img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 15px;
-  }
-  
-  .card h3 {
-    font-size: 1.5rem;
-    color: #4C394F;
-    text-decoration: none;
-  }
-  .card{
+  .split-section:nth-child(even) .content-side {
     text-align: left;
+    order: 1;
   }
-  .card p {
-    font-size: 1.3rem;
-    color: #4C394F;
-   
-  }
-  .saleprice {
-    background-color: #4c394f;
-    color: white;
-    font-weight: bold;
-    padding:  5px 5px;
-    border-radius: 5%;
-    font-size: 1.2rem;
-    width: 20%;
-    margin-left: auto;
-    text-align: center;
-  }
-  .viewDetails button {
-    padding: 10px 20px;
-    background-color: #4C394F;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.5rem;
-    transition: background-color 0.3s ease;
-    margin-top: auto;
-    margin-left: 43vw;
-  }
-  
-  .viewDetails button:hover {
-    background-color: #BCB8CE;
-    color: #4C394F;
-    font-weight: bold;
-  }
-  
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px #BCB8CE;
-  }
-  
-  
-  .faq {
-    list-style: none;
-    padding: 0;
-    margin-left: 40vw;
-    font-size: 1.3rem;
-  }
-  
-  .faqh1{
-    background-color: #DBD9E8;
-    max-width: 20%;
-    padding: 10px;
-    border-radius: 10px;
-    margin-left: 38vw;
-    text-align: center;
-  }
-  .faq li {
-    margin: 10px 0;
-  }
-  
-  .faq li span {
-    font-weight: 600;
-    cursor: pointer;
-    display: block;
-  }
-  
-  .faq li div {
-    display: none;
-    margin-top: 5px;
-    color: #555;
-  }
-  
-  .faq li.open div {
-    display: block;
-  }
-  
-  .faq li span:hover {
-    text-decoration: underline;
-  
-  }
-
-
-  .home-icons{
-    display: flex;
-    justify-content: space-between;
-    
-  }
-  .buy-now {
-    padding: 6px 11px;
-    background-color: #4C394F;
-    font-weight: bold;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: background-color 0.3s ease;
-    
-  }
-  
-  .buy-now:hover {
-    background-color: #BCB8CE;
-    color: #4C394F;
-    font-weight: bold;
-  }
-  
+}

@@ -130,7 +130,7 @@ const Product: React.FC = () => {
                   <th>Price</th>
                   <th>Stock</th>
                   <th>Image</th>
-                  <th>Actions</th> {/* Action column for update and delete */}
+                  <th>Actions</th> 
                 </tr>
               </thead>
               <tbody>
@@ -170,14 +170,14 @@ const Product: React.FC = () => {
                 <label>Product Name:</label>
                 <input
                   type="text"
-                  name="productName"
+                  name="Product Name"
                   value={editProduct.productName}
                   onChange={handleInputChange}
                 />
 
                 <label>Description:</label>
                 <textarea
-                  name="description"
+                  name="Description"
                   value={editProduct.description}
                   onChange={handleInputChange}
                 />

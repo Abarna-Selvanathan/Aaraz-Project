@@ -5,22 +5,30 @@ import React from "react";
 import Image from "next/image";  
 import './Home.css';
 import Link from 'next/link';
-import "../../src/app/globals.css";
 import axios from 'axios';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter} from 'next/navigation';
+import hero from "../../public/Image/hero-img.png"
+import polaroidHov from "../../public/Image/polaroid-hov.jpg"
+import Handmadegift from '../../public/Image/roundPhoto Collage .jpeg';
+import resinArt from "../../public/Image/Resin letter keychains.jpeg"
+import frame from "../../public/Image/frame.jpeg"
+import walletcard from "../../public/Image/Map wallet card.png";
+import HandmadegiftCollection from '../handmade-collection/Handmade-collection';
+import ResinArtsCollection from '../resin-collection/Resin-collection';
+import CollectionFrame from '../Frame-collection/Frame-collection';
+import WalletCardsCollection from '../walletcard-collection/Walletcard-collection';
 
 const Home: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [userType, setUserType] = useState<string>("customer");
   const router = useRouter();
-  const { id } = useParams(); // For fetching single product by ID
-
+  
   // Fetch User Data
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const { data } = await axios.get('/api/cookie');
-        console.log("User Data:", data);
+        // console.log("User Data:", data);
         if (data?.user?.userType) {
           setUserType(data.user.userType);
         }
@@ -31,12 +39,12 @@ const Home: React.FC = () => {
     fetchUser();
   }, []);
 
-  // Redirect Admin to Dashboard
+   
   useEffect(() => {
     if (userType === 'admin') {
       router.push('/admin/dashboard');
     }
-  }, [userType]); // Run this effect when userType changes
+  }, [userType]); 
 
   // Fetch Products (All Products)
   useEffect(() => {
@@ -44,7 +52,7 @@ const Home: React.FC = () => {
       try {
         const response = await fetch('/api/product');
         const data = await response.json();
-        setProducts(data.products); // ✅ Ensure correct API response handling
+        setProducts(data.products); 
       } catch (error: any) {
         console.error('Error fetching products:', error.message);
       }
@@ -52,53 +60,44 @@ const Home: React.FC = () => {
     fetchProducts();
   }, []);
 
-  // Fetch Single Product (if ID exists)
-  const [singleProduct, setSingleProduct] = useState<any | null>(null);
-
-  useEffect(() => {
-    if (id) {
-      const fetchSingleProduct = async () => {
-        try {
-          const response = await axios.get(`/api/product/${id}`);
-          setSingleProduct(response.data.product);
-        } catch (error) {
-          console.error('Error fetching single product:', error);
-        }
-      };
-      fetchSingleProduct();
-    }
-  }, [id]); // Only fetch when `id` is present
 
   const handleBuyNow = () => {
     console.log(`Proceed to checkout`);
   };
 
+  const handleProduct = (id: string) => {
+    router.push(`/product/${id}`)
+  }
   return (
     <div>
       {/* Hero Section */}
-      {/* <div className="hero">
+      <div className="hero">
         <Image 
-          src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622755/AARAZ/Image/k4n4ljjhyl6wgmsq2bmd.png" 
-          alt="Personalized Gift" 
+          src={hero}
+          alt="heroImg" 
           width={1920} 
-          height={500} 
+          height={200} 
         />
-      </div> */}
+      </div>
+      <div className='about'>
+        <h1>Let your gifts express your emotions</h1><br></br>
+        <p>Aaraz is an affordable gift shop, which offers customization to you as per your need !!</p>
+      </div>
       
       {/* New Launch Section */}
       <section className="section">
         <h1>New Launch</h1>
         <div className="cards">
           {products.slice(0, 4).map((product) => (
-            <div className="card" key={product._id}>
+            <div className="card" onClick={() => handleProduct(product._id)} key={product._id}>
               {product.image && (
-                <Image src={product.image} alt={product.productName} width={300} height={300} />
+                <Image src={product.image} alt={product.productName} width={400} height={300} />
               )}
               <h3>{product.productName}</h3>
               <p>Rs {product.price}</p>
               <div className='home-icons'>
                   <Link href="/cart">
-                    <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem' }}></div>
+                    <div className="fas fa-cart-plus" style={{color: 'black', fontSize: '1.5rem' }}></div>
                   </Link>
                   <Link href="/payment">
                     <div className="buttons">
@@ -117,12 +116,19 @@ const Home: React.FC = () => {
         <div className="cards">
           {products.slice(0, 4).map((product) => (
             <div className="card" key={product._id}>
+              {product.image && (
+                <>
+                  {/* <Image src={product.image} alt={product.productName} width={300} height={300} /> */}
+                  <Image className="default-img" src={product.image} alt={product.productName} width={400} height={300} />
+                  <Image className="hover-img" src={polaroidHov} alt={product.productName} width={400} height={300} />
+                </>
+              )}
               <div className="saleprice">20%</div>
               <h3>{product.productName}</h3>
               <p>Rs {product.price}</p>
               <div className='home-icons'>
                   <Link href="/cart">
-                    <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem' }}></div>
+                    <div className="fas fa-cart-plus" style={{color: 'black', fontSize: '1.5rem' }}></div>
                   </Link>
                   <Link href="/payment">
                     <div className="buttons">
@@ -133,82 +139,66 @@ const Home: React.FC = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section> 
 
-      {/* Single Product Display (if `id` is available) */}
-      {singleProduct && (
-        <section className="section">
-          <h1>Product Details</h1>
-          <div className="product-detail">
-            {singleProduct.image && (
-              <Image src={singleProduct.image} alt={singleProduct.productName} width={300} height={300} />
-            )}
-            <h3>{singleProduct.productName}</h3>
-            <p>{singleProduct.description}</p>
-            <p>Rs {singleProduct.price}</p>
-            <div className='home-icons'>
-              <Link href="/cart">
-                <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem' }}></div>
-              </Link>
-              <Link href="/payment">
-                <div className="buttons">
-                  <button className="buy-now" onClick={handleBuyNow}>Buy Now</button>
-                </div>
-              </Link>
+
+      {/* Collections Section */}
+
+      <section className="split-section">
+        <div className='collection'>
+            <div className='handmadegift'>
+
+              <div className="image-side" >
+                <Image src={Handmadegift} alt="Handmadegift" width={400} height={500} />
+              </div>
+
+               <div className="content-side">
+                <span className="section-tagline">Handmade Gifts</span>
+                <p className="section-description">Unique, handcrafted gifts that bring a personal touch to every occasion. Each item is made with love and care, perfect for showing appreciation or celebrating special moments.</p>
+                <a href="/handmadegift" className="collection-button">View Collections</a>
+              </div>
+
+
+
+            </div>
+
+            <div className='resinart'>
+              <div className="content-side">
+                <span className="section-tagline">Resin Arts</span>
+                <p className="section-description">These resin artworks are beautifully crafted by combining colors, shapes, and unique designs. Each art piece is handcrafted and features a touch of art and beautiful design. They will help add a touch of grandeur and artistic flair to your home or office.</p>
+                <a href="/resinart" className="collection-button">View Collections</a>
+              </div>
+              <div className="image-side" >
+                <Image src={resinArt} alt="resinArt" width={400} height={500} />
+              </div>
+            </div>
+
+            <div className='frame'>
+              <div className="image-side" >
+                <Image src={frame} alt="frame" width={400} height={500} />
+
+              </div>
+
+              <div className="content-side">
+                <span className="section-tagline">Frames</span>
+                <p className="section-description">Elegant, stylish photo frames designed to showcase your most cherished memories. Crafted with attention to detail, these frames bring your photos to life and add a touch of sophistication to any room.</p>
+                <a href="/frame" className="collection-button">View Collections</a>
+              </div>
+
+            </div>
+
+            <div className='walletcard'>
+              <div className="content-side">
+                <span className="section-tagline">Wallet Cards</span>
+                <p className="section-description">Thoughtful and practical wallet cards that offer a meaningful message or sentiment. Perfect as keepsakes or small gifts, these cards are designed to fit easily into your wallet and serve as a reminder of love and positivity.</p>
+                <a href="/walletcard" className="collection-button">View Collections</a>
+              </div>
+              <div className="image-side" >
+                <Image src={walletcard} alt="walletcard" width={400} height={500} />  
+              </div>
             </div>
           </div>
         </section>
-      )}
-
-      {/* Collections Section */}
-      <section className="Collections-section">
-        <h1>Collections</h1>
-        <div className="Collections-cards">
-          <div className="card">
-            <Link href="/handmadegift">
-              <h3>Handmade Gifts</h3>
-            </Link>
-          </div>
-          <div className="card">
-            <Link href="/resinart">
-              <h3>Resin Arts</h3>
-            </Link>
-          </div>
-          <div className="card">  
-            <Link href="/frame">
-              <h3> Frames</h3>
-            </Link>
-          </div>
-          <div className="card">
-            <Link href="/walletcard">
-              <h3>Wallet Cards</h3>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="section">
-        <h2 className="faqh1">Frequently Asked Questions</h2>
-        <ul className="faq">
-          <li>
-            <span>Preparation Time</span>
-            <div>Preparation - 4 to 9 working days</div>
-          </li>
-          <li>
-            <span>How to place COD order?</span>
-            <div>Contact privacy via WhatsApp or email.</div>
-          </li>
-          <li>
-            <span>How to share photos and details?</span>
-            <div>Send them through the order form or WhatsApp.</div>
-          </li>
-          <li>
-            <span>How to request for customization?</span>
-            <div>Provide details in the customization section during checkout.</div>
-          </li>
-        </ul>
-      </section>
     </div>
   );
 };

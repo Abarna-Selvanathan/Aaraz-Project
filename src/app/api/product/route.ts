@@ -10,6 +10,7 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
     await DBconnect(); 
 
     const products = await Product.find(); 
+    console.log(products)
     return NextResponse.json(
       { products },
       { status: 200 }

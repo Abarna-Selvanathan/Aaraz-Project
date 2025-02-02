@@ -1,0 +1,166 @@
+
+body, html {
+    height: 100;
+    margin: 0;
+    background-color: rgb(255, 255, 255);
+    box-sizing: border-box; 
+}
+
+.profileContainer {
+    /* display: flex; */
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    padding-top: 80px;
+    /* background-color: rgb(24, 119, 146); */
+    color: rgb(245, 245, 245);
+    border: 10px solid black;
+    border-radius: 30px;
+}
+
+/* Header Section */
+.headerprofile {
+    /* display: flex; */
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 40px;
+    padding-top: 55px;
+}
+
+
+
+
+
+
+/* profile Content */
+.contentprofile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    gap: 20px;
+}
+
+.imageprofile img {
+    width: 150px;
+    height: 150px;
+    border-radius: 30%;
+    border: 3px solid #b3acac;
+    object-fit: cover;
+}
+
+/* profile Info */
+.infoprofile {
+    text-align: center;
+    color: black;
+}
+
+.infoprofile h1 {
+    font-size: 24px;
+    margin: 20px 0;
+}
+
+.userEmail {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+.buttonSave {
+    background-color: #1873e8;
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 250px;
+    margin: 10px 0 20px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Hover and Active Effects */
+.buttonSave:hover {
+    background-color: rgb(18, 59, 192);
+    transform: scale(1.1);
+}
+
+.buttonSave:active {
+    transform: scale(0.95);
+}
+
+/* Form Section */
+.formInputs {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formGroup {
+    position: relative;
+    width: 100%;
+}
+
+/* Input Fields */
+.formGroup input {
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #333;
+    border: 1px solid #0B63F8;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    transition: border-color 0.3s ease-in-out;
+    padding-right: 50px; /* Added space for the edit icon */
+}
+
+.formGroup input::placeholder {
+    color: #aaa;
+}
+
+.formGroup input:focus {
+    outline: none;
+    border-color: #0B63F8;
+}
+
+/* Edit Symbol */
+.editSymbol {
+    position: absolute;
+    top: 50%;
+    right: 20px; /* Adjusted for proper alignment */
+    transform: translateY(-50%);
+    color: #0B63F8;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.editSymbol:hover {
+    color: #1eb9ac;
+}
+
+.logoutButton {
+    background-color: rgb(235, 81, 92);
+    color: white;
+    padding: 10px 0px;
+    margin-left: 30px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 10px;
+    cursor: pointer;
+    width: 10%;
+    max-width: 250px;
+    font-family: 'Helvetica Neue';
+    font-size:17PX;
+}
+
+.profileContainer{
+    display: flex;
+}

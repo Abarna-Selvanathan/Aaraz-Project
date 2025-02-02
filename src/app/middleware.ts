@@ -15,7 +15,7 @@ export function middleware(req: NextRequest) {
       id: string;
       email: string;
       userType: string;
-    };
+    }; 
  
     const userType = decoded.userType; // Extract userType from token
     const url = req.nextUrl.clone();

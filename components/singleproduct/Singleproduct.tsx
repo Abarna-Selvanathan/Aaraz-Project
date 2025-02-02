@@ -1,11 +1,49 @@
-import { useState, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import Image from "next/image";
-import "../../src/app/globals.css"
-import "../singleproduct/Singleproduct.css";
+import { useRouter } from "next/router";
 import Link from "next/link";
+import "../../src/app/globals.css";
+import "../singleproduct/Singleproduct.css";
 
 const Singleproductviewpage: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1);
+  const [product, setProduct] = useState<any | null>(null); // Default to null
+  const [loading, setLoading] = useState<boolean>(true); // Track loading state
+  const router = useRouter();
+  const { id } = router.query;
+  const [products, setProducts] = useState<any[]>([]);
+  
+
+  useEffect(() => {
+    if (!id) return; 
+
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`/api/product/${id}`);
+        const data = await response.json();
+        setProduct(data.product);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      } finally {
+        setLoading(false); 
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+   useEffect(() => {
+      const fetchProducts = async () => {
+        try {
+          const response = await fetch('/api/product');
+          const data = await response.json();
+          setProducts(data.products); 
+        } catch (error: any) {
+          console.error('Error fetching products:', error.message);
+        }
+      };
+      fetchProducts();
+    }, []);
 
   const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuantity(Number(event.target.value));
@@ -13,36 +51,41 @@ const Singleproductviewpage: React.FC = () => {
 
   const handleAddToCart = () => {
     console.log(`Added ${quantity} items to the cart.`);
-    // Replace with actual add-to-cart logic.
   };
 
   const handleBuyNow = () => {
     console.log(`Proceed to checkout with ${quantity} items.`);
-    // Replace with actual buy-now logic.
   };
+
+  
+  if (loading) return <p>Loading product...</p>;
+
+  
+  if (!product) return <p>Product not found.</p>;
+  const handleProduct = (id: string) => {
+    router.push(`/product/${id}`)
+  }
 
   return (
     <>
-     
-
       <div className="ProductReview">
         <div className="Illustrationimg">
           <Image
-            src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/rexnx5hnev2xys9v0om0.jpg"
-            alt="Illustration Frame"
+            src={product.image } 
+            alt={product.productName }
             width={400}
             height={500}
           />
         </div>
+
         <div className="Illustrationtext">
-          <h1>Illustration Frame</h1>
-          <p className="stock">In stock</p>
-          <p className="price">Rs 3200</p>
+          <h1>{product.productName}</h1>
+          <p className="stock">{product.stock > 0 ? "In stock" : "Out of stock"}</p>
+          <p className="price">Rs {product.price}</p>
           <p className="Quantity">Quantity</p>
           <div className="buttons">
             <input
               type="number"
-              id="quantity"
               min="1"
               value={quantity}
               onChange={handleQuantityChange}
@@ -58,202 +101,40 @@ const Singleproductviewpage: React.FC = () => {
               <button className="buy-now" onClick={handleBuyNow}>
                 Buy It Now
               </button>
-          </div>
+            </div>
           </Link>
         </div>
-      </div>
-      <div className="RelatedDetails">
-        <ul className="Relatedtext">
-          <li>
-            <Link href="/review">
-              <p>Reviews</p>
-            </Link>
-          
-          
-            <p>Specification</p>
-            <div>
-              Frame Size - 8 inches X 12 inches
-              <br />
-              Material - Glass Frame
-              <br />
-              <br />
-              We use high-quality glass box frames.
-              Number of members in the picture - 1 or 2 members.
-              You can send us the pictures and mention the name to be added to
-              aaraz@gmail.com with your order ID.
-              <br />
-              <br />
-              Send the pictures by email to aaraz@gmail.com
-              <br />
-              <br />
-              Whatsapp +94 77 456 4754 with your mail ID and order number
-            </div>
-          
-            <p>Delivery Duration</p>
-            <div>
-              Preparation - 3 to 7 working days
-              <br />
-              <br />
-              Within Vavuniya Delivery - 1 or 2 working days after preparation
-              <br />
-              <br />
-              Outside Vavuniya Delivery - 3 to 5 working days after preparation
-            </div>
-          
-            <p>Customization details</p>
-            <div>
-              To ensure that your customization preferences are met, please
-              send images and details to aaraz@gmail.com or Whatsapp +94 77 456
-              4754.
-              <br />
-              <br />
-              Please mention your order ID in the subject line. Additionally, if
-              your order includes multiple products that require customization,
-              please send a separate email for each product.
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div className="Related">
-        <section className="RelatedCollections">
-          <h1>Related Products</h1>
-          <div className="Relatedproducts">
-            <div className="Relatedproduct">
-              <Image
-                src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622753/AARAZ/Image/iczmzo7ncja7vgecijhg.jpg"
-                alt="Resin Frame"
-                width={200}
-                height={250}
-              />
-              <h3>Resin Frame</h3>
-              <p>Rs 2000</p>
+
+        <div className="cards">
+          {products.slice(0, 4).map((product) => (
+            <div className="card" onClick={() => handleProduct(product._id)} key={product._id}>
+              {product.image && (
+                <Image src={product.image} alt={product.productName} width={300} height={300} />
+              )}
+              <h3>{product.productName}</h3>
+              <p>Rs {product.price}</p>
               <div className='home-icons'>
                   <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
+                    <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem' }}></div>
                   </Link>
                   <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
+                    <div className="buttons">
+                      <button className="buy-now" onClick={handleBuyNow}>Buy Now</button>
+                    </div>
                   </Link>
                 </div>
             </div>
-            <div className="Relatedproduct">
-              <Image
-                src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622752/AARAZ/Image/r6yticdgnka7rnvilixn.png"
-                alt="Photobox"
-                width={200}
-                height={250}
-              />
-              <h3>Photo Box</h3>
-              <p>Rs 1200</p>
-              <div className='home-icons'>
-                  <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
-                  </Link>
-                  <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
-                  </Link>
-                </div>
-            </div>
-            <div className="Relatedproduct">
-              <Image
-                src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/ri29mh5dezqyezcuttoz.png"
-                alt="Explosion box"
-                width={200}
-                height={250}
-              />
-              <h3>Explosion box</h3>
-              <p>Rs 1300</p>
-              <div className='home-icons'>
-                  <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
-                  </Link>
-                  <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
-                  </Link>
-                </div>
-            </div>
-            <div className="Relatedproduct">
-              <Image
-                src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622753/AARAZ/Image/bxtdy7zhhn5hgwuagsrk.png"
-                alt="Explosion box"
-                width={200}
-                height={250}
-              />
-              <h3>Foldable Mini</h3>
-              <p>Rs 1800</p>
-              <div className='home-icons'>
-                  <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
-                  </Link>
-                  <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
-                  </Link>
-                </div>
-            </div>
-            <div className="Relatedproduct">
-              <Image
-                src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622752/AARAZ/Image/r6yticdgnka7rnvilixn.png"
-                alt="Photobox"
-                width={200}
-                height={250}
-              />
-              <h3>Photo Box</h3>
-              <p>Rs 1200</p>
-              <div className='home-icons'>
-                  <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
-                  </Link>
-                  <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
-                  </Link>
-                </div>
-            </div>
-            <div className="Relatedproduct">
-              <Image
-                src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622752/AARAZ/Image/dmhokmbujtlkahddpago.jpg"
-                alt="Squre Photo Collage"
-                width={200}
-                height={250}
-              />
-              <h3>Squre Photo Collage</h3>
-              <p>Rs 2900</p>
-              <div className='home-icons'>
-                  <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
-                  </Link>
-                  <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
-                  </Link>
-                </div>
-            </div>
-          </div>
-        </section>
+          ))}
+        </div>
 
         
+        
+            
+        
+        
+     
+
+
       </div>
 
     </>
@@ -261,3 +142,4 @@ const Singleproductviewpage: React.FC = () => {
 };
 
 export default Singleproductviewpage;
+

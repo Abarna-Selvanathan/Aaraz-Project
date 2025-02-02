@@ -24,7 +24,7 @@ const Loginpage: React.FC = () => {
       const response = await axios.post("/api/user/login", { email, password });
 
       if (response.status === 201) {
-        const { userType } = response.data;
+        const { userType } = response.data; 
 
         // Redirect based on userType
         if (userType === "admin") {
@@ -70,7 +70,7 @@ const Loginpage: React.FC = () => {
           <span
             className="show-password"
             onClick={togglePasswordVisibility}
-            role="button"
+            role="button" 
             aria-label="Toggle Password Visibility"
           >
             {passwordVisible ? "🙈" : "👁️"}

@@ -12,7 +12,7 @@
     margin-right: 20px;
   }
   
-  .Illustrationimg img:hover{
+  .Illustrationimg img:hover{ 
     transform: scale(1.05);
     box-shadow: 0 8px 16px #BCB8CE;
   }
@@ -100,7 +100,7 @@
     font-weight: bold;
   }
   
-  .Related {
+  .card{
     border-radius: 10px;
     margin: 10% 20%;
     
@@ -115,14 +115,14 @@
     color: #4c394f;
   }
   
-  .Relatedproducts {
+  .cards {
     display: grid;
     gap: 2%;
     grid-template-columns: 1fr 1fr 1fr ;
     padding: 0 10%;
   }
   
-  .Relatedproduct {
+  .card {
     background-color: #f5f0fa;
     border: 1px solid #BCB8CE;
     border-radius: 8px;
@@ -133,31 +133,31 @@
   
   }
   
-  .Relatedproduct:hover {
+  .card:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 16px #BCB8CE;
   }
   
-  .Relatedproduct img {
+  .card img {
   
     border-radius: 4px;
     margin-bottom: 10px;
   }
   
-  .Relatedproduct h3 {
+  .card h3 {
     font-size: 1.2rem;
     color: #4C394F;
     margin-bottom: 5px;
   }
   
-  .Relatedproduct p {
+  .card p {
     font-size: 1rem;
     color: #4C394F;
   }
   
   
   
-  .RelatedDetails {
+  .card {
     flex: 1;
     float: right;
     margin: 0 20%;

@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import jwt from "jsonwebtoken"; // Import jwt
 
 const Signuppage: React.FC = () => {
-  // Declare state variables for login status and username
+  // Declare state variables for login status and username 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
 
@@ -31,7 +31,7 @@ const Signuppage: React.FC = () => {
         "Content-Type": "application/json",
       },
     });
-
+ 
     if (response.ok) {
       const data = await response.json();
       // Store the token in localStorage upon successful signup
@@ -58,6 +58,7 @@ const Signuppage: React.FC = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,6 +97,8 @@ const Signuppage: React.FC = () => {
             justifyContent: "center",
           },
         }
+
+        
       );
       return;
     }

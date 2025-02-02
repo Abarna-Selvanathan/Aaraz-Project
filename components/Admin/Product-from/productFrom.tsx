@@ -89,65 +89,66 @@ export default function AddProduct() {
   };
 
   return (
-    <div>
-      <h1 className="title">Add Product</h1>
-      <form onSubmit={handleSubmit} className="addProductForm">
+    <div className="update-product-form">
+      <h2>Add Product</h2>
+      <form onSubmit={handleSubmit} >
+       
         <input
           type="text"
           placeholder="Product Name"
           value={product.productName}
           onChange={(e) => setProduct({ ...product, productName: e.target.value })}
           required
-          className="inputField"
+          
         />
-        <input
-          type="number"
-          placeholder="Product Price"
-          value={product.price}
-          onChange={(e) => setProduct({ ...product, price: parseFloat(e.target.value) })}
-          required
-          className="inputField"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          required
-          className="inputField"
-        />
-        {preview && <Image src={preview} alt="Preview" width={200} height={200} />}
+
         <textarea
           placeholder="Description"
           value={product.description}
           onChange={(e) => setProduct({ ...product, description: e.target.value })}
           required
-          className="inputField"
+          
         />
+
         <input
-          type="text"
-          placeholder="Product Type"
-          value={product.productType}
-          onChange={(e) => setProduct({ ...product, productType: e.target.value })}
+          type="number"
+          placeholder="Price"
+          value={product.price}
+          onChange={(e) => setProduct({ ...product, price: parseFloat(e.target.value) })}
           required
-          className="inputField"
+         
         />
+
         <input
           type="text"
           placeholder="Stock Status"
           value={product.stock}
           onChange={(e) => setProduct({ ...product, stock: e.target.value })}
           required
-          className="inputField"
-          // list="stock-options"
         />
-        {/* <datalist id="stock-options">
-          <option value="In Stock" />
-          <option value="Out of Stock" />
-        </datalist> */}
+        
+        
+        <input
+          type="text"
+          placeholder="Product Type"
+          value={product.productType}
+          onChange={(e) => setProduct({ ...product, productType: e.target.value })}
+          required
+         
+        />
 
-        <button type="submit" className="submitButton">
-          Add Product
-        </button>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          required
+          
+        />
+        {preview && <Image src={preview} alt="Preview" width={100} height={100} />}
+
+        
+
+        <button type="submit">Add Product</button>
         {message && <p className="message">{message}</p>}
       </form>
     </div>

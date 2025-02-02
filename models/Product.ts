@@ -3,9 +3,9 @@ import mongoose, { Schema } from 'mongoose';
 const productSchema = new mongoose.Schema({
   productId: {
     type: String,
-    unique: true,  // Ensures uniqueness
+    unique: true, 
     required: true,
-    default: () => new mongoose.Types.ObjectId().toString(), // Generates a unique ID
+    default: () => new mongoose.Types.ObjectId().toString(), 
   },
   productName: { type: String, required: true },
   description: { type: String,required: true },

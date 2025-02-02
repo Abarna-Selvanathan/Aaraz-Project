@@ -9,14 +9,14 @@ import Link from "next/link";
 
 const CollectionFrame: React.FC = () => {
 
-   const [products, setProducts] = useState<any[]>([]); // Any[] type to allow flexible structure for products
+   const [products, setProducts] = useState<any[]>([]); 
     
     useEffect(() => {
       const fetchProducts = async () => {
         try {
-          const response = await fetch('/api/product'); // Corrected the API endpoint to /api/products
+          const response = await fetch('/api/product'); 
           const data = await response.json();
-          setProducts(data); // Products state update செய்ய
+          setProducts(data); 
         } catch (error: any) {
           console.error('Error feabarnarohanabarnarohantching products:', error.message);
         }
