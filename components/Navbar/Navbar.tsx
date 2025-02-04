@@ -26,15 +26,6 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const getUser = async () => {
-      const token = Cookies.get("token"); 
-      console.log("Token from cookies:", token); // Debug log
-  
-      if (!token) {
-        console.log("No token found. User is logged out.");
-        setIsLoggedIn(false);
-        setCurrentUser(null);
-        return;
-      }
   
       try {
         const response = await axios.get('/api/cookie');
@@ -86,12 +77,11 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('/api/logout'); // Optional API call
+      await axios.post('/api/user/logout'); // Optional API call
     } catch (error) {
       console.error("Logout failed", error);
     }
-  
-    Cookies.remove("token"); // Remove token
+
     setIsLoggedIn(false);
     setUserName("");
     setCurrentUser(null);
@@ -125,11 +115,7 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  console.log("isLoggedIn:", isLoggedIn);
-  console.log("userName:", userName);
-  console.log("currentUser:", currentUser);
-  console.log("loggedUserId:", loggedUserId);
-  console.log("findUsers:", findUsers);
+  
 
 
   return (

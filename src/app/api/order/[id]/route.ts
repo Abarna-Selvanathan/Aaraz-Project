@@ -1,53 +1,74 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import DBconnect from '../../../../../lib/dbConnect';
-import Order from '../../../../../models/Order';
-import Product from '../../../../../models/Product'; // Ensure product exists before order
+import { NextRequest, NextResponse } from "next/server";
+import Order from "../../../../../models/Order";
+import dbConnect from "../../../../../lib/dbConnect";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await DBconnect(); // Ensure DB connection
+// GET an order by ID
+export async function GET(req: NextRequest, { params }: { params: { orderId: string } }) {
+  try {
+    await dbConnect();
+    const { orderId } = params;
 
-  if (req.method === 'POST') {
-    return createOrder(req, res);
-  } else if (req.method === 'GET') {
-    return getOrderById(req, res);
-  } else {
-    return res.status(405).json({ error: 'Method not allowed' });
+    if (!orderId) {
+      return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
+    }
+
+
+    
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ order }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching order:", error);
+    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
 }
 
-// POST: Create new order
-const createOrder = async (req: NextApiRequest, res: NextApiResponse) => {
+// UPDATE an order by ID
+export async function PUT(req: NextRequest, { params }: { params: { orderId: string } }) {
   try {
-    const { userId, productId, quantity, deliveryDetails } = req.body;
+    await dbConnect();
+    const { orderId } = params;
+    const body = await req.json();
 
-    // Validate Product Exists
-    const productExists = await Product.findById(productId);
-    if (!productExists) {
-      return res.status(400).json({ error: 'Invalid productId. Product not found.' });
+    if (!orderId) {
+      return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
     }
 
-    // Create Order
-    const newOrder = new Order({ userId, productId, quantity, deliveryDetails, status: 'pending' });
-    await newOrder.save();
+    const updatedOrder = await Order.findByIdAndUpdate(orderId, { $set: body }, { new: true });
 
-    return res.status(201).json({ message: 'Order created successfully', order: newOrder });
-  } catch (error: any) {
-    return res.status(500).json({ error: 'Failed to create order', details: error.message });
+    if (!updatedOrder) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Order updated successfully", order: updatedOrder }, { status: 200 });
+  } catch (error) {
+    console.error("Error updating order:", error);
+    return NextResponse.json({ error: "Failed to update order" }, { status: 500 });
   }
-};
+}
 
-// GET: Get order by ID
-const getOrderById = async (req: NextApiRequest, res: NextApiResponse) => {
+// DELETE an order by ID
+export async function DELETE(req: NextRequest, { params }: { params: { orderId: string } }) {
   try {
-    const { id } = req.query;
-    const order = await Order.findById(id);
+    await dbConnect();
+    const { orderId } = params;
+
+    if (!orderId) {
+      return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
+    }
+
+    const order = await Order.findByIdAndDelete(orderId);
 
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    return res.status(200).json(order);
-  } catch (error: any) {
-    return res.status(500).json({ error: 'Failed to fetch order', details: error.message });
+    return NextResponse.json({ message: "Order deleted successfully" }, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting order:", error);
+    return NextResponse.json({ error: "Failed to delete order" }, { status: 500 });
   }
-};
+}

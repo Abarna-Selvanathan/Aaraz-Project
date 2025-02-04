@@ -7,10 +7,10 @@ import Image from 'next/image';
 import Logo from "../../../public/Image/logo.png";
 import '../../../components/Admin/Dashbord/dashboard.css';
 import Users from '../User/user';
-import Payments from "@/pages/admin/payment";
-import Product from '@/pages/admin/product';
-import Orders from '@/pages/admin/order';
-import DeliveryDetails from '@/pages/admin/delivery';
+import Payments from "../Payment/payment";
+import Product from '../Product/product';
+import Orders from '../Order/order';
+import DeliveryDetails from '../Delivery/delivery';
 
 const Dashboard: React.FC = () => {
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(true);
@@ -100,21 +100,29 @@ const Dashboard: React.FC = () => {
     setIsPaymentOpen(false);
   };
 
-  // const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  // const toggleUserDropdown = () => {
-  //   setUserDropdownOpen(!userDropdownOpen);
-  // };
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const toggleUserDropdown = () => {
+    setUserDropdownOpen(!userDropdownOpen);
+  };
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem("token");
-  //   setIsLoggedIn(false);
-  //   setUserName("");
-  //   window.location.href = "/login";
-  // };
 
   return (
     <div className="main-content">
-      
+
+      <div className="navbar">
+
+        <div className="navbar-links">
+          <ul>
+            <li onClick={handleAnalytic}>Analytics</li>
+            <li onClick={handleProduct}>Products</li>
+            <li onClick={handleUser}>User</li>
+            <li onClick={handleOrder}>Orders</li>
+            <li onClick={handlePayment}>Payments</li>
+            <li onClick={handleDelivery}>Delivery Details</li>
+          </ul>
+        </div>
+        
+      </div>
 
       <div className="content">
         {isAnalyticsOpen && (

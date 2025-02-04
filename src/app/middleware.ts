@@ -7,8 +7,8 @@ export function middleware(req: NextRequest) {
   const token = req.headers.get("Authorization")?.split(" ")[1];
 
   if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url)); // Redirect to login page if token is missing
-  }
+    return NextResponse.redirect(new URL("/login", req.url)); 
+  } 
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as {
@@ -17,21 +17,21 @@ export function middleware(req: NextRequest) {
       userType: string;
     }; 
  
-    const userType = decoded.userType; // Extract userType from token
+    const userType = decoded.userType; 
     const url = req.nextUrl.clone();
 
-    // Role-based redirection
+    
     if (url.pathname.startsWith("/admin") && userType !== "admin") {
-      return NextResponse.redirect(new URL("/admin/dashboard", req.url)); // Redirect non-admins from admin pages
+      return NextResponse.redirect(new URL("/admin/dashboard", req.url)); 
     }
     if (url.pathname.startsWith("/home") && userType !== "customer") {
-      return NextResponse.redirect(new URL("/", req.url)); // Redirect non-customers from customer pages
+      return NextResponse.redirect(new URL("/", req.url)); 
     }
 
-    return NextResponse.next(); // All ow access if role matches
+    return NextResponse.next(); 
   } catch (error) {
     console.error("Middleware error:", error);
-    return NextResponse.redirect(new URL("/login", req.url)); // Redirect if token verification fails
+    return NextResponse.redirect(new URL("/login", req.url)); 
   }
 
   

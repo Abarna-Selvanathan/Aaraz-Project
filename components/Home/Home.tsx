@@ -62,7 +62,7 @@ const Home: React.FC = () => {
 
 
   const handleBuyNow = () => {
-    console.log(`Proceed to checkout`);
+    console.log(`Proceed to checkout`); 
   };
 
   const handleProduct = (id: string) => {
@@ -99,14 +99,14 @@ const Home: React.FC = () => {
                   <Link href="/cart">
                     <div className="fas fa-cart-plus" style={{color: 'black', fontSize: '1.5rem' }}></div>
                   </Link>
-                  <Link href="/payment">
+                
                     <div className="buttons">
                       <button className="buy-now" onClick={handleBuyNow}>Buy Now</button>
                     </div>
-                  </Link>
+               
                 </div>
             </div>
-          ))}
+          ))} 
         </div>
       </section>
 

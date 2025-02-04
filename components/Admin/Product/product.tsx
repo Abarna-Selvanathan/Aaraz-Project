@@ -9,17 +9,17 @@ import React from 'react';
 import Image from 'next/image';
 
 interface Product {
-  _id?: string;  
+  _id?: string;
   productName: string;
   description: string;
   price: number;
   stock: string;
-  productType: string; 
+  productType: string;
   image: string;
 }
 
 const Product: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]); 
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { id } = useParams(); // For GET by ID
   const [productDetails, setProductDetails] = useState<Product | null>(null); // To hold the single product details
@@ -30,7 +30,7 @@ const Product: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('/api/product');
-        if (response.status === 200) { 
+        if (response.status === 200) {
           setProducts(response.data.products);
         } else {
           console.error('Unexpected response status:', response.status);
@@ -69,7 +69,7 @@ const Product: React.FC = () => {
       if (response.status === 200) {
         alert('Product updated successfully');
         setProductDetails(response.data.product); // Update the product details in the state
-        setProducts(products.map(product => 
+        setProducts(products.map(product =>
           product._id === updatedProduct._id ? updatedProduct : product
         )); // Update the product in the list as well
         setEditProduct(null); // Close the edit form after update
@@ -130,7 +130,7 @@ const Product: React.FC = () => {
                   <th>Price</th>
                   <th>Stock</th>
                   <th>Image</th>
-                  <th>Actions</th> 
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>

@@ -44,7 +44,7 @@ const Singleproductviewpage: React.FC = () => {
       };
       fetchProducts();
     }, []);
-
+ 
   const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuantity(Number(event.target.value));
   };
@@ -54,7 +54,10 @@ const Singleproductviewpage: React.FC = () => {
   };
 
   const handleBuyNow = () => {
-    console.log(`Proceed to checkout with ${quantity} items.`);
+    router.push({
+      pathname: "/order", 
+      query: {id: id}
+    })
   };
 
   
@@ -117,11 +120,9 @@ const Singleproductviewpage: React.FC = () => {
                   <Link href="/cart">
                     <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem' }}></div>
                   </Link>
-                  <Link href="/payment">
                     <div className="buttons">
                       <button className="buy-now" onClick={handleBuyNow}>Buy Now</button>
                     </div>
-                  </Link>
                 </div>
             </div>
           ))}

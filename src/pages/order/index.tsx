@@ -1,15 +1,15 @@
 import Navbar from "../../../components/Navbar/Navbar";
-import PaymentForm from "../../../components/Payment/payment";
+import OrderForm from "../../../components/PlaceOrder/placeOrder";
 import Footer from "../../../components/Footer/Footer"
-function PaymentPage() {
+function OrderPage() {
   return (
     <div>
       <Navbar />
-      <PaymentForm/>
+      <OrderForm/>
       <Footer/>
     
     </div>
   );
 }
 
-export default PaymentPage;
+export default OrderPage;

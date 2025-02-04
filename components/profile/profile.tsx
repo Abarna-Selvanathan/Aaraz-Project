@@ -10,17 +10,17 @@ import axios from "axios";
 
 const Profile = () => {
 
+  const [preview, setPreview] = useState<string>('');
   const router = useRouter();
   const [userData, setUserData] = useState({
     _id: "",
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     phoneNumber: "",
+    profileImage: ""
   });
   const [isEditing, setIsEditing] = useState({
-    firstName: false,
-    lastName: false,
+    name: false,
     email: false,
     phoneNumber: false,
   });
@@ -45,8 +45,6 @@ const Profile = () => {
   
     fetchUserData();
   }, []);
-   
-  console.log(userData)
   
 
   const handleEditClick = (field: string) => {
@@ -118,8 +116,7 @@ const Profile = () => {
     }
 
     setIsEditing({
-      firstName: false,
-      lastName: false,
+      name: false,
       email: false,
       phoneNumber: false,
     });
@@ -129,7 +126,23 @@ const Profile = () => {
     localStorage.removeItem("user"); 
     router.push("/login"); 
   };
-
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = (event: ProgressEvent<FileReader>) => {
+        const result = event.target?.result;
+        if (typeof result === 'string') {
+          setPreview(result); // Base64 string
+          setProduct((prevProduct: any) => ({
+            ...prevProduct,
+            image: result,
+          }));
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   return (
     <div className="profileContainer">
       <ToastContainer />
@@ -140,9 +153,14 @@ const Profile = () => {
       </div>
 
       <div className="contentprofile">
-        <div className="imageprofile">
-          {/* <Image src={ProfileImage} alt="Profile Image" width={150} height={150} /> */}
-        </div>
+         <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  required
+                  
+                />
+                {preview && <Image src={preview} alt="Preview" width={100} height={100} />}
 
         <div className="infoprofile">
           <h1>Edit Profile</h1>
@@ -150,7 +168,7 @@ const Profile = () => {
         </div>
 
         <div className="formInputs">
-          {["firstName", "lastName", "email", "phoneNumber"].map((field) => (
+          {["name", "email", "phoneNumber"].map((field) => (
             <div key={field} className="formGroup">
               <input
                 type={field === "email" ? "email" : field === "phoneNumber" ? "tel" : "text"}
@@ -180,3 +198,11 @@ const Profile = () => {
 };
 
 export default Profile;
+function setProduct(arg0: (prevProduct: any) => any) {
+  throw new Error("Function not implemented.");
+}
+
+function setPreview(result: string) {
+  throw new Error("Function not implemented.");
+}
+

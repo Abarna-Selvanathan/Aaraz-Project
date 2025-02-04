@@ -1,11 +1,13 @@
 import Dashboard from "../../../../components/Admin/Dashbord/dashboard";
-import Navbar from "../../../../components/Admin/Navbar-Admin/navbar";
+import Navbar from "../../../../components/Navbar/Navbar";
+import "../../../../components/Navbar/Navbar.css"
+
 
 function DashboardPage (){
   return (
     <div>
-     <Navbar/>
-      <Dashboard/>
+    <Navbar/>
+    <Dashboard/>
      
     
     </div>

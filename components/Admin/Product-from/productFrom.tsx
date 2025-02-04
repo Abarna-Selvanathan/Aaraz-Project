@@ -50,12 +50,6 @@ export default function AddProduct() {
     e.preventDefault();
     setMessage('');
 
-    // // Validate stock (check if it's a valid number)
-    // if (!/^\d+$/.test(product.stock)) {
-    //   setMessage('Stock must be a valid number');
-    //   return;
-    // }
-
     try {
       const response = await fetch('/api/upload', {
         method: 'POST',
