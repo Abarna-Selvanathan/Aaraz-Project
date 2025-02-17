@@ -10,10 +10,10 @@ import Image from 'next/image';
 
 interface Product {
   _id?: string;
-  productName: string;
-  description: string;
+  productName: string; 
+  description: string; 
   price: number;
-  stock: string;
+  stock: string; 
   productType: string;
   image: string;
 }
@@ -24,6 +24,7 @@ const Product: React.FC = () => {
   const { id } = useParams(); // For GET by ID
   const [productDetails, setProductDetails] = useState<Product | null>(null); // To hold the single product details
   const [editProduct, setEditProduct] = useState<Product | null>(null); // State for editing product
+  const [showEditForm, setShowEditForm] = useState<boolean>(false); // New state to toggle the form and table
 
   // Fetch all products for the table
   useEffect(() => {
@@ -48,6 +49,7 @@ const Product: React.FC = () => {
           if (response.status === 200) {
             setProductDetails(response.data.product);
             setEditProduct(response.data.product); // Set the product to be editable
+            setShowEditForm(true); // Show the edit form
           } else {
             console.error('Product not found:', response.status);
           }
@@ -73,6 +75,7 @@ const Product: React.FC = () => {
           product._id === updatedProduct._id ? updatedProduct : product
         )); // Update the product in the list as well
         setEditProduct(null); // Close the edit form after update
+        setShowEditForm(false); // Hide the edit form after updating
       } else {
         console.error('Failed to update product:', response.status);
       }
@@ -110,117 +113,123 @@ const Product: React.FC = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="main-content">
-      <div className="analytics">
-        <div className="background-products">
+    <div className="main-content-Product">
+      <div className="ProductTable">
+        <div className="products">
           <h1>Products</h1>
-          <div className="viewDetails">
+          <div className="AddProduct">
             <Link href="/admin/productfrom">
               <button>Add Products</button>
             </Link>
           </div>
-          <div className="table-container">
-            <table className="user-table">
-              <thead>
-                <tr>
-                  <th>Product ID</th>
-                  <th>Product Name</th>
-                  <th>Product Type</th>
-                  <th>Description</th>
-                  <th>Price</th>
-                  <th>Stock</th>
-                  <th>Image</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product) => (
-                  <tr key={product._id}>
-                    <td>{product._id}</td>
-                    <td>{product.productName}</td>
-                    <td>{product.productType}</td>
-                    <td>{product.description}</td>
-                    <td>{product.price}</td>
-                    <td>{product.stock}</td>
-                    <td>
-                      <Image src={product.image} alt={product.productName} width={50} height={50} />
-                    </td>
-                    <td>
-                      {/* Update and Delete actions */}
-                      <button onClick={() => setEditProduct(product)}>Edit</button>
-                      <button onClick={() => handleDeleteProduct(product._id!)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
 
+          {/* Show the table only when showEditForm is false */}
+          {!showEditForm && (
+            <div className="table-container">
+              <table className="product-table">
+                <thead>
+                  <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Product Type</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((product) => (
+                    <tr key={product._id}>
+                      <td>{product._id}</td>
+                      <td>{product.productName}</td>
+                      <td>{product.productType}</td>
+                      <td>{product.description}</td>
+                      <td>{product.price}</td>
+                      <td>{product.stock}</td>
+                      <td>
+                        <Image src={product.image} alt={product.productName} width={50} height={50} />
+                      </td>
+                      <td> 
+                        {/* Update and Delete actions */}
+                        <button onClick={() => { setEditProduct(product); setShowEditForm(true); }}>Edit</button>
+                        <button onClick={() => handleDeleteProduct(product._id!)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           {/* Update Product Form */}
-          {editProduct && (
-            <div className="update-product-form">
-              <h2>Edit Product</h2>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (editProduct) handleUpdateProduct(editProduct);
-                }}
-              >
-                <label>Product Name:</label>
-                <input
-                  type="text"
-                  name="Product Name"
-                  value={editProduct.productName}
-                  onChange={handleInputChange}
-                />
+          {showEditForm && editProduct && (
+            <div className='update-product'>
+              <div className="update-product-form">
+                <h2>Edit Product</h2>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (editProduct) handleUpdateProduct(editProduct);
+                  }}
+                >
+                  <label>Product Name:</label>
+                  <input
+                    type="text"
+                    name="productName"
+                    value={editProduct.productName}
+                    onChange={handleInputChange}
+                  />
 
-                <label>Description:</label>
-                <textarea
-                  name="Description"
-                  value={editProduct.description}
-                  onChange={handleInputChange}
-                />
+                  <label>Description:</label>
+                  <textarea
+                    name="description"
+                    value={editProduct.description}
+                    onChange={handleInputChange}
+                  />
 
-                <label>Price:</label>
-                <input
-                  type="number"
-                  name="price"
-                  value={editProduct.price}
-                  onChange={handleInputChange}
-                />
+                  <label>Price:</label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={editProduct.price}
+                    onChange={handleInputChange}
+                  />
 
-                <label>Stock:</label>
-                <input
-                  type="text"
-                  name="stock"
-                  value={editProduct.stock}
-                  onChange={handleInputChange}
-                />
+                  <label>Stock:</label>
+                  <input
+                    type="text"
+                    name="stock"
+                    value={editProduct.stock}
+                    onChange={handleInputChange}
+                  />
 
-                <label>Product Type:</label>
-                <input
-                  type="text"
-                  name="productType"
-                  value={editProduct.productType}
-                  onChange={handleInputChange}
-                />
+                  <label>Product Type:</label>
+                  <input
+                    type="text"
+                    name="productType"
+                    value={editProduct.productType}
+                    onChange={handleInputChange}
+                  />
 
-                <label>Image URL:</label>
-                <input
-                  type="text"
-                  name="image"
-                  value={editProduct.image}
-                  onChange={handleInputChange}
-                />
+                  <label>Image URL:</label>
+                  <input
+                    type="text"
+                    name="image"
+                    value={editProduct.image}
+                    onChange={handleInputChange}
+                  />
 
-                <button type="submit">Update Product</button>
-              </form>
+                  <button type="submit">Update Product</button>
+                </form>
+              </div>
             </div>
           )}
         </div>
       </div>
     </div>
+    
   );
 };
 

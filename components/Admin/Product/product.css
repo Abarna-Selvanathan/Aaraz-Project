@@ -1,83 +1,65 @@
-/* General Styles */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Roboto', sans-serif;
-  /* background-color: white; */
-  color: black;
-  height: 100vh;
-}
 
 /* Main Content */
-.main-content {
+.main-content-Product {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin: 20px 0;
+  margin: 5% auto;
+  max-width: 90%;
 }
-
-/* Analytics and Products Section */
-/* .analytics {
-  
-  width: 85vw;
-  height: auto;
-  margin-top: 0.8vw;
-  margin-left: 0.8vw;
-  flex: 1;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-} */
-
-/* .background-products {
-
-  width: 85vw;
-  height: auto;
-  margin-top: 0.8vw;
-  margin-left: 0.8vw;
-  flex: 1;
-  padding: 20px;
-  border-radius: 10px;
-  
-} */
 
 /* Table Styling */
-/* .table-container {
-  overflow-x: auto;
+.table-container {
   margin-top: 20px;
-} */
-
-.user-table {
+  height: 65vh;
   
-  border-collapse: collapse;
+  overflow-y: auto;
+}
+
+
+
+.product-table {
+ border-collapse: collapse;
+  width: 100%;
   border-radius: 10px;
-  overflow: hidden;
+  padding: 0 5%;
+
   
 }
 
-.user-table th,
-.user-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+
+.product-table td {
+  padding: 15px;
+  border-right: 2px solid #ccc;
+  border-left:2px solid #ccc; 
+  font-size: 1.3rem;
+
 }
 
-.user-table th {
- 
+.product-table th {
+  background-color: #BCB8CE;
   color: black;
-  font-weight: 600;
+  padding: 20px ;
+  font-size: 1.5rem;
+  position: sticky;
+  z-index: 10000;
+  top: 0;
 }
 
+.product-table td:hover {
+  font-weight: 600;
+  
+}
 
-.user-table td img {
-  width: 50px;
-  height: 50px;
+.product-table td img {
+  width: 90px;
+  height: 90px;
   border-radius: 4px;
   object-fit: cover;
 }
 
-.user-table td button {
-  padding: 8px 12px;
+.product-table td button {
+  padding: 5px 12px;
   background-color: white;
   color: black;
   border: 2px solid black;
@@ -88,35 +70,40 @@ body {
   margin-right: 5px;
 }
 
-.user-table td button:hover {
+.product-table td button:hover {
   font-weight: bold;
 }
 
 /* Update Product Form */
+.update-product{
+  overflow-y: auto;
+
+}
 .update-product-form {
   margin-top: 20px;
   padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  max-width: 80%;
+  margin: 2% auto;
+  border: 2px solid black;
 }
 
 .update-product-form h2 {
   margin-bottom: 20px;
-  color: #4C394F;
+  
 }
 
 .update-product-form label {
   display: block;
-  margin-bottom: 5px;
-  color: #4C394F;
-  font-weight: 600;
+  margin: 1% 0; 
+
+  color: #444;
 }
 
 .update-product-form input,
 .update-product-form textarea {
   width: 100%;
-  padding: 8px;
+  padding: 5px;
   margin-bottom: 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -134,23 +121,15 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.update-product-form button:hover {
-  background-color: #BCB8CE;
-  color: #4C394F;
-  font-weight: bold;
-}
-
 /* View Details Button */
-.viewDetails button {
+.AddProduct button {
   padding: 10px 20px;
-  background-color: #4C394F;
-  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1.5rem;
   transition: background-color 0.3s ease;
   margin-top: 20px;
-  margin-left: 80vw;
+  margin-left: 70vw;
 }
 

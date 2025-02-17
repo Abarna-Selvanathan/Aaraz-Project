@@ -10,7 +10,9 @@ import Users from '../User/user';
 import Payments from "../Payment/payment";
 import Product from '../Product/product';
 import Orders from '../Order/order';
+// import "../../src/app/globals.css";
 import DeliveryDetails from '../Delivery/delivery';
+
 
 const Dashboard: React.FC = () => {
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(true);
@@ -106,12 +108,12 @@ const Dashboard: React.FC = () => {
   };
 
 
-  return (
+  return ( 
     <div className="main-content">
 
-      <div className="navbar">
+      <div className="NavbarAdmin">
 
-        <div className="navbar-links">
+        <div className="Navbar-links">
           <ul>
             <li onClick={handleAnalytic}>Analytics</li>
             <li onClick={handleProduct}>Products</li>

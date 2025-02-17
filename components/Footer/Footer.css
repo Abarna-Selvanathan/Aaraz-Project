@@ -6,29 +6,36 @@ footer {
 
 .footer-link {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  max-width: 80%;
+  margin: 0 15%; 
 }
 
 .footer-link a {
-  color: #444;
+  color: #333;
   text-decoration: none;
   font-size: 1rem;
   padding: 0.3rem 0;
   transition: color 0.3s ease;
   display: block;
 }
- .FAQ, .Our-mission{
+.Our-mission h2 {
+  margin-left: 20%;
+}
+
+.FAQ h2{
+  margin-left: 20%;
+}
+ .FAQ, .Our-mission, .FAQ{
   color: black;
   font-size: 1rem;
   transition: color 0.3s ease;
   display: block;
+  max-width: 40%;
  }
- .FAQ h2, .Our-mission h2{
-  margin: 0 20%;
 
- }
  .FAQ li, .Our-mission p, .Info {
-  color: #444;
+  color: #333;
   padding: 0.4rem 0;
   margin: 0 20%;
  }
@@ -37,10 +44,31 @@ footer {
   margin-top: 4% ;
   padding: 2% 0;
   border-top: 1px solid #9a97a5;
-  color: #444;
+  color: #333;
   text-align: center;
   font-size: 1rem ;
  }
+
+ .social-icons {
+  margin-top: 10%;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-right: 35%;
+  
+}
+
+.icon {
+  color: black;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+  
+}
+.icon:hover {
+  opacity: 0.7;
+  
+}
  
 @media (max-width: 768px) {
   .footer-link {

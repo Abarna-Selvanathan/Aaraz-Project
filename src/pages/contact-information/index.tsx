@@ -1,5 +1,5 @@
 import Navbar from "../../../components/Navbar/Navbar";
-import Support from "../../../components/support-footer/support";
+import Support from "../../../components/Contact/support";
 import Footer from "../../../components/Footer/Footer"
 function supportfooter() {
   return (

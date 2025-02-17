@@ -1,90 +1,92 @@
 form {
-  
-    background-color: #f5f0fa;
+    background-color: rgba(218, 213, 237, 0.5);
+    border: 3px solid black;
     border-radius: 10px;
     padding: 20px 30px;
-    box-shadow: 0px 10px 16px rgba(0, 0, 0, 0.1);
-    max-width: 50%;
-    width: 100%;
+    box-shadow: 0px 10px 16px rgba(183, 180, 197, 0.9);
     text-align: center;
-    margin: 160px auto;
   
   }
-  
+    
   form h2 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    margin-right: 85%;
+    margin-bottom: 20px; 
+    text-align: left;
+    font-size: 3rem;
   }
   
   form input {
-    padding: 15px 20px;
-    border: 1px solid #4c394f;
+    padding: 10px ;
+    border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1.5rem;
     margin-bottom: 15px;
-    width: calc(100% - 40px);
+    width: 100%;
   }
   
-  form .password-container {
+  .password-container {
+    position: relative;
     display: flex;
     align-items: center;
-    position: relative;
   }
   
-  form .password-container input {
-    width: calc(100% - 10px);
+  .password-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    
   }
   
-  form .password-container .show-password {
+  .password-container .icon {
     position: absolute;
-    right: 10px;
+    right: 4%;
     cursor: pointer;
+    color: #444;
+    font-size: 1.3rem;
   }
+  
   
   form button {
     background-color: #4c394f;
     color: white;
-    border: none;
-    padding: 15px 25px;
+    
+    padding: 3px 45px;
     border-radius: 5px;
-    font-size: 1.5rem;
+    font-size: 2rem;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-top:2%;
   }
   
   form button:hover {
-    background-color: #bcb8ce;
-    color: #4c394f;
     font-weight: bold;
   }
   
   form .create-account {
-    font-size: 1.5rem;
-    color: #4c394f;
+   text-align: center;
+    color: black;
     text-decoration: none;
     display: block;
-    margin-top: 10px;
+    margin-top: 2%;
   }
-  form .forgot-password{
-    font-size: 1.5rem;
-    color: #4c394f;
-    text-decoration: none;
+  .forgot-password{
+    color: black;
     display: block;
-    margin-right: 80%;
+    text-align: left;
   }
   
-  form .forgot-password:hover,
-  form .create-account:hover {
-    text-decoration: underline;
-    font-weight: bold;
-  }
   .form-logo img{
-    width: 7.5vw;
-    border-radius: 50%;
-    margin-top: 2vw;
+    margin-top: 1vw;
+    justify-content: center;
   }
-  .login-form input::placeholder {
-    color: #bcb8ce;
-    font-size: 1.5rem;
+  .login-container p{
+    font-size: 1.4rem;
+  }
+  .login-container{
+    width: 45%;
+    margin: 9% auto;
+  }
+  .signup-container{
+    width: 45%;
+    margin: 3% auto;
   }

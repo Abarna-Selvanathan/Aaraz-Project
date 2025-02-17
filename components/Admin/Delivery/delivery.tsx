@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import React from 'react';
 import Link from 'next/link';
+// import "../../src/app/globals.css";
 import Image from 'next/image';
-import "../../../components/Admin/Delivery/delivery.css"
+
 
 interface user {
   username: string;
@@ -35,12 +36,12 @@ const DeliveryDetails: React.FC = () => {
   }, []);
 
   return (
-    <div className="main-content">
-      <div className="analytics">
-        <div className="background-products">
-          <h1>Users</h1>
+    <div className="main-content-Product">
+      <div className="ProductTable">
+        <div className="products">
+          <h1>Delivery Details</h1>
           <div className="table-container">
-            <table className="user-table">
+            <table className="product-table">
               <thead>
                 <tr>
                   <th>Username</th>
@@ -48,6 +49,7 @@ const DeliveryDetails: React.FC = () => {
                   <th>Email</th>
                   <th>Phone Number</th>
                   <th>Address</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>

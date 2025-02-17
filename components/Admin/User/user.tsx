@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import './user.css';
+import "../../../components/Admin/Product/product.css"
+
 
 interface User {
   _id: string;
@@ -50,20 +51,20 @@ const Users: React.FC = () => {
     if (confirm("Are you sure you want to delete this user?")) {
       try {
         await axios.delete(`/api/user/${id}`);
-        setUsers(users.filter(user => user._id !== id)); // UI-ல் Refresh செய்யும்
+        setUsers(users.filter(user => user._id !== id)); 
       } catch (error) {
         console.error("Error deleting user:", error);
       }
     }
   };
-
+ 
   return (
-    <div className="main-content">
-      <div className="analytics">
-        <div className="background-products">
+    <div className="main-content-Product">
+      <div className="ProductTable">
+        <div className="products">
           <h1>Users</h1>
           <div className="table-container">
-            <table className="user-table">
+            <table className="product-table">
               <thead>
                 <tr>
                   <th>User ID</th>
@@ -86,7 +87,7 @@ const Users: React.FC = () => {
                     <td>{user.address}</td>
                     <td>
                     <button onClick={() => router.push(`/admin/userDetail/${user._id}`)}>View</button>
-                    <button onClick={() => router.push(`/admin/userDetail/${user._id}`)}>Edit</button>
+                    {/* <button onClick={() => router.push(`/admin/userDetail/${user._id}`)}>Edit</button> */}
 
                       <button onClick={() => handleDelete(user._id)} className="delete-btn">Delete</button>
                     </td>

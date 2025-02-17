@@ -1,14 +1,8 @@
-/* General Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
-}
 
-/* Header Styles */
+
+/* Header Styles */ 
 header {
-  background-color: #BCB8CE;
+  background-color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -18,7 +12,7 @@ header {
   z-index: 10000;
   backdrop-filter: blur(10px);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0px 4px 10px rgba(41, 40, 40, 0.1); 
+  box-shadow: 0px 4px 10px rgba(188, 184, 206, 0.8); 
 }
 .welcome-mess{
   background-color: #4C394F;
@@ -47,14 +41,14 @@ nav {
 nav a {
   color: black;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1.2rem;
+  /* font-weight: 600; */
+  font-size: 1.8rem;
   transition: transform 0.3s ease;
 }
 
-nav a:hover { 
+/* nav a:hover { 
   transform: translateY(-3px);
-}
+} */
 
 /* Search Bar */
 .searchbar {
@@ -107,14 +101,14 @@ nav a:hover {
   align-items: center;
   gap: 20px;
   color: black;
-  font-size: 1.5rem;
+  font-size: 2rem;
  
 }
 
 .icons {
   display: flex;
   gap: 20px;
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   color: black;
 }
 
@@ -130,7 +124,7 @@ nav a:hover {
 
 .dropdown-btn {
   color: black;
-  font-weight: bold;
+  /* font-weight: bold; */
   background: none;
   border: none;
   font-size: 1.2rem;

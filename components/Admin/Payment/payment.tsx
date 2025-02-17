@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-import "../../../components/Admin/Payment/payment.css"
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+// import "../../../components/Admin/Product/product.css"
+// import "../../src/app/globals.css";
+
 
 
 interface user {
@@ -39,12 +40,12 @@ const Payments: React.FC = () => {
   }, []);
 
   return ( 
-    <div className="main-content">
-      <div className="analytics">
-        <div className="background-products">
+    <div className="main-content-Product">
+      <div className="ProductTable">
+        <div className="products">
           <h1>Payments Details</h1>
           <div className="table-container">
-            <table className="customers-table">
+            <table className="product-table">
 
 
               <thead>

@@ -1,17 +1,4 @@
-body {
-    margin: 0;
-    padding: 0;    
-    font-family: 'poppins';
-    background-color: #DBD9E8;
-    color: #4C394F;
-    height: 100vh; 
-  }
-  
-  
-  
-  
-  
-  /* Main Content */
+/* Main Content */
   .main-content {
     flex: 1;
     display: flex;
@@ -27,11 +14,12 @@ body {
     width: 85vw;
     height: 37vw;
     margin-top: 0.8vw;
-    margin-left: 0.8vw;
+    margin-left: 0.8vw; 
   
     flex: 1;
     padding: 20px;
     border-radius: 10px;
+    overflow-y: auto;
   }
   
   .table-container {
@@ -74,7 +62,5 @@ body {
   }
   
   
-  /* .user-table tbody tr:hover {
-    background-color: #DBD9E8;
-  } */
+  
   

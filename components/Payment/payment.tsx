@@ -15,7 +15,7 @@ const PaymentForm = () => {
   };
 
   return (
-    <div className="checkout-container">
+    <div className="payment-container">
       <h2>Delivery Details</h2>
       <form className="delivery-form">
         <input type="text" placeholder="Name" required />

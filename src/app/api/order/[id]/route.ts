@@ -1,30 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import Order from "../../../../../models/Order";
 import dbConnect from "../../../../../lib/dbConnect";
+const express = require("express");
+const router = express.Router();
 
 // GET an order by ID
+
 export async function GET(req: NextRequest, { params }: { params: { orderId: string } }) {
+  console.log("Received Params:", params);  // Log to verify if params are received correctly
+  const { orderId } = params;
+
+  if (!orderId) {
+    return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
+  }
+
   try {
-    await dbConnect();
-    const { orderId } = params;
-
-    if (!orderId) {
-      return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
-    }
-
-
-    
+    await dbConnect()
     const order = await Order.findById(orderId);
     if (!order) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
-
     return NextResponse.json({ order }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching order:", error);
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    return NextResponse.json({message: 'Failed to fecth orders'}, { status: 500 });
   }
+
 }
+
+
+
+
 
 // UPDATE an order by ID
 export async function PUT(req: NextRequest, { params }: { params: { orderId: string } }) {
@@ -72,3 +77,25 @@ export async function DELETE(req: NextRequest, { params }: { params: { orderId: 
     return NextResponse.json({ error: "Failed to delete order" }, { status: 500 });
   }
 }
+
+
+
+router.patch("/order/:id", async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const order = await Order.findByIdAndUpdate(id, { status }, { new: true });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({ message: "Order status updated", order });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+module.exports = router;
+

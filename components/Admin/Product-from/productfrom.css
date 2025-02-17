@@ -1,14 +1,13 @@
 .update-product-form {
   font-family: 'Roboto', sans-serif;
   margin: 10%;
-  padding: 5%;
-  background-color: #BCB8CE;
+  padding: 2%;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid black;
 }
 
 .update-product-form h2 {
-  color: black;
+  color: black; 
   font-size: 2rem;
   text-align: center;
 }
@@ -19,21 +18,22 @@
   width: 100%;
   padding:  15px 8px;
   margin-bottom: 15px;
-  border: none;
+  border: 1px solid #ccc;
   border-radius: 3px;
   font-size: 1rem;
 }
 
 .update-product-form button {
   padding: 10px 20px;
-  background-color: #4C394F;
-  color:white;
-  border: none;
+  background-color: white;
+  color:black;
+  border: 2px solid black;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1.2rem;
   transition: background-color 0.3s ease;
-  margin-left: 90%;
+  margin-left: 45%;
+  margin-top: 2%;
 }
 
 .update-product-form button:hover {

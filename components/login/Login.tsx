@@ -2,20 +2,25 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import "../login/Login.css"
- 
+import "../../src/app/globals.css"
+import ReLogo from "../../public/Image/logo-removebg-preview.png";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
+
+ 
 const Loginpage: React.FC = () => {
-  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
   };
+ 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,14 +29,14 @@ const Loginpage: React.FC = () => {
       const response = await axios.post("/api/user/login", { email, password });
 
       if (response.status === 201) {
-        const { userType } = response.data; 
+        const { userType } = response.data;
 
-        // Redirect based on userType
+        
         if (userType === "admin") {
           router.push("/admin/dashboard");
-        } else  {
+        } else {
           router.push("/home");
-        } 
+        }
       } else {
         toast.error(response.data.error);
       }
@@ -45,10 +50,10 @@ const Loginpage: React.FC = () => {
       <form onSubmit={handleSubmit} className="login-form">
         <div className="form-logo">
           <Image
-            src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622752/AARAZ/Image/et5phkjew6tboxv4tkyy.png"
+            src={ReLogo}
             alt="Logo"
-            width={150}
-            height={150}
+            width={280}
+            height={280}
           />
         </div>
         <h2>Login</h2>
@@ -57,33 +62,38 @@ const Loginpage: React.FC = () => {
           type="text"
           placeholder="Email"
           required
-          className="input-field"
+        
         />
         <div className="password-container">
           <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
-            type={passwordVisible ? "text" : "password"}
-            placeholder="Password"
-            required
-            className="input-field"
+            placeholder="Enter your password"
           />
-          <span
-            className="show-password"
-            onClick={togglePasswordVisibility}
-            role="button" 
-            aria-label="Toggle Password Visibility"
-          >
-            {passwordVisible ? "🙈" : "👁️"}
+          <span className="icon" onClick={togglePassword}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
           </span>
         </div>
+        <p className="forgot-password">Forgot Password?</p>
         <button type="submit" className="login-button">
           Login
         </button>
-        <Link href="/signup" className="create-account">
-          Create Account
-        </Link>
+        <p><Link href="/signup" className="create-account">
+          Or Sign Up
+        </Link></p>
       </form>
     </div>
+
+
+ 
+
+ 
+      
+   
+  
+
   );
 };
 

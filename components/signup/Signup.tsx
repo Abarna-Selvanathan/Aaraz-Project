@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import '../signup/Signup.css';
+import "../login/Login.css"
 import "../../src/app/globals.css";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
-import jwt from "jsonwebtoken"; // Import jwt
+import ReLogo from "../../public/Image/logo-removebg-preview.png";
+import jwt from "jsonwebtoken";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 
 const Signuppage: React.FC = () => {
-  // Declare state variables for login status and username 
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
 
@@ -17,53 +20,48 @@ const Signuppage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [address, setAddress] = useState('')
 
   const router = useRouter();
 
-  const handleSignup = async (event: React.FormEvent) => { // Type the event correctly
+  const handleSignup = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const response = await fetch("/api/signup", {
       method: "POST",
-      body: JSON.stringify({ email, password }), 
+      body: JSON.stringify({ email, password }),
       headers: {
         "Content-Type": "application/json",
       },
     });
- 
+
     if (response.ok) {
       const data = await response.json();
-      // Store the token in localStorage upon successful signup
+
       localStorage.setItem("token", data.token);
 
-      // Set the logged-in state immediately
-      const decoded: any = jwt.decode(data.token); // Use 'any' since we don't know the exact type
+
+      const decoded: any = jwt.decode(data.token);
       if (decoded) {
         setIsLoggedIn(true);
         setUserName(decoded.email.split("@")[0]);
       }
-
-      // Redirect user to home or account page after signup
-      router.push("/"); // Or any other page you want to redirect to
+      router.push("/");
     } else {
       console.error("Signup failed");
     }
   };
 
-  // State for password visibility
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  // Function to toggle password visibility
-  const togglePasswordVisibility = () => {
+  const togglePassword = () => {
     setShowPassword(!showPassword);
   };
-  
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate form fields
+
     const errors = [];
 
     if (!firstName) errors.push("first name");
@@ -98,7 +96,7 @@ const Signuppage: React.FC = () => {
           },
         }
 
-        
+
       );
       return;
     }
@@ -121,7 +119,7 @@ const Signuppage: React.FC = () => {
             justifyContent: "center",
           },
         });
-        router.push("/"); // Navigate to homepage after success
+        router.push("/");
       } else {
         toast.error(response.data.error, {
           style: {
@@ -147,44 +145,57 @@ const Signuppage: React.FC = () => {
   return (
     <>
       <div className="signup-container">
-        <form onSubmit={handleSubmit} className="signup-form">
-          {/* Logo Section */}
+        <form onSubmit={handleSubmit} className="login-form">
           <div className="form-logo">
-            <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622752/AARAZ/Image/et5phkjew6tboxv4tkyy.png" alt="Logo" width={150} height={150} />
+            <Image
+              src={ReLogo}
+              alt="Logo"
+              width={280}
+              height={280}
+            />
           </div>
-          
-          {/* Form Title */}
           <h2>Signup</h2>
 
-          {/* Form Fields */}
           <input onChange={(e) => setFirstName(e.target.value)} type="text" placeholder="First Name" required />
           <input onChange={(e) => setLastName(e.target.value)} type="text" placeholder="Last Name" required />
           <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" required />
           <input onChange={(e) => setAddress(e.target.value)} type="text" placeholder="Address" required />
           <input onChange={(e) => setPhoneNumber(e.target.value)} type="text" placeholder="Phone Number" required />
 
-          {/* Password Field with Toggle */}
           <div className="password-container">
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              required
+              name="password"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
             />
-            <span className="show-password" onClick={togglePasswordVisibility}>
-              👁️
+            <span className="icon" onClick={togglePassword}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
+            
+          </div>
+          <div className="password-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your confirm password"
+            />
+            <span className="icon" onClick={togglePassword}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+            
           </div>
 
-          {/* Forgot Password Link */}
-          <a href="#" className="forgot-password">Forgot Password</a>
-
-          {/* Submit Button */}
-          <button type="submit">Signup</button>
-        </form>
-      </div>
+          <button type="submit" className="login-button">
+            Sign Up
+          </button>
+        </form >
+      </div >
     </>
   );
-} 
+}
 
 export default Signuppage;

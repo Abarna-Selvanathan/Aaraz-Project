@@ -1,9 +1,4 @@
-/* General Styles */
-body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #fff;
-  color: #000;
-}
+
 
 /* Hero Section */
 .hero img {
@@ -15,26 +10,27 @@ body {
 .about {
   text-align: center;
  margin: 2% 0;
-}
+} 
 
 .about h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
 }
-
+  
 .about p {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #444;
 }
 
 /* Sections */
 .section, .Collections-section {
   margin: 5% 0;
+
 }
 
 .section h1, .Collections-section h1 {
   text-align: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 20px;
 }
 
@@ -44,29 +40,26 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 2px;
+  /* max-width: 90%;
+  margin: 0 auto; */
 }
 
 .card {
   color: #000;
-  padding: 5px;
-  border-radius: 12px;
-  width: 250px;
+  /* padding: px; */
+  width: 15%;
   text-align: left;
-  /* transition: transform 0.3s ease-in-out; */
-  position: relative;
-}
-.card {
   position: relative;
   overflow: hidden;
 }
 
 
-.card .hover-img {
+/* .card .hover-img {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 300px;
+  height: 400px;
   opacity: 0;
   transition: opacity 0.1s ease-in-out;
 }
@@ -77,13 +70,13 @@ body {
 
 .card:hover .default-img {
   opacity: 0;
-}
+} */
 
 
 
 .card img {
-  width: 100%;
-  height: 300px;
+  width: 90%;
+  height: 350px;
   object-fit: cover;
   border-radius: 2px;
   transition: opacity 0.1s ease-in-out;
@@ -104,7 +97,7 @@ body {
 .saleprice {
   position: absolute;
   top: 15px;
-  right: 15px;
+  right: 40px;
   background: #444;
   color: white;
   padding: 5px 10px;
@@ -115,44 +108,43 @@ body {
 /* Home Icons */
 .home-icons {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   margin-top: 10px;
+  align-items: center;
+  gap: 42%;
+
 }
 
-.fas.fa-cart-plus {
-  cursor: pointer;
-  color: #000;
-  font-size: 1.5rem;
-}
-.fas.fa-cart-plus:hover{
-  font-weight: bold;
-}
 /* Buttons */
 .buttons .buy-now {
   display: inline-block;
-  padding: 12px 35px;
+  padding: 10px 20px;
   background: transparent;
   border: 2px solid #000;
+  border-radius: 5px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-weight: 600;
   transition: all 0.3s ease;
   text-decoration: none;
   color: #000;
+  font-size: 1.1rem;
 
 }
 
 .buttons .buy-now:hover {
-  border:2px solid #000;
+ font-weight:900;
 }
 .split-section{
   padding: 20px;
   background-color: #f5f0fa;
+  
 
 }
 .collection{
-  margin: 5% 32%;
+  margin: 5% auto;
   align-items: center;
+  max-width: 50%;
+
 }
 
 

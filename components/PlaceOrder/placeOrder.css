@@ -1,36 +1,40 @@
-.form-container {
+.form-container-placeOrder {
   color: black;
   padding: 2%;
   border-radius: 3px;
   border: 1px solid black;
   max-width: 40%;
-  margin: 8% auto;
+  box-shadow: 0px 4px 10px rgba(173, 169, 190, 0.9); 
+  margin: 4% auto;
 }
-
-.form-container h2 {
-  font-size: 20px;
+ 
+.form-container-placeOrder h2 {
+  font-size: 2.5rem;
   font-weight: bold;
   margin-bottom:  1% ;
   margin-top: 2%;
+  text-align: center;
 }
 
 .input-field, .textarea-field, .file-input {
   width: 100%;
-  padding: 10px;
+  padding: 30px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 1.2rem;
 }
+
 
 .submit-btn {
   background-color: white;
   color: black;
-  padding: 4px 12px;
-  font-size: 1rem;
+  padding: 4px 40px;
+  font-size: 1.5rem;
   border: 1px solid black;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 40%;
+  margin-left: 5%;
   margin-top: 2%;
  
 }

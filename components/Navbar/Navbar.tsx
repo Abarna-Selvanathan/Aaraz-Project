@@ -7,7 +7,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import ReLogo from "../../public/Image/logo-removebg-preview.png";
 import { BiSearch } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
-import Image from "next/image"; 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -19,53 +19,36 @@ const Navbar: React.FC = () => {
   const [search, setSearch] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const [findUsers, setFindUsers] = useState<any[]>([]); // Fix: Initialize as an empty array
-  const [loggedUserId, setLoggedUserId] = useState<string>('');
-  const [currentUser, setCurrentUser] = useState<any>(null); // Fix: Define state for current user
-  const [error, setError] = useState<any>(null);
+  // const [user, setUser] = useState<any[]>([]); // Fix: Initialize as an empty array
+  // const [loggedUserId, setLoggedUserId] = useState<string>('');
+  // const [currentUser, setCurrentUser] = useState<any>(null); // Fix: Define state for current user
+  // const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     const getUser = async () => {
-  
       try {
         const response = await axios.get('/api/cookie');
-        console.log("User API response:", response.data); // Debug log
-  
+
         if (response.status === 200 && response.data.user) {
-          setIsLoggedIn(true);
-          setLoggedUserId(response.data.user.id);
+          const user = await axios.post('/api/user/getUserById', {
+            id: response.data.user.id
+          });
+          if (user.status === 200) {
+            setUserName(user.data.name);
+            setIsLoggedIn(true);
+          }
         } else {
           setIsLoggedIn(false);
-          setCurrentUser(null);
         }
-  
-        const users = await axios.get('/api/user');
-        console.log("All users data:", users.data); // Debug log
-  
-        if (users.status === 200) {
-          setFindUsers(users.data.users);
-        }
+
+
       } catch (error) {
-        console.error('Failed to fetch user data:', error);
+        
       }
     };
-  
+
     getUser();
   }, []);
-  
-  
-  
-
-  useEffect(() => {
-    if (loggedUserId && findUsers.length > 0) {
-      const user = findUsers.find((u) => u._id === loggedUserId);
-      console.log(user)
-      if (user) {
-        setCurrentUser(user);
-        setUserName(user.name);
-      }
-    }
-  }, [loggedUserId, findUsers]);
 
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [collectionDropdownOpen, setCollectionDropdownOpen] = useState(false);
@@ -73,32 +56,27 @@ const Navbar: React.FC = () => {
 
   const toggleUserDropdown = () => setUserDropdownOpen(!userDropdownOpen);
   const toggleCollectionDropdown = () => setCollectionDropdownOpen(!collectionDropdownOpen);
-  const toggleLogoutDropdown =() =>  setLogoutDropdownOpen(!logoutDropdownOpen)
+  const toggleLogoutDropdown = () => setLogoutDropdownOpen(!logoutDropdownOpen);
 
   const handleLogout = async () => {
     try {
-      await axios.post('/api/user/logout'); // Optional API call
+      await axios.post('/api/user/logout');
     } catch (error) {
       console.error("Logout failed", error);
     }
 
     setIsLoggedIn(false);
-    setUserName("");
-    setCurrentUser(null);
-    setLoggedUserId("");
-    setFindUsers([]);
-  
+
     setTimeout(() => {
       router.push("/"); // Redirect to home
       window.location.reload(); // Force full page reload
     }, 300);
   };
-  
+
   const handleCancelLogout = () => {
     setLogoutDropdownOpen(false); // Close the logout dropdown
     router.push("/"); // Navigate to home page
   };
-  
 
   const handleSearch = () => setIsNavbarOpen(!isNavbarOpen);
   const handleClose = () => setIsNavbarOpen(false);
@@ -115,35 +93,19 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  
-
-
   return (
     <>
-    <div className="welcome-mess">Welcome to our store !!</div>
-    <header className={`navbar ${isScrolled ? "scrolled" : ""}`}>
+      <div className="welcome-mess">Welcome to our store !!</div>
+      <header className={`navbar ${isScrolled ? "scrolled" : ""}`}>
         <div className="logo">
-          <Image src={ReLogo} alt="Company Logo" width={90} height={90} />
+          <Image src={ReLogo} alt="Company Logo" width={130} height={130} />
         </div>
 
         <nav>
           <Link href="/">Home</Link>
-          <div className="dropdown">
-            <button className="dropdown-btn" onClick={toggleCollectionDropdown}>
-              Collections
-            </button>
-            {collectionDropdownOpen && (
-              <div className="dropdown-content">
-                <Link href="/handmadegift">Handmade Gifts</Link>
-                <Link href="/resinart">Resin Arts</Link>
-                <Link href="/frame">Frames</Link>
-                <Link href="/walletcard">Wallet Cards</Link>
-              </div>
-            )}
-          </div>
+          <Link href="/collection">Collection</Link>
           <Link href="/contact-information">Contact</Link>
         </nav>
-
 
         <div className="navIcons">
           <div className="search-icon">
@@ -163,8 +125,6 @@ const Navbar: React.FC = () => {
             )}
           </div>
 
-            
-
           <div className="icons">
             {!isLoggedIn ? (
               <div className="user-icon" title="Login">
@@ -181,22 +141,18 @@ const Navbar: React.FC = () => {
                   {userDropdownOpen && (
                     <div className="dropdown-content">
                       <Link href="/account">My Account</Link>
-
-                    <div className="dropdown">
-                    <button className="dropdown-btn" onClick={toggleLogoutDropdown}>
-                      Logout
-                    </button>
-                    {logoutDropdownOpen && (
-                      <div className="logout-btn">
-                        <button className= "logout-btns" onClick={handleLogout}>Yes</button>
-                        <button className= "logout-btns" onClick={handleCancelLogout}>No </button>
-                      </div>
-                    )}
-                    </div>
-
+                      <button className="dropdown-btn" onClick={toggleLogoutDropdown}>
+                        Logout
+                      </button>
                     </div>
                   )}
                 </div>
+              </div>
+            )}
+            {logoutDropdownOpen && (
+              <div className="logout-dropdown">
+                <button className="logout-btns" onClick={handleLogout}>Yes</button>
+                <button className="logout-btns" onClick={handleCancelLogout}>No</button>
               </div>
             )}
             <div className="cart-icon" title="Cart">
@@ -206,10 +162,7 @@ const Navbar: React.FC = () => {
             </div>
           </div>
         </div>
-
-        
-    
-    </header>
+      </header>
     </>
   );
 };

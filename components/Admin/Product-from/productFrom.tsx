@@ -6,10 +6,10 @@ interface Product {
   productName: string;
   description: string;
   price: number;
-  stock: string;  // Keep stock as a string
+  stock: string;  
   productType: string;
   image: string;
-}
+} 
 
 interface ApiResponse {
   product?: Product;
@@ -21,7 +21,7 @@ export default function AddProduct() {
     productName: '',
     description: '',
     price: 0,
-    stock: '',  // Keep stock as string
+    stock: '',  
     productType: '',
     image: '',
   });
@@ -142,7 +142,7 @@ export default function AddProduct() {
 
         
 
-        <button type="submit">Add Product</button>
+        <button type="submit" >Add Product</button>
         {message && <p className="message">{message}</p>}
       </form>
     </div>

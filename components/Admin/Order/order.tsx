@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../../../components/Admin/Order/order.css";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import "../../../components/Admin/Product/product.css";
 
 interface Order {
   _id: string;
@@ -15,12 +15,11 @@ interface Order {
     email: string;
     phoneNumber: string;
   };
-  productId: { _id: string }[];
-  contact: {
-    name: string;
-    email: string;
-    phoneNumber: string;
-  };
+  productId: {
+    _id: string;
+    productName: string;
+    price: number;
+  }[];
   customization: {
     description: string;
     image?: string;
@@ -31,6 +30,7 @@ interface Order {
 const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
 
+  // Fetch all orders
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -46,13 +46,36 @@ const Orders: React.FC = () => {
     fetchOrders();
   }, []);
 
+  // Update order status
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    try {
+      const response = await axios.patch(`/api/order/${orderId}`, { status: newStatus });
+
+      if (response.status === 200) {
+        // Update the order list locally
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === orderId ? { ...order, status: newStatus } : order
+          )
+        );
+
+        // If the order is accepted, redirect customer to the payment page
+        if (newStatus === "Accepted") {
+          window.location.href = `/payment?orderId=${orderId}`;
+        }
+      }
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
+
   return (
-    <div className="main-content">
-      <div className="analytics">
-        <div className="background-products">
+    <div className="main-content-Product">
+      <div className="ProductTable">
+        <div className="products">
           <h1>Orders</h1>
           <div className="table-container">
-            <table className="user-table">
+            <table className="product-table">
               <thead>
                 <tr>
                   <th>Order ID</th>
@@ -60,9 +83,9 @@ const Orders: React.FC = () => {
                   <th>Email</th>
                   <th>Phone Number</th>
                   <th>Product ID</th>
-                  <th>Description</th>
-                  <th>Image</th>
+                  <th>Product Name</th>
                   <th>Status</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -70,27 +93,38 @@ const Orders: React.FC = () => {
                   <tr key={order._id}>
                     <td>{order._id}</td>
                     <td>{order.userId.name}</td>
-                    <td>{order.contact.email}</td>
-                    <td>{order.contact.phoneNumber}</td>
-                    <td>{order.productId.map((p) => p._id).join(", ")}</td>
-                    <td>{order.customization.description}</td>
+                    <td>{order.userId.email}</td>
+                    <td>{order.userId.phoneNumber}</td>
                     <td>
-                      {order.customization.image ? (
-                        <Image
-                          src={order.customization.image}
-                          alt="Order Image"
-                          width={50}
-                          height={50}
-                        />
-                      ) : (
-                        "No Image"
-                      )}
+                      {Array.isArray(order.productId)
+                        ? order.productId.map((product) => product._id).join(", ")
+                        : order.productId._id}
                     </td>
                     <td>
-                      <Link href={{ pathname: '/admin/orderView', query: {id: order._id} }}>
+                      {Array.isArray(order.productId)
+                        ? order.productId.map((product) => product.productName).join(", ")
+                        : order.productId.productName}
+                    </td>
+                    <td>{order.status}</td>
+                    <td>
+                      {/* <Link href={{ pathname: "/admin/orderView", query: { id: order._id } }}>
                         <button>View Details</button>
-                      </Link>
+                      </Link> */}
+                      <button
+                        onClick={() => updateOrderStatus(order._id, "Accepted")}
+                        className="accept-btn"
+                      >
+                        <i className="fa fa-check-square-o" aria-hidden="true"></i>
 
+      
+
+                      </button>
+                      <button
+                        onClick={() => updateOrderStatus(order._id, "Rejected")}
+                        className="reject-btn"
+                      >
+                        Reject
+                      </button>
                     </td>
                   </tr>
                 ))}

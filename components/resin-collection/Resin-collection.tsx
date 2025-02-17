@@ -1,115 +1,70 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import '../resin-collection/Resin-collection.css'
-import Link from 'next/link';
-import "../../src/app/globals.css"
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import '../handmade-collection/Handmade-collection.css';
+import "../../src/app/globals.css";
 
 const ResinArtsCollection: React.FC = () => {
+    const [products, setProducts] = useState<any[]>([]);
+    const [page, setPage] = useState(1);
+    const itemsPerPage = 12;
+    const router = useRouter();
 
-  const handleBuyNow = () => {
-    console.log(`Proceed to checkout with ${quantity} items.`);
-    // Replace with actual buy-now logic.
-  };
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch('/api/product');
+                const data = await response.json();
+                setProducts(data.products);
+            } catch (error: any) {
+                console.error('Error fetching products:', error.message);
+            }
+        };
+        fetchProducts();
+    }, []);
 
+    const paginatedProducts = products.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
-  return (
-    <>
-   
+    const handleProduct = (id: string) => {
+        router.push(`/product/${id}`);
+    };
 
-      <section className="Collections">
-        <h1>Collections Of Resin Arts</h1>
-        <div className="products">
-          <div className="product">
-            <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622753/AARAZ/Image/iczmzo7ncja7vgecijhg.jpg" alt="Resin Frame" width={300} height={300} />
-            <h3>Resin Frame</h3>
-            <p>Rs 2200</p>
-            <div className='home-icons'>
-                  <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
-                  </Link>
-                  <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
-                  </Link>
+    return (
+        <>
+            <section className="Collections">
+                <p>Collections Of Resin Arts</p>
+                <div className="cards">
+                    {paginatedProducts.length > 0 ? (
+                        paginatedProducts.map((product) => (
+                            <div className="card" onClick={() => handleProduct(product._id)} key={product._id}>
+                                {product.image && (
+                                    <Image src={product.image} alt={product.productName} width={400} height={300} />
+                                )}
+                                <h3>{product.productName}</h3>
+                                <p>LKR {product.price}</p>
+                                <div className='home-icons'>
+                                    <Link href="/cart">
+                                        <div className="fas fa-cart-plus" style={{ color: 'black', fontSize: '1.5rem' }}></div>
+                                    </Link>
+                                    <div className="buttons">
+                                        <button className="buy-now">Buy Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No products found.</p>
+                    )}
                 </div>
-          </div>
-          <div className="product">
-            <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622756/AARAZ/Image/hcfmz4jrvkq2bg5t44by.jpg" alt="Letter Keychain" width={300} height={300} />
-            <h3>Letter Keychain</h3>
-            <p>Rs 400</p>
-            <div className='home-icons'>
-                  <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
-                  </Link>
-                  <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
-                  </Link>
+                
+                <div className="pagination">
+                    {page > 1 && <button onClick={() => setPage(page - 1)}>Previous</button>}
+                    {page * itemsPerPage < products.length && <button onClick={() => setPage(page + 1)}>See More</button>}
                 </div>
-          </div>
-          <div className="product">
-            <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622755/AARAZ/Image/ihdnmziidr9ms4u84awg.jpg" alt="Name Stand" width={300} height={300} />
-            <h3>Name Stand</h3>
-            <p>Rs 1000</p>
-            <div className='home-icons'>
-                  <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
-                  </Link>
-                  <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
-                  </Link>
-                </div>
-          </div>
-          <div className="product">
-            <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622757/AARAZ/Image/rcfr2po397xqn9htjt1q.jpg" alt="Letter & Photo Stand" width={300} height={300} />
-            <h3>Letter & Photo Stand</h3>
-            <p>Rs 900</p>
-            <div className='home-icons'>
-                  <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
-                  </Link>
-                  <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
-                  </Link>
-                </div>
-          </div>
-          <div className="product">
-            <Image src="https://res.cloudinary.com/dgqumuoqj/image/upload/v1737622754/AARAZ/Image/xakd3esdebbu2egqjljz.jpg" alt="Resin Preservation" width={300} height={300} />
-            <h3>Resin Preservation</h3>
-            <p>Rs 3000</p>
-            <div className='home-icons'>
-                  <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{color: '#4C394F', fontSize: '1.5rem'  }}></div>
-                  </Link>
-                  <Link href="/payment">
-                  <div className="buttons">
-                    <button className="buy-now" onClick={handleBuyNow}>
-                      Buy Now
-                    </button>
-                  </div>
-                  </Link>
-                </div>
-          </div>
-        </div>
-      </section>
-
-     
-    </>
-  );
+            </section>
+        </>
+    );
 };
 
 export default ResinArtsCollection;

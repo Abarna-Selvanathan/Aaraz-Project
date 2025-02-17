@@ -1,4 +1,5 @@
 import Dashboard from "../../../../components/Admin/Dashbord/dashboard";
+import Footer from "../../../../components/Footer/Footer";
 import Navbar from "../../../../components/Navbar/Navbar";
 import "../../../../components/Navbar/Navbar.css"
 
@@ -8,7 +9,7 @@ function DashboardPage (){
     <div>
     <Navbar/>
     <Dashboard/>
-     
+    <Footer/>
     
     </div>
   );

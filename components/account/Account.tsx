@@ -1,150 +1,171 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import axios from "axios";
-import '../account/Account.css';
+import { useRouter } from "next/navigation";
+import "../account/Account.css";
 import "../../src/app/globals.css";
+import axios from "axios";
+import { SlidersHorizontal  } from "lucide-react";
 
 interface User {
   _id: string;
   name: string;
   profileImage?: string;
+  address: string;
+  phoneNumber: string[];
 }
 
-interface Order {
+interface Product {
   _id: string;
-  productName: string;
-  deliveryDate: string;
-  deliveryAddress: string;
-  deliveryCharge: number;
-  price: number;
-  quantity: number;
-  totalPrice: number;
   image: string;
+  productType: string;
+  productName: string;
+  stock: string;
+  price: number;
+}
+
+interface Customization {
+  customizationDescription: string;
+  customizationImage: string;
+}
+
+interface OrderData {
+  _id: string;
+  userId: User;
+  productId: Product;
+  customization: Customization;
+  createdAt: Date;
+  updatedAt: Date;
+  status: string;
 }
 
 const AccountReviewPage: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [order, setOrder] = useState<OrderData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchUserId = async () => {
+    const fetchUserData = async () => {
       try {
         const response = await axios.get("/api/cookie");
-        console.log("Cookie API Response:", response.data);
-        
-        if (response.status === 200 && response.data.user?.id) {
-          setUserId(response.data.user.id);
-        } else {
-          throw new Error("User ID not found in cookie response.");
+        if (response.status === 200) {
+          const id = response.data.user.id;
+          console.log("✅ User ID:", id);
+          setUserId(id);
+
+          const userResponse = await axios.post("/api/user/getUserById", { id });
+          setUser(userResponse.data.user);
         }
       } catch (error) {
-        console.error("Error fetching user ID:", error);
-        setError("User authentication failed.");
-        setIsLoading(false);
+        console.error("❌ Error fetching user:", error);
+        setError("Failed to load user data.");
       }
     };
 
-    fetchUserId();
+    fetchUserData();
   }, []);
 
   useEffect(() => {
-    if (!userId) return;
-
-    const fetchData = async () => {
+    const fetchLastOrder = async () => {
       try {
-        const userResponse = await axios.get(`/api/user/get-user/${userId}`);
-        console.log("User API Response:", userResponse.data);
+        if (!userId) return;
 
-        const ordersResponse = await axios.get(`/api/order/${userId}`);
-        console.log("Orders API Response:", ordersResponse.data);
+        const response = await axios.post("/api/order/getbyUserId", { userId });
 
-        setUser(userResponse.data);
-        setOrders(ordersResponse.data);
+        console.log("Last Order Response:", response.data);
+
+        if (response.status === 200) {
+          setOrder(response.data.order || null);
+        }
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to fetch data. Please try again later.");
+        console.error("Error fetching last order:", error);
+        setError("Failed to load the last order.");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchData();
+    fetchLastOrder();
   }, [userId]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  const handleCancelOrder = async () => {
+    if (!order) return;
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+    try {
+      await axios.delete(`/api/order/${order._id}`);
+      setOrder(null);
+    } catch (error) {
+      console.error("❌ Error canceling order:", error);
+      alert("Failed to cancel the order.");
+    }
+  };
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="account-container">
       <div className="profile-section">
-        <div className="profile-icon">
-          {user?.profileImage && (
-            <Image
-              src={user.profileImage}
-              alt="User Icon"
-              width={150}
-              height={150}
-              priority
-            />
-          )}
+
+        {user?.profileImage ? (
+          <Image src={order?.userId.profileImage} alt="User Icon" width={50} height={50} className="user-icon" />
+        ) : (
+          <div className="user-icon-placeholder">{order?.userId.name.charAt(0).toUpperCase()}</div>
+        )}
+        <h2 style={{ cursor: "pointer" }}>
+          {order?.userId.name}
+
+        </h2>
+
+        <div className="arrow">
+          <SlidersHorizontal className="icon" onClick={() => router.push("/profile")}/>
         </div>
-        <h2>{user?.name || "Guest"}</h2> 
       </div>
 
-      <div className="tittles">
-        <div className="tittleH3">My Orders</div>
-        <div className="view-all-orders">View All Orders &gt;</div>
+      <div className="titles">
+        <p>My Orders</p>
+        <h2 onClick={() => router.push("/orders")}>
+          View All Orders &gt;
+        </h2>
       </div>
 
-      {orders.length > 0 ? (
-        orders.map((order) => (
-          <div className="orders-view" key={order._id}>
-            <div className="order-img">
-              <Image src={order.image} alt="Order Image" width={150} height={150} />
-            </div>
-            <div className="orders-section">
-              <div className="order-item">
-                <div className="order-detail">
-                  <div className="item-title">{order.productName}</div>
-                  <p>
-                    <b>Delivery Date:</b> <span>{order.deliveryDate}</span>
-                  </p>
-                  <p>
-                    <b>Delivery Address:</b> <span>{order.deliveryAddress}</span>
-                  </p>
-                  <p>
-                    <b>Delivery Charge: </b><span>Rs {order.deliveryCharge}</span>
-                  </p>
-                  <p>
-                    <b>Price:</b> <span>Rs {order.price}</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="delivery-section">
-              <Link href={`/delivery-detail/${order._id}`}>Delivery Details</Link>
-              <p>Qty: {order.quantity}</p>
-              <p>
-                Total: <span>Rs {order.totalPrice}</span>
-              </p>
-              <button className="cancel-button" aria-label="Cancel Order">
-                Cancel
+      {order ? (
+        <div className="order-container">
+          <div className="order-item">
+            <span className="order-label">Product Name:</span>
+            <span>{order.productId.productName}</span>
+          </div>
+
+          <div className="order-item">
+            <span className="order-label">Image:</span>
+            <Image src={order.productId.image} alt="Product Image" width={100} height={100} />
+          </div>
+
+          <div className="order-item">
+            <span className="order-label">Price:</span>
+            <span>LKR {order.productId.price}</span>
+          </div>
+
+          <div className="order-item">
+            <span className="order-label">Status:</span>
+            <span className={`status-label ${order.status.toLowerCase()}`}>
+              {order.status}
+            </span>
+          </div>
+
+          {order.status.toLowerCase() === "pending" && (
+            <div className="order-item">
+              <button className="cancel-button" onClick={handleCancelOrder}>
+                Cancel Order
               </button>
             </div>
-          </div>
-        ))
+          )}
+        </div>
       ) : (
-        <p>No orders found.</p>
+        <p>No recent orders found.</p>
       )}
     </div>
   );

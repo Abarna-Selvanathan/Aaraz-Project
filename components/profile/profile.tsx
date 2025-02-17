@@ -16,7 +16,7 @@ const Profile = () => {
     _id: "",
     name: "",
     email: "",
-    phoneNumber: "",
+    phoneNumber: "", 
     profileImage: ""
   });
   const [isEditing, setIsEditing] = useState({
@@ -33,10 +33,11 @@ const Profile = () => {
         const id = response.data.user.id
   
         if (response.status === 200) {
-          const userResponse = await axios.post('/api/user/get-user', {
+          const userResponse = await axios.post('/api/user/getUserById', {
             id 
           });
-          setUserData(userResponse.data.user);
+          
+          setUserData(userResponse.data);
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -45,7 +46,6 @@ const Profile = () => {
   
     fetchUserData();
   }, []);
-  
 
   const handleEditClick = (field: string) => {
     setIsEditing((prevState) => ({
@@ -132,17 +132,19 @@ const Profile = () => {
       const reader = new FileReader();
       reader.onloadend = (event: ProgressEvent<FileReader>) => {
         const result = event.target?.result;
-        if (typeof result === 'string') {
-          setPreview(result); // Base64 string
-          setProduct((prevProduct: any) => ({
-            ...prevProduct,
-            image: result,
+        if (typeof result === "string") {
+          setPreview(result); // Set preview image
+          setUserData((prevState) => ({
+            ...prevState,
+            profileImage: result, // Update user data with the new image
           }));
         }
       };
       reader.readAsDataURL(file);
     }
   };
+  
+  
   return (
     <div className="profileContainer">
       <ToastContainer />
@@ -198,11 +200,4 @@ const Profile = () => {
 };
 
 export default Profile;
-function setProduct(arg0: (prevProduct: any) => any) {
-  throw new Error("Function not implemented.");
-}
-
-function setPreview(result: string) {
-  throw new Error("Function not implemented.");
-}
 

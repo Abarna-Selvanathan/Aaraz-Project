@@ -1,8 +1,13 @@
+.reviews-main{
+  border: 1px solid black;
+  max-width: 30%;
+  margin: 3% auto;
+  border-radius: 5px;
+
+}
 .review {
-    background-color: #f5f0fa;
-    list-style: none;
     padding: 10px;
-    max-width: 30%;
+   width: 100%;
     border-radius: 10px;
     text-align: center;
     margin: 30px auto; 
@@ -13,44 +18,39 @@
     margin-top: 20px;
     margin: 2%;
     display: inline-block;
-    background-color: #4c394f;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1.5rem;
+    padding: 2px 10px;
     cursor: pointer;
+    
+    background: transparent;
+    border: 2px solid #000;
     border-radius: 5px;
-    transition: background-color 0.3s;
-  
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #000;
+    
   }
   
   .reviewButton button:hover {
-    background-color: #BCB8CE;
-    color: #4C394F;
-    font-weight: bold;
+    border:2px solid #000;
+    
   }
   
   .rating {
-    background-color: #f5f0fa;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px #BCB8CE;
-    padding: 20px;
+    border-top: 1px solid black;
     text-align: center;
-    max-width: 30%; 
-    margin: 30px auto; 
+    max-width: 90%; 
+    margin: 0 auto;
+    
+  }
+  .recommendtext {
+    
+    text-align: center;
+    max-width: 100%; 
+    
   }
   
-  .rating h2 {
-    font-size: 2rem;
-    color: #4C394F;
-    margin-bottom: 10px;
-  }
-  
-  .rating p {
-    font-size: 1.2rem;
-    color: #555;
-    margin-bottom: 15px; 
-  }
   .rating .stars {
     display: flex;
     justify-content: center;
@@ -58,48 +58,19 @@
     margin-bottom: 15px; 
   }
   .rating .star {
-    font-size: 2rem;
+    font-size: 3rem;
     color: #ccc;
     cursor: pointer;
     transition: color 0.3s;
   }
   
-  .rating .star:hover {
+  .rating .selected-star {
     color: #f39c12;
   }
   
-  .rating .star.selected {
-    color: #f39c12;
-  }
-  
-  .rating .submit-rating {
-    background-color: #4C394F;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .rating .submit-rating:hover {
-    background-color: #BCB8CE;
-    color: #4C394F;
-    font-weight: bold;
-  }
-  
-  .recommendtext {
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px #BCB8CE;
-    padding: 40px; 
-    text-align: center;
-    max-width: 30%; 
-    margin: 30px auto;
-  }
   .recommend-textarea::placeholder {
-    color: #bcb8ce;
-    font-size: 0.9rem;
+    color: #ccc;
+    font-size: 1rem;
   }
   .recommend-textarea {
     width: 90%;
@@ -107,41 +78,52 @@
     margin-top: 10px; 
     padding: 10px; 
     font-size: 1rem;
-    border: 1px solid #4c394f;
+    
+  }
+  
+  .submit {
+    display: inline-block;
+    padding: 2px 10px;
+    background: transparent;
+    border: 2px solid #000;
     border-radius: 5px;
-    resize: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #000;
+    margin: 2% 36%;
   }
-  
-  .recommend-textarea:focus {
-    outline: none;
-    border: 1px solid #4C394F;
-  }
-  
-  .submit-comment {
-    background-color: #4C394F;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: background-color 0.3s;
-  }
-  
-  .submit-comment:hover {
-    background-color: #BCB8CE;
-    color: #4C394F;
-    font-weight: bold;
-  }
-  
-  .reviews {
-    text-align: center;
-    color: #4C394F;
-  }
-  
-  .reviews h1 {
-    font-size: 3rem; 
-    color: #4C394F;
-    margin-bottom: 20px; 
-  }
+
+  .submit:hover {
+    border:2px solid #000;
+}
+
+ /* Reviews Section */
+.reviews-section {
+ 
+  max-width: 90%;
+  margin: 30px auto;
+  padding: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.reviews-section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.add-review textarea {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+  margin-top: 10px;
+}
+
+.add-review button {
+  margin-top: 10px;
+  display: block;
+}
