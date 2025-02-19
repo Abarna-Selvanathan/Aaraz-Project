@@ -6,6 +6,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import "../../../components/Admin/Product/product.css";
+import "../../../components/Admin/Order/order.css"
+import { CheckCircle, XCircle, Eye } from "lucide-react";
 
 interface Order {
   _id: string;
@@ -45,29 +47,25 @@ const Orders: React.FC = () => {
 
     fetchOrders();
   }, []);
-
+  console.log(orders)
   // Update order status
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
-      const response = await axios.patch(`/api/order/${orderId}`, { status: newStatus });
+      const response = await axios.patch('/api/order', { orderId, status: newStatus });
 
       if (response.status === 200) {
-        // Update the order list locally
         setOrders((prevOrders) =>
           prevOrders.map((order) =>
             order._id === orderId ? { ...order, status: newStatus } : order
           )
         );
 
-        // If the order is accepted, redirect customer to the payment page
-        if (newStatus === "Accepted") {
-          window.location.href = `/payment?orderId=${orderId}`;
-        }
       }
     } catch (error) {
       console.error("Error updating order status:", error);
     }
   };
+  
 
   return (
     <div className="main-content-Product">
@@ -106,26 +104,22 @@ const Orders: React.FC = () => {
                         : order.productId.productName}
                     </td>
                     <td>{order.status}</td>
-                    <td>
-                      {/* <Link href={{ pathname: "/admin/orderView", query: { id: order._id } }}>
-                        <button>View Details</button>
-                      </Link> */}
+                    <td className={`btns ${order.status === "Accepted" ? "accepted" : order.status === "Rejected" ? "rejected" : ""}`}>
                       <button
                         onClick={() => updateOrderStatus(order._id, "Accepted")}
-                        className="accept-btn"
+                        className={`accept-btn ${order.status === "Accepted" ? "active" : ""}`}
                       >
-                        <i className="fa fa-check-square-o" aria-hidden="true"></i>
-
-      
-
+                        <CheckCircle size={20} />
                       </button>
+
                       <button
                         onClick={() => updateOrderStatus(order._id, "Rejected")}
-                        className="reject-btn"
+                        className={`reject-btn ${order.status === "Rejected" ? "active" : ""}`}
                       >
-                        Reject
+                        <XCircle size={20} />
                       </button>
                     </td>
+
                   </tr>
                 ))}
               </tbody>

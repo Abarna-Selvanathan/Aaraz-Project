@@ -37,7 +37,8 @@ export async function PUT(req: NextRequest, { params }: { params: { orderId: str
     await dbConnect();
     const { orderId } = params;
     const body = await req.json();
-
+     
+    console.log(orderId)
     if (!orderId) {
       return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
     }
@@ -78,24 +79,20 @@ export async function DELETE(req: NextRequest, { params }: { params: { orderId: 
   }
 }
 
-
-
-router.patch("/order/:id", async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
+export const PATCH = async (req: NextRequest, { params }: { params: { orderId: string } }) => {
+  const { orderId } = params;
+  const { status } = await req.body;
 
   try {
-    const order = await Order.findByIdAndUpdate(id, { status }, { new: true });
-
+    const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
+    console.log(orderId)
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+      return NextResponse.json({ message: "Order not found" }, {status: 404});
     }
 
-    res.status(200).json({ message: "Order status updated", order });
+    return NextResponse.json({ message: "Order status updated" }, {status: 200});
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    return NextResponse.json({ message: "Server error", error }, {status: 500});
   }
-});
-
-module.exports = router;
+};
 

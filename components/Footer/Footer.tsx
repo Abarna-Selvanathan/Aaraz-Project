@@ -8,7 +8,7 @@ import {FaFacebookF, FaTiktok, FaWhatsapp} from "react-icons/fa"; // Import Icon
 
 
 const Footer: React.FC = () => {
-  return (
+  return ( 
     <footer >
 
       <div className="footer-link">

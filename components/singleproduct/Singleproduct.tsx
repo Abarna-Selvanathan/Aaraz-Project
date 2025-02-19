@@ -109,7 +109,7 @@ const Singleproductviewpage: React.FC = () => {
 
         <div className="Illustrationtext">
           <h1>{product.productName}</h1>
-          <p className="stock">{product.stock > 0 ?  "Out of stock" : "In stock"}</p>
+          <p className="stock">{product.stock > 0 ? "Out of stock" : "In stock"}</p>
           <p className="price">LKR {product.price}</p>
           <p className="description">{product.description}</p>
           <p className="Quantity">Quantity</p>
@@ -119,7 +119,6 @@ const Singleproductviewpage: React.FC = () => {
             <button className="quantity-btn" onClick={handleIncrease}>+</button>
           </div>
           <div className="buttons">
-            <button className="buy-now" onClick={handleAddToCart}>Add to Cart</button>
             <button className="buy-now" onClick={handleBuyNow}>Buy It Now</button>
 
           </div>
@@ -130,7 +129,7 @@ const Singleproductviewpage: React.FC = () => {
                 onClick={() => toggleSection("reviews")}
               >
                 <div className="icon-text"
-                  >
+                >
                   <MessageSquare size={20} />
                   <Link href="/review" style={{ color: "#555", textDecoration: "none" }}>
                     <span >Customer Reviews</span>
@@ -186,28 +185,29 @@ const Singleproductviewpage: React.FC = () => {
 
 
 
-      <section className="section">
-        <h1>You may also like</h1>
-        <div className="cards">
-          {products.slice(0, 4).map((product) => (
-            <div className="card" onClick={() => handleProduct(product._id)} key={product._id}>
-              {product.image && (
-                <Image src={product.image} alt={product.productName} width={400} height={300} />
-              )}
-              <h3>{product.productName}</h3>
-              <p>LKR {product.price}</p>
-              <div className='home-icons'>
-                <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{ color: 'black', fontSize: '1.5rem' }}></div>
-                </Link>
+      <section className="section-related">
+          <h2>You may also like</h2>
+          <div className="cards">
+            {products.slice(0, 4).map((product) => (
+              <div className="card" onClick={() => handleProduct(product._id)} key={product._id}>
+                {product.image && (
+                  <Image src={product.image} alt={product.productName} width={400} height={500} />
+                )}
+                <div className='card-contents'>
+                  <h3>{product.productName}</h3>
+                  <p>LKR. {product.price}</p>
+                  <div className='home-icons'>
 
-                <div className="buttons">
-                  <button className="buy-now" onClick={handleBuyNow}>Buy Now</button>
+                    <div className="buttons">
+                      <button className="buy-now" onClick={handleBuyNow}>Choose</button>
+                    </div>
+
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        
       </section>
     </div>
   );

@@ -12,7 +12,7 @@ export const POST = async (req: NextRequest) => {
         await DBconnect();
         const body = await req.json()
         const { id } = body
-
+        
         const user = await UserSchema.findById({ _id: id });
         if (!user) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });

@@ -1,20 +1,21 @@
 .orders-container {
     padding: 20px;
+    margin: 0 15%;
   
   }
   
-  h2 {
+  .orders-container h2 {
     text-align: center;
     margin-bottom: 20px;
     font-size: 2.5rem;
   }
   
-  .orders-list {
+  /* .orders-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-  
+  } */
+/*   
   .order-card {
     display: flex;
     justify-content: space-between;
@@ -27,8 +28,8 @@
    
     width: 60%;
     margin: 0 auto;
-  }
-  
+  } */
+/*   
   .order-left {
     display: flex;
     align-items: center;
@@ -57,7 +58,7 @@
   .total-price {
     font-weight: bold;
     font-size: 18px;
-  }
+  } */
   
   .cancel-button {
     background: #c4b6d9;
@@ -72,4 +73,56 @@
   .cancel-button:hover {
     background: #b2a4c6;
   }
+
+
+.order-container{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin: 2% 0;
+}
+.order-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.order-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+}
+
+.order-status {
+  text-align: left;
+}
+
+.status-label {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.status-label.accepted {
+  background-color: #28a745; 
+  color: white;
+}
+
+.status-label.rejected {
+  background-color: #dc3545; 
+  color: white;
+}
+
+.status-label.pending {
+  background-color: #ffc107; 
+  color: black;
+}
+
+.payment-time{
+  font-weight: bold;
+}
   

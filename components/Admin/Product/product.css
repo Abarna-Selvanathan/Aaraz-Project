@@ -58,17 +58,17 @@
   object-fit: cover;
 }
 
-.product-table td button {
+/* .product-table td button {
   padding: 5px 12px;
   background-color: white;
   color: black;
-  border: 2px solid black;
+  border: 1px solid black;
   border-radius:3px ;
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.3s ease;
   margin-right: 5px;
-}
+} */
 
 .product-table td button:hover {
   font-weight: bold;
@@ -133,3 +133,70 @@
   margin-left: 70vw;
 }
 
+
+
+
+.edit-btn, .delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 150px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.edit-btn {
+  background-color: #FFC107; /* Yellow */
+  color: black;
+}
+
+.edit-btn:hover {
+  background-color: #E0A800;
+  transform: scale(1.05);
+}
+
+.delete-btn {
+  background-color: #F44336; /* Red */
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #D32F2F;
+  transform: scale(1.05);
+}
+
+
+.view-btn, .delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 150px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.view-btn {
+  background-color: #007bff; /* Blue */
+  color: white;
+}
+
+.view-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.delete-btn {
+  background-color: #F44336; /* Red */
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #D32F2F;
+  transform: scale(1.05);
+}

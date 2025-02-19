@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import "../account/Account.css";
 import "../../src/app/globals.css";
 import axios from "axios";
-import { SlidersHorizontal  } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 
 interface User {
   _id: string;
@@ -37,6 +37,7 @@ interface OrderData {
   createdAt: Date;
   updatedAt: Date;
   status: string;
+  // paymentTime?: Date; 
 }
 
 const AccountReviewPage: React.FC = () => {
@@ -109,51 +110,53 @@ const AccountReviewPage: React.FC = () => {
   return (
     <div className="account-container">
       <div className="profile-section">
-
-        {user?.profileImage ? (
-          <Image src={order?.userId.profileImage} alt="User Icon" width={50} height={50} className="user-icon" />
-        ) : (
-          <div className="user-icon-placeholder">{order?.userId.name.charAt(0).toUpperCase()}</div>
-        )}
-        <h2 style={{ cursor: "pointer" }}>
-          {order?.userId.name}
-
-        </h2>
-
+        <div className="user-name">
+          {user?.profileImage ? (
+            <Image src={order?.userId.profileImage} alt="User Icon" width={50} height={50} className="user-icon" />
+          ) : (
+            <div className="user-icon-placeholder">{order?.userId.name.charAt(0).toUpperCase()}</div>
+          )}
+          <h2 style={{ cursor: "pointer" }}>{order?.userId.name}</h2>
+        </div>
         <div className="arrow">
-          <SlidersHorizontal className="icon" onClick={() => router.push("/profile")}/>
+          <SlidersHorizontal className="icon" onClick={() => router.push("/profile")} />
         </div>
       </div>
 
       <div className="titles">
         <p>My Orders</p>
-        <h2 onClick={() => router.push("/orders")}>
-          View All Orders &gt;
-        </h2>
+        <h3 onClick={() => router.push("/orders")}>View All Orders &gt;</h3>
       </div>
 
       {order ? (
         <div className="order-container">
-          <div className="order-item">
-            <span className="order-label">Product Name:</span>
-            <span>{order.productId.productName}</span>
-          </div>
+          <Image src={order.productId.image} alt="Product Image" width={180} height={180} className="order-img" />
 
-          <div className="order-item">
-            <span className="order-label">Image:</span>
-            <Image src={order.productId.image} alt="Product Image" width={100} height={100} />
-          </div>
+          <div className="order-details">
+            
+              <h3 className="order-name">{order.productId.productName}</h3>
+          
+            <div className="order-info">
+             
+                <span className="order-price">LKR {order.productId.price}</span>
+             
+                <span className="order-qty">Qty: {order.productId.quantity}</span>
+             
+            </div>
 
-          <div className="order-item">
-            <span className="order-label">Price:</span>
-            <span>LKR {order.productId.price}</span>
-          </div>
+            {/* <div className="order-item">
+              <span>Total: LKR {order.productId.price * order.quantity}</span>
+            </div> */}
+            <div className="order-status">
+              <span className={`status-label ${order.status.toLowerCase()}`}>{order.status}</span>
+            </div>
 
-          <div className="order-item">
-            <span className="order-label">Status:</span>
-            <span className={`status-label ${order.status.toLowerCase()}`}>
-              {order.status}
-            </span>
+
+            {order.status.toLowerCase() === "accepted" && (
+              <div className="order-item">
+                <div className="payment-time" onClick={() => router.push("/payment")}>Now Payment Time &gt;</div>
+              </div>
+            )}
           </div>
 
           {order.status.toLowerCase() === "pending" && (

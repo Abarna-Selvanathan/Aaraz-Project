@@ -4,13 +4,13 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  font-family: 'Roboto', sans-serif;
+  
 }
 
 .product-container {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 100%; 
   max-width: 1200px;
   margin-bottom: 30px;
 }
@@ -87,7 +87,7 @@ h1 {
 
 
 /* Sections */
-.section{
+.section-related{
   margin: 5% 0;
 }
 
@@ -176,15 +176,17 @@ h1 {
 /* Buttons */
 .buttons .buy-now {
   display: inline-block;
-  padding: 12px 35px;
+  padding: 7px 28px;
   background: transparent;
   border: 2px solid #000;
+  border-radius: 2px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  /* transition: all 0.5s ease; */
   text-decoration: none;
   color: #000;
+  font-weight: 500;
+  font-size: 1.1rem;
 
 }
 

@@ -1,64 +1,92 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import "../Payment/payment.css";
+import Image from "next/image";
 
-const PaymentForm = () => {
-  const [paymentMethod, setPaymentMethod] = useState(null);
+interface User {
+  _id: string;
+  name: string;
+  profileImage?: string;
+  address: string;
+  phoneNumber: string[];
+}
+
+interface Product {
+  _id: string;
+  image: string;
+  productType: string;
+  productName: string;
+  stock: string;
+  price: number;
+}
+
+interface Customization {
+  customizationDescription: string;
+  customizationImage: string;
+}
+
+interface OrderData {
+  _id: string;
+  userId: User;
+  productId: Product;
+  customization: Customization;
+  createdAt: Date;
+  updatedAt: Date;
+  status: string;
+  quantity: number;
+}
+
+interface PaymentFormProps {
+  order: OrderData;
+}
+
+const PaymentForm: React.FC<PaymentFormProps> = ({ order }) => {
+  console.log(order)
+  
+  
+  if (!order || !order.productId) {
+    return <p>Loading Order Details...</p>;
+  }
+  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
   const [deliveryCharge, setDeliveryCharge] = useState(0);
-
-  const handlePaymentSelect = (method: string | SetStateAction<null>) => {
+  
+  const handlePaymentSelect = (method: string) => {
     setPaymentMethod(method);
-    if (method === "cod") {
-      setDeliveryCharge(450); // Example delivery charge
-    } else {
-      setDeliveryCharge(0);
-    }
+    setDeliveryCharge(method === "cod" ? 450 : 0);
   };
-
+  const subtotal = order.productId.price * order.quantity;
+  const total = subtotal + deliveryCharge;
+  
   return (
     <div className="payment-container">
-      <h2>Delivery Details</h2>
-      <form className="delivery-form">
-        <input type="text" placeholder="Name" required />
-        <input type="tel" placeholder="Phone Number" required />
-        <textarea placeholder="Address" required></textarea>
-        <select required>
-          <option value="">Select District</option>
-          <option value="Ampara">Ampara</option>
-          <option value="Anuradhapura">Anuradhapura</option>
-          <option value="Badulla">Badulla</option>
-          <option value="Batticaloa">Batticaloa</option>
-          <option value="Colombo">Colombo</option>
-          <option value="Galle">Galle</option>
-          <option value="Gampaha">Gampaha</option>
-          <option value="Hambantota">Hambantota</option>
-          <option value="Jaffna">Jaffna</option>
-          <option value="Kandy">Kandy</option>
-          <option value="Kegalle">Kegalle</option>
-          <option value="Kilinochchi">Kilinochchi</option>
-          <option value="Kurunegala">Kurunegala</option>
-          <option value="Mannar">Mannar</option>
-          <option value="Matale">Matale</option>
-          <option value="Matara">Matara</option>
-          <option value="Monaragala">Monaragala</option>
-          <option value="Mullaitivu">Mullaitivu</option>
-          <option value="Nuwara Eliya">Nuwara Eliya</option>
-          <option value="Polonnaruwa">Polonnaruwa</option>
-          <option value="Puttalam">Puttalam</option>
-          <option value="Ratnapura">Ratnapura</option>
-          <option value="Trincomalee">Trincomalee</option>
-          <option value="Vavuniya">Vavuniya</option>
-          <option value="Kalutara">Kalutara</option>
+      <div className="order-summary">
+        <h2 className="title">Order Summary</h2>
+        <div className="item">
+          <div className="image-container">
+            <Image
+              src={order.productId.image}
+              alt="Product Image"
+              width={180}
+              height={180}
+              className="order-img"
+            />
+            <div className="qty-badge">Qty: {order.productId.quantity}</div>
+          </div>
+          <span className="product-name">{order.productId.productName}</span>
+          <span className="price">LKR {order.productId.price}</span>
+        </div>
 
-        </select>
-        <input type="text" placeholder="Postal Code" />
-        <textarea placeholder="Additional Notes"></textarea>
-      </form>
+        <div className="summary">
+          <p>Subtotal: LKR {subtotal}</p>
+          <p>Delivery Charge: LKR {deliveryCharge}</p>
+          <p>Total: LKR {total}</p>
+        </div>
+      </div>
 
       <h2>Payment Method</h2>
       <div className="payment-options">
-        <button type="button" onClick={() => handlePaymentSelect("cod")}>
+        {/* <button type="button" onClick={() => handlePaymentSelect("cod")}>
           Cash on Delivery (COD)
-        </button>
+        </button> */}
         <button type="button" onClick={() => handlePaymentSelect("card")}>
           Pay with Card
         </button>
@@ -74,8 +102,9 @@ const PaymentForm = () => {
         </div>
       )}
 
-      <p>Delivery Charge: LRK {deliveryCharge}</p>
-      <button type="submit" className="submit-btn">Submit </button>
+      <button type="submit" className="submit-btn">
+        Submit
+      </button>
     </div>
   );
 };

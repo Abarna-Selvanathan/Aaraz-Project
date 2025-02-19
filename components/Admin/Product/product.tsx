@@ -7,13 +7,15 @@ import "../../../components/Admin/Product/product.css"
 import Link from 'next/link';
 import React from 'react';
 import Image from 'next/image';
+import {Pencil, Trash2} from "lucide-react";
+
 
 interface Product {
   _id?: string;
-  productName: string; 
-  description: string; 
+  productName: string;
+  description: string;
   price: number;
-  stock: string; 
+  stock: string;
   productType: string;
   image: string;
 }
@@ -151,10 +153,23 @@ const Product: React.FC = () => {
                       <td>
                         <Image src={product.image} alt={product.productName} width={50} height={50} />
                       </td>
-                      <td> 
+                      <td className="btns">
                         {/* Update and Delete actions */}
-                        <button onClick={() => { setEditProduct(product); setShowEditForm(true); }}>Edit</button>
-                        <button onClick={() => handleDeleteProduct(product._id!)}>Delete</button>
+
+                        <button
+                          onClick={() => {
+                            setEditProduct(product);
+                            setShowEditForm(true);
+                          }}
+                          className="edit-btn"
+                        >
+                          <Pencil size={18} /> 
+                        </button>
+
+                        <button onClick={() => handleDeleteProduct(product._id!)} className="delete-btn">
+                          <Trash2 size={18} /> 
+                        </button>
+
                       </td>
                     </tr>
                   ))}
@@ -229,7 +244,7 @@ const Product: React.FC = () => {
         </div>
       </div>
     </div>
-    
+
   );
 };
 

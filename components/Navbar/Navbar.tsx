@@ -1,16 +1,20 @@
 'use client';
 import Link from "next/link";
 import { useEffect, useState } from "react";
+
 import '../Navbar/Navbar.css';
 import "../../src/app/globals.css";
-import '@fortawesome/fontawesome-free/css/all.min.css';
+
 import ReLogo from "../../public/Image/logo-removebg-preview.png";
+import Image from "next/image";
+
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { BiSearch } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import axios from "axios";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 const Navbar: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,6 +22,8 @@ const Navbar: React.FC = () => {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const pathname = usePathname();
 
   // const [user, setUser] = useState<any[]>([]); // Fix: Initialize as an empty array
   // const [loggedUserId, setLoggedUserId] = useState<string>('');
@@ -102,9 +108,9 @@ const Navbar: React.FC = () => {
         </div>
 
         <nav>
-          <Link href="/">Home</Link>
-          <Link href="/collection">Collection</Link>
-          <Link href="/contact-information">Contact</Link>
+          <Link href="/" className={pathname === "/" ? "active-link" : ""}>Home</Link>
+          <Link href="/collection" className={pathname === "/collection" ? "active-link" : ""}>Collection</Link>
+          <Link href="/contact-information" className={pathname === "/contact-information" ? "active-link" : ""}>Contact</Link>
         </nav>
 
         <div className="navIcons">
@@ -140,7 +146,7 @@ const Navbar: React.FC = () => {
                   </button>
                   {userDropdownOpen && (
                     <div className="dropdown-content">
-                      <Link href="/account">My Account</Link>
+                      <Link href="/account">Account</Link>
                       <button className="dropdown-btn" onClick={toggleLogoutDropdown}>
                         Logout
                       </button>
@@ -155,11 +161,11 @@ const Navbar: React.FC = () => {
                 <button className="logout-btns" onClick={handleCancelLogout}>No</button>
               </div>
             )}
-            <div className="cart-icon" title="Cart">
+            {/* <div className="cart-icon" title="Cart">
               <Link href="/cart">
                 <div className="fas fa-cart-plus" style={{ color: "black" }}></div>
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </header>

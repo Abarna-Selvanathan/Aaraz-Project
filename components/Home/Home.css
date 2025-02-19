@@ -30,67 +30,68 @@
 
 .section h1, .Collections-section h1 {
   text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+  font-size: 3.5rem;
+  margin-bottom: 20px; 
+  letter-spacing: 3px;
+  
+  padding-bottom: 1% ;
 }
 
 /* Card Layout */
 .cards {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   justify-content: center;
-  gap: 2px;
-  /* max-width: 90%;
-  margin: 0 auto; */
+  margin: 0 20%;
+  gap: 30px;
+
 }
 
 .card {
   color: #000;
-  /* padding: px; */
-  width: 15%;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
   text-align: left;
   position: relative;
   overflow: hidden;
+  /* box-shadow: 0 0 5px #fff9; */
+  border: 1px solid #ccc;
 }
 
 
-/* .card .hover-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 400px;
-  opacity: 0;
-  transition: opacity 0.1s ease-in-out;
-}
 
-.card .hover-img:hover {
-  opacity: 1;
-}
-
-.card:hover .default-img {
-  opacity: 0;
-} */
 
 
 
 .card img {
-  width: 90%;
-  height: 350px;
+  width: 100%;
+  height: 280px;
   object-fit: cover;
-  border-radius: 2px;
+  /* border-radius: 8px; */
   transition: opacity 0.1s ease-in-out;
 }
 
-.card h3 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-top: 10px;
+.card-contents {
+  padding: 20px;
 }
+
+.card h3 {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-top: 10px;
+  padding: 2% 0;
+
+}
+/* .card h3:hover{
+  text-decoration: underline;
+  padding: 1% 0;
+} */
 
 .card p {
   font-size: 1rem;
   color: #444;
+  padding: 2% 0;
 }
 
 /* Sale Price Tag */
@@ -115,24 +116,30 @@
 
 }
 
+.buttons {
+  width: 100%;
+}
+
 /* Buttons */
 .buttons .buy-now {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 7px 0;
+  width: 100%;
+  text-align: center;
   background: transparent;
-  border: 2px solid #000;
-  border-radius: 5px;
+  border-radius: 2px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  transition: all 0.3s ease;
   text-decoration: none;
-  color: #000;
-  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  background-color: #4C394F;
 
 }
 
 .buttons .buy-now:hover {
- font-weight:900;
+ font-weight:bold;
 }
 .split-section{
   padding: 20px;
@@ -141,9 +148,9 @@
 
 }
 .collection{
-  margin: 5% auto;
+  /* margin: 5% auto; */
   align-items: center;
-  max-width: 50%;
+  margin: 5% 15%;
 
 }
 
@@ -156,12 +163,18 @@
   
 }
 .content-side{
-  padding: 10% 0;
+  padding: 5% 0;
   z-index: 1;
+  transform: scale(1);
 }
 
+.content-side-right{
+  text-align: right;
+  padding: 5% 0;
+  z-index: 1;
+  transform: scale(1);
+}
 .image-side{
-
   background-size: cover;
   background-position: center;
 }
@@ -180,12 +193,14 @@
 /* */
 
 .section-description {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   line-height: 1.6;
   color: #444;
-  margin-bottom: 2rem;
+  text-align: justify;
   max-width: 500px;
+  padding: 8% 2%;
 }
+
 
 /* Button Styling */
 .collection-button {
@@ -199,11 +214,11 @@
   transition: all 0.3s ease;
   text-decoration: none;
   color: #000;
+  font-size: 1.2rem;
 }
 
 .collection-button:hover {
   border: 3px solid #000;
-  
 }
 
 /* Responsive Design */

@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import cloudinary from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
+import { promises as fs } from "fs";
+import formidable from "formidable";
 import Order from "../../../../models/Order";
 import User from "../../../../models/User";
 import dbConnect from "../../../../lib/dbConnect";
 import "../../../../src/app/api/upload/route";
 import mongoose from "mongoose";
 import Product from "../../../../models/Product";
+
 
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -18,77 +21,110 @@ interface OrderData {
   productId: string;
   customizationDescription: string;
   customizationImage: string;
-  // status?: string;
+  quantity: number;
+  deliveryCharge: number;
+  status?: string;
 }
 
 export const POST = async (req: NextRequest) => {
+  await dbConnect();
+
   try {
-    const body: OrderData = await req.json();
-    console.log("Received request body:", body);
+    const form = formidable({ multiples: true });
+    const [fields, files] = await form.parse(req.body);
 
-    const { userId, productId, customizationDescription, customizationImage } = body;
+    // Extract and validate fields
+    const getField = (name: string) => fields[name]?.[0] || "";
+    const getFile = (name: string) => files[name]?.[0];
 
-    if (!customizationDescription || !customizationImage) {
+    const orderData = {
+      userId: getField("userId"),
+      productId: getField("productId"),
+      customizationDescription: getField("customizationDescription"),
+      quantity: Number(getField("quantity")),
+      deliveryCharge: Number(getField("deliveryCharge")),
+      deliveryDetails: JSON.parse(getField("deliveryDetails")),
+      customizationImage: getFile("customizationImage"),
+    };
+
+    // Validation
+    if (!orderData.customizationDescription || !orderData.quantity) {
       return NextResponse.json(
-        { error: "Missing required fields: customizationDescription, or image" },
+        { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    if (!mongoose.Types.ObjectId.isValid(productId)) {
-      return NextResponse.json({ error: "Invalid productId format" }, { status: 400 });
+    // Validate ObjectIDs
+    if (!mongoose.Types.ObjectId.isValid(orderData.productId)) {
+      return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
     }
 
-    await dbConnect();
+    // Check user/product existence
+    const [user, product] = await Promise.all([
+      User.findById(orderData.userId),
+      Product.findById(orderData.productId),
+    ]);
 
-    const user = await User.findById(userId);
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!user || !product) {
+      return NextResponse.json(
+        { error: "User or product not found" },
+        { status: 404 }
+      );
     }
-    const product = await Product.findById(productId);
-    if (!product) {
-      return NextResponse.json({ error: "Product not found" }, { status: 404 });
-    }
 
-
-
-
+    // Process image upload
     let orderImage = "";
-    try {
-      const uploadResponse = await cloudinary.v2.uploader.upload(customizationImage, {
-        folder: "order_images",
-      });
-      orderImage = uploadResponse.secure_url;
-    } catch (uploadError) {
-      console.error("Cloudinary upload error:", uploadError);
-      return NextResponse.json({ error: "Image upload failed. Please try again." }, { status: 500 });
+    if (orderData.customizationImage) {
+      try {
+        const fileContent = await fs.readFile(orderData.customizationImage.filepath);
+        const uploadResponse = await new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            { folder: "order_images" },
+            (error, result) => {
+              if (error) reject(error);
+              resolve(result);
+            }
+          );
+          uploadStream.end(fileContent);
+        });
+        orderImage = uploadResponse.secure_url;
+      } catch (uploadError) {
+        console.error("Image upload failed:", uploadError);
+        return NextResponse.json(
+          { error: "Image upload failed" },
+          { status: 500 }
+        );
+      }
     }
 
+    // Create and save order
     const newOrder = new Order({
-      userId: new mongoose.Types.ObjectId(userId),
-      productId: new mongoose.Types.ObjectId(productId),
-      customization: { customizationDescription, customizationImage: orderImage },
-      status: "pending",
+      userId: orderData.userId,
+      productId: orderData.productId,
+      customization: {
+        description: orderData.customizationDescription,
+        image: orderImage,
+      },
+      quantity: orderData.quantity,
+      deliveryCharge: orderData.deliveryCharge,
+      deliveryDetails: orderData.deliveryDetails,
+      status: "Pending",
     });
 
-
-  console.log("Saving new order to DB:", newOrder);
-
-
-
-  try {
     const savedOrder = await newOrder.save();
-    console.log("Order saved successfully:", savedOrder);
 
-    return NextResponse.json({ message: "Order created successfully", data: savedOrder }, { status: 201 });
-  } catch (dbError) {
-    console.error("Database save error:", dbError);
-    return NextResponse.json({ error: "Database save failed" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Order created", data: savedOrder },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    console.error("Order creation error:", error);
+    return NextResponse.json(
+      { error: error.message || "Server error" },
+      { status: 500 }
+    );
   }
-} catch (error) {
-  console.error("Unexpected error in order creation:", error);
-  return NextResponse.json({ error: "Failed to create order", details: error.message }, { status: 500 });
-}
 };
 
 export async function GET(req: NextRequest) {
@@ -101,3 +137,21 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });
   }
 }
+
+
+export const PATCH = async (req: NextRequest) => {
+  const body = await req.json();
+  const { orderId, status } = body
+
+  try {
+    const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
+    if (!order) {
+      return NextResponse.json({ message: "Order not found" }, { status: 404 });
+    }
+    console.log(order)
+
+    return NextResponse.json({ message: "Order status updated" }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: "Server error", error }, { status: 500 });
+  }
+};

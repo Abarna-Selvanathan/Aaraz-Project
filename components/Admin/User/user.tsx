@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import "../../../components/Admin/Product/product.css"
 
+import {Eye, Trash2} from "lucide-react";
+
 
 interface User {
   _id: string;
@@ -24,9 +26,9 @@ const Users: React.FC = () => {
       try {
         const response = await axios.get('/api/user');
         console.log("API Response:", response); // Debugging Log
-  
-        if (response.status === 200) { 
-          setUsers(response.data.users); 
+
+        if (response.status === 200) {
+          setUsers(response.data.users);
         } else {
           console.error('Unexpected response status:', response.status);
         }
@@ -42,22 +44,22 @@ const Users: React.FC = () => {
         }
       }
     };
-  
+
     fetchUsers();
   }, []);
-  
+
 
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this user?")) {
       try {
         await axios.delete(`/api/user/${id}`);
-        setUsers(users.filter(user => user._id !== id)); 
+        setUsers(users.filter(user => user._id !== id));
       } catch (error) {
         console.error("Error deleting user:", error);
       }
     }
   };
- 
+
   return (
     <div className="main-content-Product">
       <div className="ProductTable">
@@ -85,11 +87,16 @@ const Users: React.FC = () => {
                     <td>{user.email}</td>
                     <td>{user.phoneNumber}</td>
                     <td>{user.address}</td>
-                    <td>
-                    <button onClick={() => router.push(`/admin/userDetail/${user._id}`)}>View</button>
-                    {/* <button onClick={() => router.push(`/admin/userDetail/${user._id}`)}>Edit</button> */}
+                    <td className="btns">
+                      
+                        <button onClick={() => router.push(`/admin/userDetail/${user._id}`)} className="view-btn">
+                          <Eye size={18} /> 
+                        </button>
 
-                      <button onClick={() => handleDelete(user._id)} className="delete-btn">Delete</button>
+                        <button onClick={() => handleDelete(user._id)} className="delete-btn">
+                          <Trash2 size={18} /> 
+                        </button>
+
                     </td>
                   </tr>
                 ))}

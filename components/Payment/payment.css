@@ -5,7 +5,7 @@
   border: 1px solid black;
   box-shadow: 0px 4px 10px rgba(173, 169, 190, 0.9); 
   border-radius:3px;
-  
+   
 } 
 
 h2 {
@@ -115,6 +115,95 @@ p {
 .submit-btn:hover {
   font-weight: bold;
 }
+
+
+
+/* order */
+.container {
+  max-width: 500px;
+  background: #e8e6f3;
+  padding: 20px;
+  border-radius: 10px;
+  font-family: "Arial", sans-serif;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.imageContainer {
+  position: relative;
+}
+
+.image {
+  width: 60px;
+  height: 60px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.qtyBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 15px;
+}
+
+.productName {
+  flex: 1;
+  margin-left: 15px;
+  font-size: 18px;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.discountSection {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.discountInput {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  background: #d6d3e6;
+  color: #555;
+  font-size: 16px;
+}
+
+.applyButton {
+  padding: 8px 15px;
+  background: #d6d3e6;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.summary {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {

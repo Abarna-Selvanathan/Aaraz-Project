@@ -13,7 +13,7 @@ import Handmadegift from '../../public/Image/roundPhoto Collage .jpeg';
 import resinArt from "../../public/Image/Resin letter keychains.jpeg"
 import frame from "../../public/Image/frame.jpeg"
 import walletcard from "../../public/Image/Map wallet card.png";
- 
+
 
 const Home: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -30,7 +30,7 @@ const Home: React.FC = () => {
           setUserType(data.user.userType);
         }
       } catch (error) {
-        
+
       }
     };
     fetchUser();
@@ -83,24 +83,23 @@ const Home: React.FC = () => {
 
       {/* New Launch Section */}
       <section className="section">
-        <h1>New Launch</h1>
+        <h1>New Launches</h1>
         <div className="cards">
           {products.slice(0, 4).map((product) => (
             <div className="card" onClick={() => handleProduct(product._id)} key={product._id}>
               {product.image && (
                 <Image src={product.image} alt={product.productName} width={400} height={500} />
               )}
-              <h3>{product.productName}</h3>
-              <p>LKR {product.price}</p>
-              <div className='home-icons'>
-                <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{ color: 'black', fontSize: '1.5rem' }}></div>
-                </Link>
+              <div className='card-contents'>
+                <h3>{product.productName}</h3>
+                <p>LKR. {product.price}</p>
+                <div className='home-icons'>
 
-                <div className="buttons">
-                  <button className="buy-now" onClick={handleBuyNow}>Buy Now</button>
+                  <div className="buttons">
+                    <button className="buy-now" onClick={handleBuyNow}>Choose</button>
+                  </div>
+
                 </div>
-
               </div>
             </div>
           ))}
@@ -120,15 +119,15 @@ const Home: React.FC = () => {
                   <Image className="hover-img" src={polaroidHov} alt={product.productName} width={400} height={300} /> */}
                 </>
               )}
-              <div className="saleprice">20%</div>
-              <h3>{product.productName}</h3>
-              <p>LKR {product.price}</p>
-              <div className='home-icons'>
-                <Link href="/cart">
-                  <div className="fas fa-cart-plus" style={{ color: 'black', fontSize: '1.5rem' }}></div>
-                </Link>
-                <div className="buttons">
-                  <button className="buy-now">Buy Now</button>
+              <div className='card-contents'>
+                <div className="saleprice">20%</div>
+                <h3>{product.productName}</h3>
+                <p>LKR. {product.price}</p>
+                <div className='home-icons'>
+
+                  <div className="buttons">
+                    <button className="buy-now">Choose</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -144,10 +143,10 @@ const Home: React.FC = () => {
           <div className='handmadegift'>
 
             <div className="image-side" >
-              <Image src={Handmadegift} alt="Handmadegift" width={400} height={500} />
+              <Image src={Handmadegift} alt="Handmadegift" width={500} height={600} />
             </div>
 
-            <div className="content-side">
+            <div className="content-side-right">
               <span className="section-tagline">Handmade Gifts</span>
               <p className="section-description">Unique, handcrafted gifts that bring a personal touch to every occasion. Each item is made with love and care, perfect for showing appreciation or celebrating special moments.</p>
               <a href="/handmadegift" className="collection-button">View Collections</a>
@@ -164,17 +163,17 @@ const Home: React.FC = () => {
               <a href="/resinart" className="collection-button">View Collections</a>
             </div>
             <div className="image-side" >
-              <Image src={resinArt} alt="resinArt" width={400} height={500} />
+              <Image src={resinArt} alt="resinArt" width={500} height={600} />
             </div>
           </div>
 
           <div className='frame'>
             <div className="image-side" >
-              <Image src={frame} alt="frame" width={400} height={500} />
+              <Image src={frame} alt="frame" width={500} height={600} />
 
             </div>
 
-            <div className="content-side">
+            <div className="content-side-right">
               <span className="section-tagline">Frames</span>
               <p className="section-description">Elegant, stylish photo frames designed to showcase your most cherished memories. Crafted with attention to detail, these frames bring your photos to life and add a touch of sophistication to any room.</p>
               <a href="/frame" className="collection-button">View Collections</a>
@@ -189,7 +188,7 @@ const Home: React.FC = () => {
               <a href="/walletcard" className="collection-button">View Collections</a>
             </div>
             <div className="image-side" >
-              <Image src={walletcard} alt="walletcard" width={400} height={500} />
+              <Image src={walletcard} alt="walletcard" width={500} height={600} objectFit='cover' />
             </div>
           </div>
         </div>
