@@ -30,6 +30,16 @@
     background-color: #F44336;
     color: white;
 }
+.Shipped-btn { 
+   background-color: #f48236;
+  color: white;
+}
+
+
+.Delivered-btn {
+  background-color: #3672f4;
+  color: white;
+}
 .delivery-details {
     padding: 10px; 
     background-color: white;

@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import '../review/Review.css';
 import "../../src/app/globals.css";
 import axios from "axios";
+import { XCircle } from "lucide-react";
+import router from "next/router";
+
+
 
 interface UserData {
   _id: string;
@@ -27,12 +31,12 @@ const ReviewPage: React.FC<ReviewPageProps> = ({ id }) => {
       setLoading(true)
       try {
         const userId = id
-          const userResponse = await axios.post("/api/user/getUserById", { id: userId });
-          const response = await axios.get(`/api/product/review?id=${id}`);
-          if (response.status !== 200) throw new Error("Failed to fetch reviews");
-          
-          setUserData(userResponse.data);
-          setReviews(response.data.reviews || []);
+        const userResponse = await axios.post("/api/user/getUserById", { id: userId });
+        const response = await axios.get(`/api/product/review?id=${id}`);
+        if (response.status !== 200) throw new Error("Failed to fetch reviews");
+
+        setUserData(userResponse.data);
+        setReviews(response.data.reviews || []);
       } catch (error) {
         console.log("Error fetching user:", error);
       } finally {
@@ -78,64 +82,74 @@ const ReviewPage: React.FC<ReviewPageProps> = ({ id }) => {
       console.error("Error submitting review:", error);
     }
   };
-
+  const handleClosePage = () => {
+    router.push("/");
+  };
   return (
     <>
-      <div className="reviews-main">
-        <section className="review">
-          <h2>Do you recommend this product?</h2>
-          <div className="reviewButton">
-            <button className={recommended === true ? "selected" : ""} onClick={() => handleRecommendation(true)}>Yes</button>
-          </div>
-        </section>
+      <div className="review">
+        <div className="closeButton" onClick={handleClosePage}>
+          <XCircle size={30} />
+        </div>
+        <div className="reviews-main">
 
-        {recommended !== null && (
-          <section className="rating">
-            <div className="stars">
-              {[1, 2, 3, 4, 5].map((starValue) => (
-                <span
-                  key={starValue}
-                  className={`star ${rating && rating >= starValue ? "selected-star" : ""}`}
-                  data-value={starValue}
-                  onClick={() => handleRating(starValue)}
-                >
-                  &#9733;
-                </span>
-              ))}
+          <section className="review">
+            <h2>Do you recommend this product?</h2>
+            <div className="reviewButton">
+              <button className={recommended === true ? "selected" : ""} onClick={() => handleRecommendation(true)}>Yes</button>
+              <button className={recommended === true ? "selected" : ""} onClick={() => handleRecommendation(true)}>No</button>
+
             </div>
           </section>
-        )}
 
-        {recommended !== null && (
-          <section className="recommendtext">
-            <textarea
-              className="recommend-textarea"
-              placeholder="Tell us why you recommend or don't recommend this product..."
-              value={comment}
-              onChange={handleCommentChange}
-            ></textarea>
-          </section>
-        )}
-        {recommended !== null && (
-          <button className="submit" onClick={handleSubmit}>Submit Review</button>
-        )}
-      </div>
+          {recommended !== null && (
+            <section className="rating">
+              <div className="stars">
+                {[1, 2, 3, 4, 5].map((starValue) => (
+                  <span
+                    key={starValue}
+                    className={`star ${rating && rating >= starValue ? "selected-star" : ""}`}
+                    data-value={starValue}
+                    onClick={() => handleRating(starValue)}
+                  >
+                    &#9733;
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
 
-      <div className="reviews-section">
-        <h2>Customer Reviews</h2>
-        {loading ? (
-          <p>Loading reviews...</p>
-        ) : reviews.length > 0 ? (
-          reviews.map((review, index) => (
-            <div key={index} className="review">
-              <p><strong>Rating:</strong> {review.rating} ★</p>
-              <p><strong>Recommended:</strong> {review.recommended ? "Yes" : "No"}</p>
-              <p>{review.comment}</p>
-            </div>
-          ))
-        ) : (
-          <p>No reviews yet.</p>
-        )}
+          {recommended !== null && (
+            <section className="recommendtext">
+              <textarea
+                className="recommend-textarea"
+                placeholder="Tell us why you recommend or don't recommend this product..."
+                value={comment}
+                onChange={handleCommentChange}
+              ></textarea>
+            </section>
+          )}
+          {recommended !== null && (
+            <button className="submit" onClick={handleSubmit}>Submit Review</button>
+          )}
+        </div>
+
+        <div className="reviews-section">
+          <h2>Customer Reviews</h2>
+          {loading ? (
+            <p>Loading reviews...</p>
+          ) : reviews.length > 0 ? (
+            reviews.map((review, index) => (
+              <div key={index} className="review">
+                <p ><strong >Rating:</strong> <strong className="star" >{review.rating} &#9733;</strong></p>
+                <p><strong>Recommended:</strong> {review.recommended ? "No" : "Yes"}</p>
+                <p>{review.comment}</p>
+              </div>
+            ))
+          ) : (
+            <p>No reviews yet.</p>
+          )}
+        </div>
       </div>
     </>
   );

@@ -159,10 +159,25 @@ const AccountReviewPage: React.FC = () => {
                     <div className="payment-button" onClick={() => router.push("/payment")}>Now Payment Time &gt;</div>
                   </div>
                 )}
- 
-                {(order.status === 'Paid' || order.status === 'Shipped' || order.status === 'Delivered') && (
+
+                {(order.status === "Paid" || order.status === "Shipped" || order.status === "Delivered") && (
                   <div className="order-actions">
-                    <div className="payment-button" onClick={() => router.push(`/tracking?order=${order._id}`)}>Now Track Your Order &gt;</div>
+                    <div
+                      className="tracking-button"
+                      onClick={() => router.push(`/tracking?order=${order._id}`)}
+                    >
+                      Now Track Your Order &gt;
+                    </div>
+                  </div>
+                )}
+                {order.status.toLowerCase() === "delivered" && (
+                  <div className="order-actions">
+                    <div
+                      className="review-button"
+                      onClick={() => router.push(`/review?order=${order._id}`)}
+                    >
+                      Now Review Your Order &gt;
+                    </div>
                   </div>
                 )}
 

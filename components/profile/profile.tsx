@@ -134,7 +134,7 @@ const Profile = () => {
     });
   };
 
-  return (
+  return ( 
     <div className="profileContainer">
       <ToastContainer />
       

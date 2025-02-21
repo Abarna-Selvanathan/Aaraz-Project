@@ -10,7 +10,7 @@ const OrderSchema = new mongoose.Schema(
       phoneNumber: { type: String, required: true },
       address: { type: String, required: true },
       district: { type: String, required: true },
-      postalCode: { type: String, required: false },
+      postalCode: { type: String, required: true },
       additionalNotes: { type: String },
     },
     

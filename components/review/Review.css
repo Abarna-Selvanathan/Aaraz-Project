@@ -67,7 +67,7 @@
   .rating .selected-star {
     color: #f39c12;
   }
-  
+
   .recommend-textarea::placeholder {
     color: #ccc;
     font-size: 1rem;
@@ -126,4 +126,17 @@
 .add-review button {
   margin-top: 10px;
   display: block;
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  color: #ff3b30;
+  transition: color 0.3s ease;
+}
+
+.closeButton:hover {
+  color: #cc2a24;
 }

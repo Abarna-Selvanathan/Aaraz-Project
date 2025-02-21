@@ -178,10 +178,31 @@
   justify-content: space-between;
   margin-top: 15px;
 }
+.tracking-button{
+  background-color: #807f7f;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1.5;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: white;
+  font-weight: 800;
+}
 
 
 .payment-button {
   background-color:#155724;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1.5;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: white;
+  font-weight: 800;
+}
+
+.review-button {
+  background-color: #735678;
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 1.5;

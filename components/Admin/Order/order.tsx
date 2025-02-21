@@ -8,7 +8,13 @@ import Link from "next/link";
 import "../../../components/Admin/Product/product.css";
 import "../../../components/Admin/Order/order.css";
 import { CheckCircle, XCircle } from "lucide-react";
-import { Truck, PackageCheck } from "lucide-react";
+import {
+  Truck,
+  PackageCheck,
+} from "lucide-react"; 
+
+
+
 
 interface Order {
   _id: string;
@@ -53,7 +59,7 @@ const Orders: React.FC = () => {
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
-    };
+    }; 
 
     fetchOrders();
   }, []);
@@ -76,7 +82,7 @@ const Orders: React.FC = () => {
       console.error("Error updating order status:", error);
     }
   };
-
+  
   return (
     <div className="main-content-Product">
       <div className="ProductTable">
@@ -106,9 +112,7 @@ const Orders: React.FC = () => {
                     <td>{order.userId.phoneNumber}</td>
                     <td>{order.productId._id}</td>
                     <td>{order.productId.productName}</td>
-                    <td className={`status ${order.status.toLowerCase()}`}>
-                      {order.status}
-                    </td>
+                    <td>{order.status}</td>
                     <td>
                       <div className="delivery-details">
                         <p><strong>Name:</strong> {order.deliveryDetails?.name || "N/A"}</p>
@@ -136,18 +140,19 @@ const Orders: React.FC = () => {
 
                       <button
                         onClick={() => updateOrderStatus(order._id, "Shipped")}
-                        className={`accept-btn ${order.status === "Shipped" ? "active" : ""}`}
+                        className={`Shipped-btn ${order.status === "Shipped" ? "active" : ""}`}
                       >
                         <PackageCheck size={20} />
                       </button>
 
                       <button
                         onClick={() => updateOrderStatus(order._id, "Delivered")}
-                        className={`reject-btn ${order.status === "Delivered" ? "active" : ""}`}
+                        className={`Delivered-btn ${order.status === "Delivered" ? "active" : ""}`}
                       >
                         <Truck size={20} />
                       </button>
                     </td>
+
                   </tr>
                 ))}
               </tbody>

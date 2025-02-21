@@ -1,4 +1,4 @@
-// import '../app/globals.css';
+import '../app/globals.css';
 
 import Homepage from "../pages/home";
 function Page() {
