@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loader from '../../Loader/loader';
 
 interface User {
   _id: string;
@@ -51,7 +52,7 @@ const UserDetails: React.FC<{ userId: string }> = ({ userId }) => {
   }, [userId]);
 
   if (!user) {
-    return <p>Loading user details...</p>;
+    return <Loader/>;
   }
 
   return (

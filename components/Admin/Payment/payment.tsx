@@ -2,52 +2,53 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-// import "../../../components/Admin/Product/product.css"
-// import "../../src/app/globals.css";
 
-
-
-interface user {
-  username: string;
-  userId: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
+interface Payment {
+  _id: string;
+  orderId: {
+    _id: string;
+    productName: string;
+    price: number;
+    quantity: number;
+  };
+  userId: {
+    _id: string;
+    username: string;
+    email: string;
+  };
+  paymentStatus: string;
+  paymentMethod: string;
+  amountPaid: number;
+  transactionDate: Date;
 }
 
-
 const Payments: React.FC = () => {
-
-  const [customers, setCustomers] = useState<user[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchPayments = async () => {
       try {
-        const response = await axios.get('/api/user'); // Ensure the endpoint is correct
-        console.log(response)
-        if (response.status === 201) {
-          setCustomers(response.data.customers); // Updated to match the correct response structure
+        const response = await axios.get('/api/payment'); // Fetch all payments
+        if (response.status === 200) {
+          setPayments(response.data); // Set the payments data
         }
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error('Error fetching payments:', error);
       }
     };
 
-    fetchUsers();
+    fetchPayments();
   }, []);
 
-  return ( 
+  return (
     <div className="main-content-Product">
       <div className="ProductTable">
         <div className="products">
           <h1>Payments Details</h1>
           <div className="table-container">
             <table className="product-table">
-
-
               <thead>
                 <tr>
                   <th>User ID</th>
@@ -59,13 +60,14 @@ const Payments: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {customers.map((customer, index) => (
-                  <tr key={index}>
-                    <td>{customer.username}</td>
-                    <td>{customer.userId}</td>
-                    <td>{customer.email}</td>
-                    <td>{customer.phoneNumber}</td>
-                    <td>{customer.address}</td>
+                {payments.map((payment) => (
+                  <tr key={payment._id}>
+                    <td>{payment.userId.username}</td>
+                    <td>{payment.orderId.productName}</td>
+                    <td>{payment._id}</td>
+                    <td>{payment.paymentStatus}</td>
+                    <td>{new Date(payment.transactionDate).toLocaleDateString()}</td>
+                    <td>LKR {payment.amountPaid}</td>
                   </tr>
                 ))}
               </tbody>

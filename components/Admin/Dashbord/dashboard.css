@@ -38,6 +38,21 @@
   font-size: 2rem;
   padding: 0 1rem;
 }
+.active-tab {
+  position: relative;
+  font-weight: bold;
+}
+
+.active-tab::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  bottom: -5px;
+  width: 50%;
+  height: 3px;
+  background-color: black;
+}
+
 
 .content {
   flex: 1;

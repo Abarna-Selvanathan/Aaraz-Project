@@ -3,146 +3,118 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import Logo from "../../../public/Image/logo.png";
 import '../../../components/Admin/Dashbord/dashboard.css';
 import Users from '../User/user';
-import Payments from "../Payment/payment";
+import Payments from '../Payment/payment';
 import Product from '../Product/product';
 import Orders from '../Order/order';
-// import "../../src/app/globals.css";
 import DeliveryDetails from '../Delivery/delivery';
-
+import Loader from '../../Loader/loader';
 
 const Dashboard: React.FC = () => {
-  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(true);
-  const [isUserOpen, setIsUserOpen] = useState(false);
-  const [isProductOpen, setIsProductOpen] = useState(false);
-  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
-  const [isOrderOpen, setIsOrderOpen] = useState(false);
-  const [isDeliveryOpen, setIsDeliveryOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [userType, setType] = useState("admin");
-
-  useEffect(() => {
-    let isMounted = true;
-    const fetchUser = async () => {
-      try {
-        const { data } = await axios.get('/api/cookie');
-        console.log(data);
-        setType(data?.user?.userType);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUser();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const [activeTab, setActiveTab] = useState("Analytics");
+  const [userType, setUserType] = useState<string | null>(null); 
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
 
-  if (userType === 'customer') {
-    router.push('/');
-  }
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data } = await axios.get('/api/cookie');
+        setUserType(data?.user?.userType);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        setError("Failed to verify user.");
+      }
+    };
+    fetchUser();
+  }, []);
 
-  const handleUser = () => {
-    setIsUserOpen(true);
-    setIsAnalyticsOpen(false);
-    setIsProductOpen(false);
-    setIsOrderOpen(false);
-    setIsDeliveryOpen(false);
-    setIsPaymentOpen(false);
+  useEffect(() => {
+    if (userType === "customer") {
+      router.push('/');
+    }
+  }, [userType, router]);
+
+  useEffect(() => {
+    const fetchAnalyticsData = async () => {
+      try {
+        const [productsResponse, usersResponse, ordersResponse] = await Promise.all([
+          axios.get('/api/product/count'),
+          axios.get('/api/user/count'),
+          axios.get('/api/order/count'),
+        ]);
+
+        setTotalProducts(productsResponse.data.count);
+        setTotalUsers(usersResponse.data.count);
+        setTotalOrders(ordersResponse.data.count);
+      } catch (error) {
+        console.error('Error fetching analytics data:', error);
+        setError("Failed to load analytics data.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAnalyticsData();
+  }, []);
+
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
   };
 
-  const handleAnalytic = () => {
-    setIsUserOpen(false);
-    setIsAnalyticsOpen(true);
-    setIsProductOpen(false);
-    setIsOrderOpen(false);
-    setIsDeliveryOpen(false);
-    setIsPaymentOpen(false);
-  };
+  if (isLoading) return <Loader />;
+  if (error) return <p className="error">{error}</p>;
+  if (!userType) return null; // Prevent rendering if userType is not yet fetched
 
-  const handleProduct = () => {
-    setIsProductOpen(true);
-    setIsAnalyticsOpen(false);
-    setIsUserOpen(false);
-    setIsOrderOpen(false);
-    setIsDeliveryOpen(false);
-    setIsPaymentOpen(false);
-  };
-
-  const handlePayment = () => {
-    setIsPaymentOpen(true);
-    setIsAnalyticsOpen(false);
-    setIsUserOpen(false);
-    setIsProductOpen(false);
-    setIsOrderOpen(false);
-    setIsDeliveryOpen(false);
-  };
-
-  const handleOrder = () => {
-    setIsOrderOpen(true);
-    setIsAnalyticsOpen(false);
-    setIsUserOpen(false);
-    setIsProductOpen(false);
-    setIsDeliveryOpen(false);
-    setIsPaymentOpen(false);
-  };
-
-  const handleDelivery = () => {
-    setIsDeliveryOpen(true);
-    setIsAnalyticsOpen(false);
-    setIsUserOpen(false);
-    setIsProductOpen(false);
-    setIsOrderOpen(false);
-    setIsPaymentOpen(false);
-  };
-
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  const toggleUserDropdown = () => {
-    setUserDropdownOpen(!userDropdownOpen);
-  };
-
-
-  return ( 
+  return (
     <div className="main-content">
-
       <div className="NavbarAdmin">
-
         <div className="Navbar-links">
           <ul>
-            <li onClick={handleAnalytic}>Analytics</li>
-            <li onClick={handleProduct}>Products</li>
-            <li onClick={handleUser}>User</li>
-            <li onClick={handleOrder}>Orders</li>
-            <li onClick={handlePayment}>Payments</li>
-            <li onClick={handleDelivery}>Delivery Details</li>
+            {["Analytics", "Products", "User", "Orders", "Payments"].map((tab) => (
+              <li
+                key={tab}
+                onClick={() => handleTabClick(tab)}
+                className={activeTab === tab ? "active-tab" : ""}
+              >
+                {tab}
+              </li>
+            ))}
           </ul>
         </div>
-        
       </div>
 
       <div className="content">
-        {isAnalyticsOpen && (
+        {activeTab === "Analytics" && (
           <div className="analytics">
             <h1>Analytics</h1>
             <div className="analytics-cards">
-              <div className="analytics-card">Products</div>
-              <div className="analytics-card">Users</div>
-              <div className="analytics-card">Orders</div>
+              <div className="analytics-card">
+                <h2>Total Products</h2>
+                <p>{totalProducts}</p>
+              </div>
+              <div className="analytics-card">
+                <h2>Total Users</h2>
+                <p>{totalUsers}</p>
+              </div>
+              <div className="analytics-card">
+                <h2>Total Orders</h2>
+                <p>{totalOrders}</p>
+              </div>
             </div>
           </div>
         )}
-
-        {isUserOpen && <Users />}
-        {isProductOpen && <Product />}
-        {isPaymentOpen && <Payments />}
-        {isOrderOpen && <Orders />}
-        {isDeliveryOpen && <DeliveryDetails />}
+        {activeTab === "User" && <Users />}
+        {activeTab === "Products" && <Product />}
+        {activeTab === "Payments" && <Payments />}
+        {activeTab === "Orders" && <Orders />}
+        {/* {activeTab === "Delivery Details" && <DeliveryDetails />} */}
       </div>
     </div>
   );

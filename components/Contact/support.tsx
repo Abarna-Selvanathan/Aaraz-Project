@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../Contact/support.css";
 import "../../src/app/globals.css";
 import Link from "next/link";
-import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt } from "react-icons/fa"; 
+import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ const ContactForm: React.FC = () => {
     phoneNumber: "",
     email: "",
     message: "",
-  });
+  }); 
 
   const [errors, setErrors] = useState({
     name: "",
@@ -36,11 +36,31 @@ const ContactForm: React.FC = () => {
 
     setErrors(newErrors);
 
-    if (!newErrors.name && !newErrors.email && !newErrors.message) {
-      console.log("Form submitted:", formData);
-      alert("Form submitted successfully!");
-      setFormData({ name: "", email: "", phoneNumber: "", message: "" });
-    }
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+
+      // Validation code...
+
+      if (!newErrors.name && !newErrors.email && !newErrors.message) {
+        try {
+          const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          });
+
+          if (!response.ok) throw new Error('Failed to send');
+
+          alert("Form submitted successfully!");
+          setFormData({ name: "", email: "", phoneNumber: "", message: "" });
+        } catch (error) {
+          console.error('Error:', error);
+          alert("Failed to send message");
+        }
+      }
+    };
   };
 
   return (
@@ -54,7 +74,7 @@ const ContactForm: React.FC = () => {
         <p>
           <FaEnvelope className="icon" />
           <Link href="mailto:aaraz@gmail.com" style={{ color: '#4C394F', textDecoration: 'none' }}>
-              aaraz@gmail.com
+            aaraz.business@gmail.com
           </Link>
         </p>
         <p>
@@ -77,8 +97,9 @@ const ContactForm: React.FC = () => {
         </div>
 
         <div className="formGroup">
-          <input placeholder="Phone Number" type="phoneNumber" id="phoneNumber" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
-          {errors.email && <p className="error">{errors.email}</p>}
+          <input placeholder="Phone Number" type="tel" id="phoneNumber"
+            name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
+          {errors.phoneNumber && <p className="error">{errors.phoneNumber}</p>}
         </div>
 
         <div className="formGroup">

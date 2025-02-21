@@ -1,75 +1,75 @@
 import React, { useState, useEffect } from "react";
 import '../review/Review.css';
 import "../../src/app/globals.css";
+import axios from "axios";
+
+interface UserData {
+  _id: string;
+  name: string;
+  email: string;
+  phoneNumber: number;
+}
 
 interface ReviewPageProps {
-  id: string; // Product ID for fetching reviews
+  id: string;
 }
 
 const ReviewPage: React.FC<ReviewPageProps> = ({ id }) => {
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [recommended, setRecommended] = useState<boolean | null>(null);
   const [rating, setRating] = useState<number | null>(null);
   const [comment, setComment] = useState<string>("");
   const [reviews, setReviews] = useState<{ comment: string; rating: number; recommended: boolean | null }[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  // Fetch Product Reviews from Backend
   useEffect(() => {
-    if (!id) return;
-
-    const fetchReviews = async () => {
+    const fetchUserAndReviewData = async () => {
+      setLoading(true)
       try {
-        const response = await fetch(`/api/product/${id}/reviews`);
-        if (!response.ok) throw new Error("Failed to fetch reviews");
-
-        const data = await response.json();
-        setReviews(data.reviews || []);
+        const userId = id
+          const userResponse = await axios.post("/api/user/getUserById", { id: userId });
+          const response = await axios.get(`/api/product/review?id=${id}`);
+          if (response.status !== 200) throw new Error("Failed to fetch reviews");
+          
+          setUserData(userResponse.data);
+          setReviews(response.data.reviews || []);
       } catch (error) {
-        console.error("Error fetching reviews:", error);
+        console.log("Error fetching user:", error);
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     };
 
-    fetchReviews();
+    fetchUserAndReviewData();
   }, [id]);
 
-  // Handle Recommendation
   const handleRecommendation = (value: boolean) => {
     setRecommended(value);
   };
 
-  // Handle Rating
   const handleRating = (value: number) => {
     setRating(value);
   };
 
-  // Handle Comment Change
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
 
-  // Submit Review to Backend
   const handleSubmit = async () => {
     if (!rating || !comment) {
       alert("Please provide both rating and a comment.");
       return;
     }
 
-    const reviewData = { recommended, rating, comment };
+    const reviewData = { productId: id, userId: userData?._id, recommended, rating, comment };
 
     try {
-      const response = await fetch(`/api/product/${id}/reviews`, {
-        method: "POST",
+      const response = await axios.post("/api/product/review", reviewData, {
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(reviewData),
       });
+      console.log("Review submitted successfully:", response.data);
+      alert("Review submitted successfully!");
 
-      if (!response.ok) {
-        throw new Error("Failed to submit review");
-      }
-
-      // Update UI after successful submission
       setReviews([...reviews, reviewData]);
       setComment("");
       setRecommended(null);
@@ -86,7 +86,6 @@ const ReviewPage: React.FC<ReviewPageProps> = ({ id }) => {
           <h2>Do you recommend this product?</h2>
           <div className="reviewButton">
             <button className={recommended === true ? "selected" : ""} onClick={() => handleRecommendation(true)}>Yes</button>
-            <button className={recommended === false ? "selected" : ""} onClick={() => handleRecommendation(false)}>No</button>
           </div>
         </section>
 
@@ -118,11 +117,10 @@ const ReviewPage: React.FC<ReviewPageProps> = ({ id }) => {
           </section>
         )}
         {recommended !== null && (
-        <button className="submit" onClick={handleSubmit}>Submit Review</button>
+          <button className="submit" onClick={handleSubmit}>Submit Review</button>
         )}
       </div>
 
-      {/* Customer Reviews Section */}
       <div className="reviews-section">
         <h2>Customer Reviews</h2>
         {loading ? (
@@ -139,8 +137,6 @@ const ReviewPage: React.FC<ReviewPageProps> = ({ id }) => {
           <p>No reviews yet.</p>
         )}
       </div>
-
-      
     </>
   );
 };

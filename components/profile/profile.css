@@ -12,18 +12,6 @@
     border-radius: 30px;
 }
 
-/* Header Section */
-.headerprofile {
-    /* display: flex; */
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    padding: 40px;
-    padding-top: 55px;
-}
-
-
 
 
 
@@ -39,14 +27,6 @@
     gap: 20px;
 }
 
-.imageprofile img {
-    width: 150px;
-    height: 150px;
-    border-radius: 30%;
-    border: 3px solid #b3acac;
-    object-fit: cover;
-}
-
 /* profile Info */
 .infoprofile {
     text-align: center;
@@ -58,28 +38,25 @@
     margin: 20px 0;
 }
 
-.userEmail {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
 
 /* Buttons */
 .buttonSave {
-    background-color: #1873e8;
-    color: white;
-    padding: 15px 25px;
-    border: none;
+    background-color: #ffffff;
+    color: black;
+    /* padding: 15px 25px; */
+    border: 2px solid black;
     border-radius: 5px;
     cursor: pointer;
     width: 100%;
     max-width: 250px;
     margin: 10px 0 20px;
     transition: transform 0.3s ease, background-color 0.3s ease;
+    font-size: 1.3rem;
 }
 
 /* Hover and Active Effects */
 .buttonSave:hover {
-    background-color: rgb(18, 59, 192);
+   font-weight: bold;
     transform: scale(1.1);
 }
 
@@ -105,13 +82,14 @@
 .formGroup input {
     width: 100%;
     padding: 15px 20px;
-    background-color: #333;
-    border: 1px solid #0B63F8;
+    background-color: white;
+    border: 1px solid black;
     border-radius: 10px;
-    color: white;
+    color: black;
     font-size: 18px;
     transition: border-color 0.3s ease-in-out;
-    padding-right: 50px; /* Added space for the edit icon */
+    padding-right: 50px; 
+    font-weight: 700;
 }
 
 .formGroup input::placeholder {
@@ -120,7 +98,7 @@
 
 .formGroup input:focus {
     outline: none;
-    border-color: #0B63F8;
+    border-color: #000000;
 }
 
 /* Edit Symbol */
@@ -129,31 +107,32 @@
     top: 50%;
     right: 20px; /* Adjusted for proper alignment */
     transform: translateY(-50%);
-    color: #0B63F8;
+    color: black;
     font-size: 24px;
     cursor: pointer;
     transition: color 0.3s ease-in-out;
+    font-weight: 500;
 }
 
 .editSymbol:hover {
-    color: #1eb9ac;
+    font-weight: bold;
 }
 
-.logoutButton {
-    background-color: rgb(235, 81, 92);
-    color: white;
-    padding: 10px 0px;
-    margin-left: 30px;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 10px;
-    cursor: pointer;
-    width: 10%;
-    max-width: 250px;
-    font-family: 'Helvetica Neue';
-    font-size:17PX;
-}
+
 
 .profileContainer{
     display: flex;
 }
+.closeButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    color: #ff3b30;
+    transition: color 0.3s ease;
+  }
+  
+  .closeButton:hover {
+    color: #cc2a24;
+  }
+  

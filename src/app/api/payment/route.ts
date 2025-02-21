@@ -1,24 +1,53 @@
+import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { NextApiRequest, NextApiResponse } from "next";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, );
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
+  apiVersion: "2023-10-16",
+});
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "POST") {
-    try {
-      const { amount } = req.body;
+export async function POST(req: NextRequest) {
+  try {
+    const { order } = await req.json();
 
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: amount, 
-        currency: "lkr",
-        payment_method_types: ["card"],
-      });
-
-      res.status(200).json({ clientSecret: paymentIntent.client_secret });
-    } catch (error) {
-      res.status(500).json({ error: (error as any).message });
+    if (!order || !order.productId) {
+      return NextResponse.json({ error: "Invalid order data" }, { status: 400 });
     }
-  } else {
-    res.status(405).json({ error: "Method Not Allowed" });
+
+    const deliveryCharge = 450; // Add delivery charge
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "lkr",
+            product_data: {
+              name: order.productId.productName,
+              images: [order.productId.image],
+            },
+            unit_amount: order.productId.price * 100, // Convert to cents
+          },
+          quantity: order.quantity || 1,
+        },
+        {
+          price_data: {
+            currency: "lkr",
+            product_data: {
+              name: "Delivery Charge",
+            },
+            unit_amount: deliveryCharge * 100, // Convert to cents
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `${req.nextUrl.origin}/payment-success?oid=${order._id}`,
+      cancel_url: `${req.nextUrl.origin}/payment-failed`,
+    });
+
+    return NextResponse.json({ url: session.url }, { status: 200 });
+  } catch (error) {
+    console.error("Stripe Checkout Error:", error);
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

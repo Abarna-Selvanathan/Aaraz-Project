@@ -1,110 +1,114 @@
 import { useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 import "../Payment/payment.css";
 import Image from "next/image";
+import Loader from "../../components/Loader/loader"; 
 
-interface User {
-  _id: string;
-  name: string;
-  profileImage?: string;
-  address: string;
-  phoneNumber: string[];
-}
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || "");
 
-interface Product {
-  _id: string;
-  image: string;
-  productType: string;
-  productName: string;
-  stock: string;
-  price: number;
-}
-
-interface Customization {
-  customizationDescription: string;
-  customizationImage: string;
-}
-
-interface OrderData {
-  _id: string;
-  userId: User;
-  productId: Product;
-  customization: Customization;
-  createdAt: Date;
-  updatedAt: Date;
-  status: string;
+interface Order {
+  productId: {
+    productName: string;
+    image: string;
+    price: number;
+  };
   quantity: number;
 }
 
 interface PaymentFormProps {
-  order: OrderData;
+  order: Order | null;
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({ order }) => {
-  console.log(order)
-  
-  
+
   if (!order || !order.productId) {
-    return <p>Loading Order Details...</p>;
+      return <Loader />; 
   }
-  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
-  const [deliveryCharge, setDeliveryCharge] = useState(0);
   
-  const handlePaymentSelect = (method: string) => {
-    setPaymentMethod(method);
-    setDeliveryCharge(method === "cod" ? 450 : 0);
-  };
-  const subtotal = order.productId.price * order.quantity;
+  const [loading, setLoading] = useState(false);
+  const deliveryCharge = 450;
+
+  const subtotal = order.productId.price * order.quantity || 0;
   const total = subtotal + deliveryCharge;
-  
+
+  const handlePayment = async () => {
+    setLoading(true);
+    const stripe = await stripePromise;
+
+    if (!stripe) {
+      console.error("Stripe failed to load.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || "Payment failed, try again.");
+      }
+    } catch (error:any) {
+      console.error(error);
+      alert(error.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="payment-container">
-      <div className="order-summary">
-        <h2 className="title">Order Summary</h2>
+      <div className="order-summary compact">
+        <h2 className="tittles">Order Summary</h2>
         <div className="item">
-          <div className="image-container">
-            <Image
-              src={order.productId.image}
-              alt="Product Image"
-              width={180}
-              height={180}
-              className="order-img"
-            />
-            <div className="qty-badge">Qty: {order.productId.quantity}</div>
+          <Image
+            src={order.productId.image}
+            alt="Product Image"
+            width={80}
+            height={80}
+            className="order-img"
+          />
+          <div className="summary-info">
+            <p className="product-name">{order.productId.productName}</p>
+            <p className="sub-info">Sub information</p>
           </div>
-          <span className="product-name">{order.productId.productName}</span>
-          <span className="price">LKR {order.productId.price}</span>
+          <div className="qty-controls">
+            <span className="qty">{order.quantity || 1}</span>
+            <p className="price">LKR {order.productId.price}</p>
+          </div>
         </div>
 
-        <div className="summary">
-          <p>Subtotal: LKR {subtotal}</p>
-          <p>Delivery Charge: LKR {deliveryCharge}</p>
-          <p>Total: LKR {total}</p>
+        <hr />
+        <div className="summary-details">
+          <div className="summary-row">
+            <p>Subtotal</p>
+            <p className="amount">LKR {subtotal}</p>
+          </div>
+          <div className="summary-row">
+            <p>Shipping fees</p>
+            <p className="amount">LKR {deliveryCharge}</p>
+          </div>
+          <div className="summary-row total">
+            <p>Total </p>
+            <p className="amount total-amount">LKR {total}</p>
+          </div>
         </div>
       </div>
 
-      <h2>Payment Method</h2>
-      <div className="payment-options">
-        {/* <button type="button" onClick={() => handlePaymentSelect("cod")}>
-          Cash on Delivery (COD)
-        </button> */}
-        <button type="button" onClick={() => handlePaymentSelect("card")}>
-          Pay with Card
-        </button>
-      </div>
-
-      {paymentMethod === "card" && (
-        <div className="card-payment-form">
-          <input type="text" placeholder="Cardholder Name" required />
-          <input type="text" placeholder="Card Number" required />
-          <input type="text" placeholder="Expiry Date" required />
-          <input type="text" placeholder="CVV" required />
-          <textarea placeholder="Billing Address (if different)"></textarea>
+      <div className="payment-section modern">
+        <h2 className="tittles">Payment Method</h2>
+        <div className="payment-options">
+          <button className="payment-btn" onClick={handlePayment} disabled={loading}>
+            {loading ? "Redirecting..." : "Pay with Card"}
+          </button>
         </div>
-      )}
-
-      <button type="submit" className="submit-btn">
-        Submit
-      </button>
+      </div>
     </div>
   );
 };

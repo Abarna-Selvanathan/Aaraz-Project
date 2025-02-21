@@ -6,6 +6,8 @@ import "../account/Account.css";
 import "../../src/app/globals.css";
 import axios from "axios";
 import { SlidersHorizontal } from "lucide-react";
+import Loader from "../Loader/loader"
+
 
 interface User {
   _id: string;
@@ -47,6 +49,7 @@ const AccountReviewPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -104,7 +107,7 @@ const AccountReviewPage: React.FC = () => {
     }
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loader />;
   if (error) return <p>{error}</p>;
 
   return (
@@ -117,59 +120,72 @@ const AccountReviewPage: React.FC = () => {
             <div className="user-icon-placeholder">{order?.userId.name.charAt(0).toUpperCase()}</div>
           )}
           <h2 style={{ cursor: "pointer" }}>{order?.userId.name}</h2>
+
+
         </div>
         <div className="arrow">
           <SlidersHorizontal className="icon" onClick={() => router.push("/profile")} />
+
         </div>
       </div>
 
       <div className="titles">
-        <p>My Orders</p>
-        <h3 onClick={() => router.push("/orders")}>View All Orders &gt;</h3>
+        <p >My Orders</p>
+        <p className="veiworder" onClick={() => router.push("/orders")}>View All Orders &gt;</p>
       </div>
 
-      {order ? (
-        <div className="order-container">
-          <Image src={order.productId.image} alt="Product Image" width={180} height={180} className="order-img" />
+      <div className="order-section">
 
-          <div className="order-details">
-            
-              <h3 className="order-name">{order.productId.productName}</h3>
-          
-            <div className="order-info">
-             
-                <span className="order-price">LKR {order.productId.price}</span>
-             
-                <span className="order-qty">Qty: {order.productId.quantity}</span>
-             
-            </div>
+        {order ? (
+          <div className="order-card">
+            <div className="order-data-container">
+              <Image src={order.productId.image} alt="Product Image" width={140} height={140} className="order-img" />
 
-            {/* <div className="order-item">
-              <span>Total: LKR {order.productId.price * order.quantity}</span>
-            </div> */}
-            <div className="order-status">
-              <span className={`status-label ${order.status.toLowerCase()}`}>{order.status}</span>
-            </div>
+              <div className="order-details">
+                <div className="order-info">
+                  <h3 className="order-name">{order.productId.productName}</h3>
+                  <div className="order-status">
+                    <span className={`status-label ${order.status.toLowerCase()}`}>{order.status}</span>
+                  </div>
+                </div>
 
+                <div className="order-info">
+                  <span className="order-price">LKR {order.productId.price}</span>
+                  <span className="order-qty">Qty: 1{order.productId.quantity}</span>
+                </div>
 
-            {order.status.toLowerCase() === "accepted" && (
-              <div className="order-item">
-                <div className="payment-time" onClick={() => router.push("/payment")}>Now Payment Time &gt;</div>
+                {order.status.toLowerCase() === "accepted" && (
+                  <div className="order-actions">
+                    <div className="payment-button" onClick={() => router.push("/payment")}>Now Payment Time &gt;</div>
+                  </div>
+                )}
+ 
+                {(order.status === 'Paid' || order.status === 'Shipped' || order.status === 'Delivered') && (
+                  <div className="order-actions">
+                    <div className="payment-button" onClick={() => router.push(`/tracking?order=${order._id}`)}>Now Track Your Order &gt;</div>
+                  </div>
+                )}
+
+                {order.status.toLowerCase() === "delivering" && (
+                  <div className="order-actions">
+                    <span className="delivery-status">Order is on the way!</span>
+                  </div>
+                )}
+
+                {order.status.toLowerCase() === "pending" && (
+                  <div className="order-actions">
+                    <button className="cancel-button" onClick={handleCancelOrder}>
+                      Cancel Order
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-
-          {order.status.toLowerCase() === "pending" && (
-            <div className="order-item">
-              <button className="cancel-button" onClick={handleCancelOrder}>
-                Cancel Order
-              </button>
             </div>
-          )}
-        </div>
-      ) : (
-        <p>No recent orders found.</p>
-      )}
+          </div>
+        ) : (
+          <p>No recent orders found.</p>
+        )}
+      </div>
     </div>
   );
 };

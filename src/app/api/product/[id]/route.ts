@@ -6,8 +6,9 @@ import Product from "../../../../../models/Product";
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     await DBconnect();
-    
+
     const { id } = params;
+    console.log('[ID]: ', id)
     console.log("Received Product ID:", id); // Debugging line
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -43,7 +44,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const { id } = params;
     const body = await req.json();
     const updatedProduct = await Product.findByIdAndUpdate(id, body, { new: true });
-    
+
     if (!updatedProduct) {
       return NextResponse.json({ message: 'Product not found' }, { status: 404 });
     }
@@ -58,7 +59,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     await DBconnect();
-    
+
     const { id } = params;
     console.log("Received Product ID:", id); // Debugging line
 

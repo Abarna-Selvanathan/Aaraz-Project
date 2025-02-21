@@ -27,15 +27,15 @@
 
 
 .submit-btn {
-  background-color: white;
-  color: black;
+  color: white;
   padding: 4px 20px;
-  font-size: 1rem;
-  border: 1px solid black;
+  font-size: 1.3rem;
+  background-color: #4C394F;
   border-radius: 5px;
   cursor: pointer;
-  /* margin-left: 4%; */
-  margin-top: 2%;
+  margin: 2% 18%;
+  width: 70%;
+  font-weight: 800;
  
 }
 

@@ -80,10 +80,13 @@ export async function DELETE(req: NextRequest, { params }: { params: { orderId: 
 }
 
 export const PATCH = async (req: NextRequest, { params }: { params: { orderId: string } }) => {
+  await dbConnect();
   const { orderId } = params;
   const { status } = await req.body;
-
   try {
+    if (!orderId || !status) {
+      return NextResponse.json({ error: "Order ID and status required" }, { status: 400 });
+    }
     const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
     console.log(orderId)
     if (!order) {

@@ -19,17 +19,7 @@ interface DeliveryData {
   district: string;
   postalCode: string;
   additionalNotes: string;
-}
-
-interface OrderData {
-  userId: string;
-  productId: string;
-  customizationDescription: string;
-  customizationImage: string;
-  quantity: number;
-  deliveryCharge: number;
-  status?: string;
-  deliveryDetails: DeliveryData;
+  deliveryDate: string;  
 }
 
 const OrderForm = () => {
@@ -41,6 +31,7 @@ const OrderForm = () => {
     district: "",
     postalCode: "",
     additionalNotes: "",
+    deliveryDate: "",  // Default empty delivery date
   });
   const [customization, setCustomization] = useState({
     customizationDescription: "",
@@ -52,10 +43,10 @@ const OrderForm = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.query.id) {
+    if (router.isReady && router.query.id) {
       setProductId(router.query.id as string);
     }
-  }, [router.query.id]);
+  }, [router.isReady, router.query.id]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -101,12 +92,18 @@ const OrderForm = () => {
     formData.append("userId", userData._id);
     formData.append("productId", productId);
     formData.append("customizationDescription", customization.customizationDescription);
+
     if (customization.customizationImage) {
       formData.append("customizationImage", customization.customizationImage);
     }
+
     formData.append("quantity", quantity.toString());
-    formData.append("deliveryCharge", "500"); // Example delivery charge
+    formData.append("deliveryCharge", "500");
     formData.append("deliveryDetails", JSON.stringify(deliveryDetails));
+    // ✅ Debugging FormData to ensure data is appended correctly
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
 
     try {
       const response = await axios.post("/api/order", formData, {
@@ -126,7 +123,7 @@ const OrderForm = () => {
   return (
     <form onSubmit={handleSubmit} className="form-container-placeOrder">
       <div className="orderplace-Contact">
-        <fieldset >
+        <fieldset>
           <legend><h3>Contact Details</h3></legend>
           <input type="text" name="name" placeholder="Your Name" value={userData?.name || ""} readOnly className="input-field" />
           <input type="email" name="email" placeholder="Your Email" value={userData?.email || ""} readOnly className="input-field" />
@@ -153,7 +150,7 @@ const OrderForm = () => {
                 onChange={handleImageUpload}
                 required
               />
-              <i  className="fa fa-cloud-upload" aria-hidden="true"></i> Upload image
+              <i className="fa fa-cloud-upload" aria-hidden="true"></i> Upload image
             </label>
             {/* {preview && <Image src={preview} alt="Customization Preview" width={100} height={100} />} */}
           </div>
@@ -236,6 +233,15 @@ const OrderForm = () => {
           placeholder="Additional Notes"
           value={deliveryDetails.additionalNotes}
           onChange={handleDeliveryDetailsChange}
+          className="input-field"
+        />
+        {/* Added Delivery Date Field */}
+        <input
+          type="date"
+          name="deliveryDate"
+          value={deliveryDetails.deliveryDate}
+          onChange={handleDeliveryDetailsChange}
+          required
           className="input-field"
         />
       </fieldset>

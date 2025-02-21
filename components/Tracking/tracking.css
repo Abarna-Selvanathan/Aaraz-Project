@@ -1,90 +1,98 @@
+.tracking-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f8f8f8;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 5% 18%;
+}
+
+.tracking-status {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 .tracking-container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* width: 100%; */
-    max-width: 40%;
-    margin: 4% auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  position: relative;
+}
+
+.tracking-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* Tracking icons */
+.tracking-icon {
+  width: 50px;
+  height: 50px;
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.tracking-step.active .tracking-icon {
+  background-color: green;
+  color: white;
+}
+
+
+.tracking-line {
+  width:452%;
+  height: 5px;
+  background: #e0e0e0;
+  position: absolute;
+  top: 25px;
+  left: 300%;
  
-  }
-  
-  .tracking-header {
-    display: flex;
-    justify-content: space-between;
+  transform: translateX(-50%);
+}
+
+.filled {
+  background: green;
+}
+
+.active .icon {
+  background: green;
+  color: white;
+}
+
+.step-label {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tracking-step.active .tracking-icon {
+  color: green;
+}
+
+.tracking-line.filled {
+  background-color: green;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .tracking-container {
+    flex-direction: column;
     align-items: center;
   }
-  
-  .status-badge {
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 1.5rem;
+  .tracking-line {
+    width: 5px;
+    height: 50px;
+    left: auto;
+    top: auto;
+    transform: translateY(-50%);
   }
-  
-  .status-badge.delivered {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .timeline {
-    position: relative;
-    margin-top: 20px;
-  }
-  
-  .timeline-item {
-    display: flex;
-    align-items: flex-start;
-    position: relative;
-    padding-left: 25px;
-    margin-bottom: 20px;
-  }
-  
-  .timeline-item:last-child {
-    margin-bottom: 0;
-  }
-  
-  .timeline-dot {
-    width: 12px;
-    height: 12px;
-    background-color: #007bff;
-    border-radius: 50%;
-    position: absolute;
-    left: 0;
-    top: 5px;
-  }
-  
-  .timeline-content {
-    background: #f8f9fa;
-    padding: 10px;
-    border-radius: 5px;
-    width: 100%;
-  }
-  
-  .time, .date {
-    font-weight: bold;
-    font-size: 1rem;
-    color: #666;
-  }
-  
-  .status {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 5px 0;
-  }
-  
-  .description {
-    font-size: 1rem;
-    color: #555;
-  }
-  
-  .delivery-info {
-    margin-top: 20px;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-    font-size: 1.3rem;
-  }
- .tracking-header h2{
-    font-size: 2rem;
- } 
-  
+}

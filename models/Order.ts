@@ -10,7 +10,7 @@ const OrderSchema = new mongoose.Schema(
       phoneNumber: { type: String, required: true },
       address: { type: String, required: true },
       district: { type: String, required: true },
-      postalCode: { type: String, required: true },
+      postalCode: { type: String, required: false },
       additionalNotes: { type: String },
     },
     
@@ -24,7 +24,7 @@ const OrderSchema = new mongoose.Schema(
 
     status: { 
       type: String, 
-      enum: ["Order pending", "Order accepted", "Order rejected"], 
+      enum: ["Order pending", "Order accepted", "Order rejected", "Order Placed","Order Shipped","Order Delivered", "Paid"], 
       default: "Order pending" 
     },
   },

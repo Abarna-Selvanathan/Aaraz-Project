@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -5,11 +7,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../profile/profile.css"; 
 import axios from "axios";
-
-
+import { XCircle } from "lucide-react";
 
 const Profile = () => {
-
   const [preview, setPreview] = useState<string>('');
   const router = useRouter();
   const [userData, setUserData] = useState({
@@ -19,6 +19,7 @@ const Profile = () => {
     phoneNumber: "", 
     profileImage: ""
   });
+
   const [isEditing, setIsEditing] = useState({
     name: false,
     email: false,
@@ -30,13 +31,10 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get("/api/cookie");
-        const id = response.data.user.id
+        const id = response.data.user.id;
   
         if (response.status === 200) {
-          const userResponse = await axios.post('/api/user/getUserById', {
-            id 
-          });
-          
+          const userResponse = await axios.post('/api/user/getUserById', { id });
           setUserData(userResponse.data);
         }
       } catch (error) {
@@ -54,6 +52,17 @@ const Profile = () => {
     }));
   };
 
+  const handleCloseEdit = (field: string) => {
+    setIsEditing((prevState) => ({
+      ...prevState,
+      [field]: false,
+    }));
+  };
+
+  const handleClosePage = () => {
+    router.push("/account"); 
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     setUserData((prevState) => ({
       ...prevState,
@@ -66,6 +75,9 @@ const Profile = () => {
     if (isModified) {
       try {
         const response = await fetch(`/api/user/${userData._id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData),
         });
 
         if (!response.ok) {
@@ -122,51 +134,18 @@ const Profile = () => {
     });
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("user"); 
-    router.push("/login"); 
-  };
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = (event: ProgressEvent<FileReader>) => {
-        const result = event.target?.result;
-        if (typeof result === "string") {
-          setPreview(result); // Set preview image
-          setUserData((prevState) => ({
-            ...prevState,
-            profileImage: result, // Update user data with the new image
-          }));
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  
-  
   return (
     <div className="profileContainer">
       <ToastContainer />
-      <div className="headerprofile">
-        <button className="logoutButton" onClick={handleLogout}>
-          Logout
-        </button>
+      
+      {/* Close Button */}
+      <div className="closeButton" onClick={handleClosePage}>
+        <XCircle size={30} />
       </div>
 
       <div className="contentprofile">
-         <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  required
-                  
-                />
-                {preview && <Image src={preview} alt="Preview" width={100} height={100} />}
-
         <div className="infoprofile">
           <h1>Edit Profile</h1>
-          <p className="userEmail">{userData.email || "No email available"}</p>
         </div>
 
         <div className="formInputs">
@@ -179,14 +158,25 @@ const Profile = () => {
                 onChange={(e) => handleChange(e, field)}
                 readOnly={!isEditing[field as keyof typeof isEditing]}
               />
-              <span
-                className="editSymbol"
-                onClick={() => handleEditClick(field)}
-                role="button"
-                tabIndex={0}
-              >
-                ✎
-              </span>
+              {!isEditing[field as keyof typeof isEditing] ? (
+                <span
+                  className="editSymbol"
+                  onClick={() => handleEditClick(field)}
+                  role="button"
+                  tabIndex={0}
+                >
+                  ✎
+                </span>
+              ) : (
+                <span
+                  className="closeSymbol"
+                  onClick={() => handleCloseEdit(field)}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <XCircle size={18} />
+                </span>
+              )}
             </div>
           ))}
         </div>
@@ -200,4 +190,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

@@ -11,7 +11,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 
  
-const Loginpage: React.FC = () => {
+const Loginpage: React.FC = () => { 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

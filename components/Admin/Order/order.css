@@ -1,5 +1,7 @@
 .btns {
-    display: flex;
+    display: grid;
+    gap: 20px;
+    justify-content: center;
 
 }
 
@@ -23,29 +25,34 @@
     color: white;
 }
 
-/* .accept-btn:hover {
-    background-color: #388E3C; 
-    transform: scale(1.1);
-  } */
 
 .reject-btn {
     background-color: #F44336;
     color: white;
 }
+.delivery-details {
+    padding: 10px; 
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  .delivery-details p {
+    margin: 5px 0;
+  }
 
-/* .reject-btn:hover {
-    background-color: #D32F2F;
-    transform: scale(1.1);
-  } */
-
-/* .accept-btn.active {
-    background-color: green;
-    color: white;
-    font-weight: bold;
-}
-
-.reject-btn.active {
-    background-color: red;
-    color: white;
-    font-weight: bold;
-} */
+  .status-accepted {
+    color: green;
+    
+  }
+  
+  .status-rejected {
+    color: red;
+  }
+  
+  .status-shipped {
+    color: yellow;
+  }
+  
+  .status-delivered {
+    color: green;
+  }

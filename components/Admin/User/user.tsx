@@ -4,17 +4,16 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import "../../../components/Admin/Product/product.css"
-
 import {Eye, Trash2} from "lucide-react";
-
 
 interface User {
   _id: string;
   name: string;
-  userType: string;
+  userType: string; 
   email: string;
   phoneNumber: string;
   address: string;
+  createdAt: string; // Add this line
 }
 
 const Users: React.FC = () => {
@@ -28,7 +27,11 @@ const Users: React.FC = () => {
         console.log("API Response:", response); // Debugging Log
 
         if (response.status === 200) {
-          setUsers(response.data.users);
+          // Sort users by createdAt in descending order
+          const sortedUsers = response.data.users.sort((a: User, b: User) => {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          });
+          setUsers(sortedUsers);
         } else {
           console.error('Unexpected response status:', response.status);
         }
@@ -47,7 +50,6 @@ const Users: React.FC = () => {
 
     fetchUsers();
   }, []);
-
 
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this user?")) {
@@ -88,15 +90,9 @@ const Users: React.FC = () => {
                     <td>{user.phoneNumber}</td>
                     <td>{user.address}</td>
                     <td className="btns">
-                      
-                        <button onClick={() => router.push(`/admin/userDetail/${user._id}`)} className="view-btn">
-                          <Eye size={18} /> 
-                        </button>
-
-                        <button onClick={() => handleDelete(user._id)} className="delete-btn">
-                          <Trash2 size={18} /> 
-                        </button>
-
+                      <button onClick={() => handleDelete(user._id)} className="delete-btn">
+                        <Trash2 size={18} /> 
+                      </button>
                     </td>
                   </tr>
                 ))}

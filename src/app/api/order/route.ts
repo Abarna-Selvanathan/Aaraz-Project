@@ -1,157 +1,154 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
-import { promises as fs } from "fs";
-import formidable from "formidable";
+import mongoose from "mongoose";
+import dbConnect from "../../../../lib/dbConnect";
 import Order from "../../../../models/Order";
 import User from "../../../../models/User";
-import dbConnect from "../../../../lib/dbConnect";
-import "../../../../src/app/api/upload/route";
-import mongoose from "mongoose";
 import Product from "../../../../models/Product";
 
-
-cloudinary.v2.config({
+// Cloudinary Configuration
+cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-interface OrderData {
-  userId: string;
-  productId: string;
-  customizationDescription: string;
-  customizationImage: string;
-  quantity: number;
-  deliveryCharge: number;
-  status?: string;
-}
-
 export const POST = async (req: NextRequest) => {
-  await dbConnect();
-
   try {
-    const form = formidable({ multiples: true });
-    const [fields, files] = await form.parse(req.body);
+    await dbConnect(); // Ensure DB connection
 
-    // Extract and validate fields
-    const getField = (name: string) => fields[name]?.[0] || "";
-    const getFile = (name: string) => files[name]?.[0];
+    const formData = await req.formData();
+    console.log('FormData:', formData);
 
-    const orderData = {
-      userId: getField("userId"),
-      productId: getField("productId"),
-      customizationDescription: getField("customizationDescription"),
-      quantity: Number(getField("quantity")),
-      deliveryCharge: Number(getField("deliveryCharge")),
-      deliveryDetails: JSON.parse(getField("deliveryDetails")),
-      customizationImage: getFile("customizationImage"),
-    };
+    // Extract form values
+    const userId = formData.get("userId") as string;
+    const productId = formData.get("productId") as string;
+    const customizationDescription = formData.get("customizationDescription") as string;
+    const quantity = Number(formData.get("quantity"));
+    const deliveryCharge = Number(formData.get("deliveryCharge"));
+    const customizationImage = formData.get("customizationImage") as File;
 
-    // Validation
-    if (!orderData.customizationDescription || !orderData.quantity) {
+    // ✅ Extract and parse `deliveryDetails`
+    const deliveryDetailsRaw = formData.get("deliveryDetails") as string;
+    const deliveryDetails = deliveryDetailsRaw ? JSON.parse(deliveryDetailsRaw) : null;
+    console.log('deliveryDetails:', deliveryDetails);
+    // Validate required fields
+    if (!userId || !productId || !customizationDescription || !quantity || !deliveryCharge || !deliveryDetails) {
+      console.log("Missing required fields.");
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Missing required fields: userId, productId, customizationDescription, deliveryDetails, quantity, deliveryCharge" },
         { status: 400 }
       );
     }
 
-    // Validate ObjectIDs
-    if (!mongoose.Types.ObjectId.isValid(orderData.productId)) {
-      return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
+    // Validate MongoDB ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(productId)) {
+      console.log("Invalid userId or productId format");
+      return NextResponse.json({ error: "Invalid userId or productId format" }, { status: 400 });
     }
 
-    // Check user/product existence
-    const [user, product] = await Promise.all([
-      User.findById(orderData.userId),
-      Product.findById(orderData.productId),
-    ]);
+    // Verify User & Product exist
+    const user = await User.findById(userId);
+    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-    if (!user || !product) {
-      return NextResponse.json(
-        { error: "User or product not found" },
-        { status: 404 }
-      );
-    }
+    const product = await Product.findById(productId);
+    if (!product) return NextResponse.json({ error: "Product not found" }, { status: 404 });
 
-    // Process image upload
-    let orderImage = "";
-    if (orderData.customizationImage) {
-      try {
-        const fileContent = await fs.readFile(orderData.customizationImage.filepath);
-        const uploadResponse = await new Promise((resolve, reject) => {
-          const uploadStream = cloudinary.uploader.upload_stream(
-            { folder: "order_images" },
-            (error, result) => {
-              if (error) reject(error);
+    let customizationImageUrl = "";
+    if (customizationImage) {
+      const arrayBuffer = await customizationImage.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "order_images" },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
               resolve(result);
             }
-          );
-          uploadStream.end(fileContent);
-        });
-        orderImage = uploadResponse.secure_url;
-      } catch (uploadError) {
-        console.error("Image upload failed:", uploadError);
-        return NextResponse.json(
-          { error: "Image upload failed" },
-          { status: 500 }
+          }
         );
-      }
+        uploadStream.end(buffer);
+      });
+
+      customizationImageUrl = (uploadResult as any).secure_url || "";
     }
 
-    // Create and save order
     const newOrder = new Order({
-      userId: orderData.userId,
-      productId: orderData.productId,
-      customization: {
-        description: orderData.customizationDescription,
-        image: orderImage,
-      },
-      quantity: orderData.quantity,
-      deliveryCharge: orderData.deliveryCharge,
-      deliveryDetails: orderData.deliveryDetails,
-      status: "Pending",
+      userId: new mongoose.Types.ObjectId(userId),
+      productId: new mongoose.Types.ObjectId(productId),
+      customization: { customizationDescription, customizationImage: customizationImageUrl },
+      quantity,
+      deliveryCharge,
+      status: "Order pending",
+      deliveryDetails,
     });
 
+    console.log("Saving new order:", newOrder);
+
     const savedOrder = await newOrder.save();
+    console.log("Order saved successfully:", savedOrder);
 
     return NextResponse.json(
-      { message: "Order created", data: savedOrder },
+      { message: "Order created successfully", data: savedOrder },
       { status: 201 }
     );
-  } catch (error: any) {
-    console.error("Order creation error:", error);
+  } catch (error) {
+    console.log("Unexpected error in order creation:", error);
     return NextResponse.json(
-      { error: error.message || "Server error" },
+      { error: "Failed to create order", details: (error as Error).message },
       { status: 500 }
     );
   }
 };
 
-export async function GET(req: NextRequest) {
+export const PATCH = async (req: NextRequest) => {
+  try {
+    const body = await req.json();
+    const { orderId, status } = body; // Default status if not provided
+
+    if (!orderId) {
+      return NextResponse.json({ message: "Missing orderId" }, { status: 400 });
+    }
+
+    await dbConnect();
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return NextResponse.json({ message: "Order not found", order: updatedOrder }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { message: "Order status updated", order: updatedOrder },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log("Error updating order status:", error);
+    return NextResponse.json({ message: "Server error", error }, { status: 500 });
+  }
+};
+
+export const GET = async () => {
   try {
     await dbConnect();
-    const orders = await Order.find().populate("userId productId");
-    return NextResponse.json({ orders }, { status: 200 });
+    const orders = await Order.find()
+      .populate('userId')
+      .populate('productId')
+
+    if (orders.length === 0) {
+      return NextResponse.json({ message: "No orders found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Orders retrieved successfully", orders }, { status: 200 });
   } catch (error) {
     console.error("Error fetching orders:", error);
-    return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });
-  }
-}
-
-
-export const PATCH = async (req: NextRequest) => {
-  const body = await req.json();
-  const { orderId, status } = body
-
-  try {
-    const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
-    if (!order) {
-      return NextResponse.json({ message: "Order not found" }, { status: 404 });
-    }
-    console.log(order)
-
-    return NextResponse.json({ message: "Order status updated" }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ message: "Server error", error }, { status: 500 });
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 };

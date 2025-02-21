@@ -1,4 +1,4 @@
-form {
+.login-form {
     background-color: rgba(218, 213, 237, 0.5);
     border: 3px solid black;
     border-radius: 10px;
@@ -7,14 +7,14 @@ form {
     text-align: center;
   
   }
-    
-  form h2 {
+     
+  .login-form h2 {
     margin-bottom: 20px; 
     text-align: left;
     font-size: 3rem;
   }
   
-  form input {
+  .login-form input {
     padding: 10px ;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -46,7 +46,7 @@ form {
   }
   
   
-  form button {
+  .login-form button {
     background-color: #4c394f;
     color: white;
     
@@ -58,11 +58,11 @@ form {
     margin-top:2%;
   }
   
-  form button:hover {
+  .login-form button:hover {
     font-weight: bold;
   }
   
-  form .create-account {
+  .login-form .create-account {
    text-align: center;
     color: black;
     text-decoration: none;
@@ -83,10 +83,10 @@ form {
     font-size: 1.4rem;
   }
   .login-container{
-    width: 45%;
-    margin: 9% auto;
+    /* width: 45%; */
+    margin: 9% 20%;
   }
   .signup-container{
-    width: 45%;
-    margin: 3% auto;
+    /* width: 45%; */
+    margin: 3% 20%;
   }

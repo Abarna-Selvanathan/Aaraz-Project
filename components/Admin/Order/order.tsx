@@ -6,8 +6,9 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import "../../../components/Admin/Product/product.css";
-import "../../../components/Admin/Order/order.css"
-import { CheckCircle, XCircle, Eye } from "lucide-react";
+import "../../../components/Admin/Order/order.css";
+import { CheckCircle, XCircle } from "lucide-react";
+import { Truck, PackageCheck } from "lucide-react";
 
 interface Order {
   _id: string;
@@ -21,24 +22,33 @@ interface Order {
     _id: string;
     productName: string;
     price: number;
-  }[];
-  customization: {
-    description: string;
-    image?: string;
+  };
+  deliveryDetails?: {
+    name: string;
+    phoneNumber: string;
+    address: string;
+    district: string;
+    postalCode: string;
+    additionalNotes: string;
   };
   status: string;
+  createdAt?: string; // Add this field if your backend provides it
 }
 
 const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
 
-  // Fetch all orders
+  // Fetch all orders and sort them by createdAt or _id
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get("/api/order");
         if (response.status === 200) {
-          setOrders(response.data.orders);
+          // Sort orders by createdAt in descending order (newest first)
+          const sortedOrders = response.data.orders.sort((a, b) => {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          });
+          setOrders(sortedOrders);
         }
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -47,11 +57,13 @@ const Orders: React.FC = () => {
 
     fetchOrders();
   }, []);
-  console.log(orders)
+
+  console.log(orders);
+
   // Update order status
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
-      const response = await axios.patch('/api/order', { orderId, status: newStatus });
+      const response = await axios.patch("/api/order", { orderId, status: newStatus });
 
       if (response.status === 200) {
         setOrders((prevOrders) =>
@@ -59,13 +71,11 @@ const Orders: React.FC = () => {
             order._id === orderId ? { ...order, status: newStatus } : order
           )
         );
-
       }
     } catch (error) {
       console.error("Error updating order status:", error);
     }
   };
-  
 
   return (
     <div className="main-content-Product">
@@ -83,6 +93,7 @@ const Orders: React.FC = () => {
                   <th>Product ID</th>
                   <th>Product Name</th>
                   <th>Status</th>
+                  <th>Delivery Details</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -93,17 +104,21 @@ const Orders: React.FC = () => {
                     <td>{order.userId.name}</td>
                     <td>{order.userId.email}</td>
                     <td>{order.userId.phoneNumber}</td>
-                    <td>
-                      {Array.isArray(order.productId)
-                        ? order.productId.map((product) => product._id).join(", ")
-                        : order.productId._id}
+                    <td>{order.productId._id}</td>
+                    <td>{order.productId.productName}</td>
+                    <td className={`status ${order.status.toLowerCase()}`}>
+                      {order.status}
                     </td>
                     <td>
-                      {Array.isArray(order.productId)
-                        ? order.productId.map((product) => product.productName).join(", ")
-                        : order.productId.productName}
+                      <div className="delivery-details">
+                        <p><strong>Name:</strong> {order.deliveryDetails?.name || "N/A"}</p>
+                        <p><strong>Phone:</strong> {order.deliveryDetails?.phoneNumber || "N/A"}</p>
+                        <p><strong>Address:</strong> {order.deliveryDetails?.address || "N/A"}</p>
+                        <p><strong>District:</strong> {order.deliveryDetails?.district || "N/A"}</p>
+                        <p><strong>Postal Code:</strong> {order.deliveryDetails?.postalCode || "N/A"}</p>
+                        <p><strong>Notes:</strong> {order.deliveryDetails?.additionalNotes || "N/A"}</p>
+                      </div>
                     </td>
-                    <td>{order.status}</td>
                     <td className={`btns ${order.status === "Accepted" ? "accepted" : order.status === "Rejected" ? "rejected" : ""}`}>
                       <button
                         onClick={() => updateOrderStatus(order._id, "Accepted")}
@@ -118,8 +133,21 @@ const Orders: React.FC = () => {
                       >
                         <XCircle size={20} />
                       </button>
-                    </td>
 
+                      <button
+                        onClick={() => updateOrderStatus(order._id, "Shipped")}
+                        className={`accept-btn ${order.status === "Shipped" ? "active" : ""}`}
+                      >
+                        <PackageCheck size={20} />
+                      </button>
+
+                      <button
+                        onClick={() => updateOrderStatus(order._id, "Delivered")}
+                        className={`reject-btn ${order.status === "Delivered" ? "active" : ""}`}
+                      >
+                        <Truck size={20} />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

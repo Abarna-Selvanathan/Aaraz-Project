@@ -10,10 +10,11 @@ import {FaFacebookF, FaTiktok, FaWhatsapp} from "react-icons/fa"; // Import Icon
 const Footer: React.FC = () => {
   return ( 
     <footer >
+      <div className="footer">
 
       <div className="footer-link">
         <div className="Our-mission ">
-
+ 
           <h2>Aaraz</h2>
           <p>We are passionate about ensuring that we have the right product to suit your needs.</p>
 
@@ -58,7 +59,7 @@ const Footer: React.FC = () => {
             <div>Provide details in the customization section during checkout.</div>
           </li>
         </div>
-        <div className="footer-info">
+        <div className="info">
           <h2>Info </h2>
           <Link href="/terms-conditions">Terms and Conditions</Link>
           <Link href="/delivery-policy">Delivery Policy</Link>
@@ -72,7 +73,7 @@ const Footer: React.FC = () => {
       </div>
 
 
-
+      </div>
     </footer>
   );
 };

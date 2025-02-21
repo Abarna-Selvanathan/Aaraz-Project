@@ -3,42 +3,50 @@ footer {
   background-color: #BCB8CE;
   
 }
-
+.footer{
+  margin: 0 6%; 
+}
 .footer-link {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
   gap: 30px;
-  margin: 0 10%; 
+  /* margin: 0 5%;  */
 
 }
 
 .footer-link a {
   color: #333;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.4rem;
   padding: 0.3rem 0;
   transition: color 0.3s ease;
   display: block;
 }
-.Our-mission h2, .FAQ h2, .footer-info h2 {
+.Our-mission h2, .FAQ h2 {
   margin-left: 20%;
   font-size: 2rem;
+}
+.info h2{
+  margin-left: 5%;
+  font-size: 2rem;
+  color: black;
+
 }
 /* 
 .FAQ h2{
   margin-left: 20%;
 } */
- .FAQ, .Our-mission, .FAQ{
+ .FAQ, .Our-mission, .info{
   color: black;
-  font-size: 1rem;
+  font-size: 1.4rem;
   transition: color 0.3s ease;
   display: block;
   text-align: justify;
   /* max-width: 40%; */
  }
 
- .FAQ li, .Our-mission p, .Info {
+ .FAQ li, .Our-mission p, .info {
   color: #333;
   padding: 0.4rem 0;
   margin: 0 20%;

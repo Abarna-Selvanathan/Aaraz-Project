@@ -7,8 +7,8 @@ import "../../../components/Admin/Product/product.css"
 import Link from 'next/link';
 import React from 'react';
 import Image from 'next/image';
-import {Pencil, Trash2} from "lucide-react";
-
+import { Pencil, Trash2 } from "lucide-react";
+import Loader from '../../Loader/loader';
 
 interface Product {
   _id?: string;
@@ -18,6 +18,7 @@ interface Product {
   stock: string;
   productType: string;
   image: string;
+  createdAt?: string; // Add this field if your backend provides it
 }
 
 const Product: React.FC = () => {
@@ -34,7 +35,11 @@ const Product: React.FC = () => {
       try {
         const response = await axios.get('/api/product');
         if (response.status === 200) {
-          setProducts(response.data.products);
+          // Sort products by _id in descending order (newest first)
+          const sortedProducts = response.data.products.sort((a, b) => {
+            return b._id.localeCompare(a._id);
+          });
+          setProducts(sortedProducts);
         } else {
           console.error('Unexpected response status:', response.status);
         }
@@ -112,7 +117,7 @@ const Product: React.FC = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader/>;
 
   return (
     <div className="main-content-Product">
@@ -155,7 +160,6 @@ const Product: React.FC = () => {
                       </td>
                       <td className="btns">
                         {/* Update and Delete actions */}
-
                         <button
                           onClick={() => {
                             setEditProduct(product);
@@ -163,13 +167,12 @@ const Product: React.FC = () => {
                           }}
                           className="edit-btn"
                         >
-                          <Pencil size={18} /> 
+                          <Pencil size={18} />
                         </button>
 
                         <button onClick={() => handleDeleteProduct(product._id!)} className="delete-btn">
-                          <Trash2 size={18} /> 
+                          <Trash2 size={18} />
                         </button>
-
                       </td>
                     </tr>
                   ))}
@@ -244,7 +247,6 @@ const Product: React.FC = () => {
         </div>
       </div>
     </div>
-
   );
 };
 
