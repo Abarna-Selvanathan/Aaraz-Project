@@ -1,48 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import Order from "../../../../../models/Order";
 import dbConnect from "../../../../../lib/dbConnect";
-const express = require("express");
-const router = express.Router();
 
 // GET an order by ID
-
-export async function GET(req: NextRequest, { params }: { params: { orderId: string } }) {
-  console.log("Received Params:", params);  // Log to verify if params are received correctly
-  const { orderId } = params;
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const orderId = searchParams.get("orderId");
 
   if (!orderId) {
     return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
   }
 
   try {
-    await dbConnect()
+    await dbConnect();
     const order = await Order.findById(orderId);
     if (!order) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
     return NextResponse.json({ order }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({message: 'Failed to fecth orders'}, { status: 500 });
+    console.error(error);
+    return NextResponse.json({ message: "Failed to fetch order" }, { status: 500 });
   }
-
 }
 
-
-
-
-
 // UPDATE an order by ID
-export async function PUT(req: NextRequest, { params }: { params: { orderId: string } }) {
+export async function PUT(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const orderId = searchParams.get("orderId");
+
+  if (!orderId) {
+    return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
+  }
+
+  const body = await req.json();
   try {
     await dbConnect();
-    const { orderId } = params;
-    const body = await req.json();
-     
-    console.log(orderId)
-    if (!orderId) {
-      return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
-    }
-
     const updatedOrder = await Order.findByIdAndUpdate(orderId, { $set: body }, { new: true });
 
     if (!updatedOrder) {
@@ -57,15 +50,16 @@ export async function PUT(req: NextRequest, { params }: { params: { orderId: str
 }
 
 // DELETE an order by ID
-export async function DELETE(req: NextRequest, { params }: { params: { orderId: string } }) {
+export async function DELETE(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const orderId = searchParams.get("orderId");
+
+  if (!orderId) {
+    return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
+  }
+
   try {
     await dbConnect();
-    const { orderId } = params;
-
-    if (!orderId) {
-      return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
-    }
-
     const order = await Order.findByIdAndDelete(orderId);
 
     if (!order) {
@@ -79,23 +73,26 @@ export async function DELETE(req: NextRequest, { params }: { params: { orderId: 
   }
 }
 
-export const PATCH = async (req: NextRequest, { params }: { params: { orderId: string } }) => {
-  await dbConnect();
-  const { orderId } = params;
-  const { status } = await req.body;
+// PATCH an order by ID (update status)
+export const PATCH = async (req: NextRequest) => {
+  const { searchParams } = new URL(req.url);
+  const orderId = searchParams.get("orderId");
+  const { status } = await req.json();
+
+  if (!orderId || !status) {
+    return NextResponse.json({ error: "Order ID and status required" }, { status: 400 });
+  }
+
   try {
-    if (!orderId || !status) {
-      return NextResponse.json({ error: "Order ID and status required" }, { status: 400 });
-    }
+    await dbConnect();
     const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
-    console.log(orderId)
+
     if (!order) {
-      return NextResponse.json({ message: "Order not found" }, {status: 404});
+      return NextResponse.json({ message: "Order not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "Order status updated" }, {status: 200});
+    return NextResponse.json({ message: "Order status updated" }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ message: "Server error", error }, {status: 500});
+    return NextResponse.json({ message: "Server error", error }, { status: 500 });
   }
 };
-

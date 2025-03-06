@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import "../../../components/Admin/Product/product.css"
-import {Eye, Trash2} from "lucide-react";
+import { Trash2} from "lucide-react";
 
 interface User {
   _id: string;
@@ -18,7 +17,6 @@ interface User {
 
 const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -35,16 +33,8 @@ const Users: React.FC = () => {
         } else {
           console.error('Unexpected response status:', response.status);
         }
-      } catch (error: any) {
-        console.error('Error fetching users:', error);
-        if (error.response) {
-          console.error('Response Data:', error.response.data);
-          console.error('Response Status:', error.response.status);
-        } else if (error.request) {
-          console.error('No response received:', error.request);
-        } else {
-          console.error('Error Message:', error.message);
-        }
+      } catch (error) {
+        console.error('Error fetching users:', error)
       }
     };
 

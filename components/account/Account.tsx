@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -6,8 +7,7 @@ import "../account/Account.css";
 import "../../src/app/globals.css";
 import axios from "axios";
 import { SlidersHorizontal } from "lucide-react";
-import Loader from "../Loader/loader"
-
+import Loader from "../Loader/loader";
 
 interface User {
   _id: string;
@@ -24,6 +24,7 @@ interface Product {
   productName: string;
   stock: string;
   price: number;
+  quantity: number;
 }
 
 interface Customization {
@@ -39,7 +40,7 @@ interface OrderData {
   createdAt: Date;
   updatedAt: Date;
   status: string;
-  // paymentTime?: Date; 
+  // paymentTime?: Date;
 }
 
 const AccountReviewPage: React.FC = () => {
@@ -49,7 +50,6 @@ const AccountReviewPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
-
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -115,37 +115,51 @@ const AccountReviewPage: React.FC = () => {
       <div className="profile-section">
         <div className="user-name">
           {user?.profileImage ? (
-            <Image src={order?.userId.profileImage} alt="User Icon" width={50} height={50} className="user-icon" />
+            <Image
+              src={user.profileImage} // Use the user's profileImage instead of order's userId profileImage
+              alt="User Icon"
+              width={50}
+              height={50}
+              className="user-icon"
+            />
           ) : (
-            <div className="user-icon-placeholder">{order?.userId.name.charAt(0).toUpperCase()}</div>
+            <div className="user-icon-placeholder">
+              {order?.userId.name.charAt(0).toUpperCase()}
+            </div>
           )}
           <h2 style={{ cursor: "pointer" }}>{order?.userId.name}</h2>
-
-
         </div>
         <div className="arrow">
           <SlidersHorizontal className="icon" onClick={() => router.push("/profile")} />
-
         </div>
       </div>
 
       <div className="titles">
-        <p >My Orders</p>
-        <p className="veiworder" onClick={() => router.push("/orders")}>View All Orders &gt;</p>
+        <p>My Orders</p>
+        <p className="veiworder" onClick={() => router.push("/orders")}>
+          View All Orders &gt;
+        </p>
       </div>
 
       <div className="order-section">
-
         {order ? (
           <div className="order-card">
             <div className="order-data-container">
-              <Image src={order.productId.image} alt="Product Image" width={140} height={140} className="order-img" />
+              <Image
+                src={order.productId.image}
+                alt="Product Image"
+                width={140}
+                height={140}
+                className="order-img"
+              />
 
               <div className="order-details">
                 <div className="order-info">
                   <h3 className="order-name">{order.productId.productName}</h3>
                   <div className="order-status">
-                    <span className={`status-label ${order.status.toLowerCase()}`}>{order.status}</span>
+                    <span className={`status-label ${order.status.toLowerCase()}`}>
+                      {order.status}
+                    </span>
                   </div>
                 </div>
 
@@ -156,7 +170,9 @@ const AccountReviewPage: React.FC = () => {
 
                 {order.status.toLowerCase() === "accepted" && (
                   <div className="order-actions">
-                    <div className="payment-button" onClick={() => router.push("/payment")}>Now Payment Time &gt;</div>
+                    <div className="payment-button" onClick={() => router.push("/payment")}>
+                      Now Payment Time &gt;
+                    </div>
                   </div>
                 )}
 
@@ -170,6 +186,7 @@ const AccountReviewPage: React.FC = () => {
                     </div>
                   </div>
                 )}
+
                 {order.status.toLowerCase() === "delivered" && (
                   <div className="order-actions">
                     <div

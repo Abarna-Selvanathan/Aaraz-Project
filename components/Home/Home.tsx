@@ -5,7 +5,6 @@ import React from "react";
 import Image from "next/image";
 import './Home.css';
 import "../../src/app/globals.css"
-import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import hero from "../../public/Image/hero-img.png"
@@ -13,10 +12,17 @@ import Handmadegift from '../../public/Image/roundPhoto Collage .jpeg';
 import resinArt from "../../public/Image/Resin letter keychains.jpeg"
 import frame from "../../public/Image/frame.jpeg"
 import walletcard from "../../public/Image/Map wallet card.png";
+import { Link } from 'lucide-react';
 
+interface Product {
+  _id: string;
+  productName: string;
+  price: number;
+  image: string;
+}
 
 const Home: React.FC = () => {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [userType, setUserType] = useState<string>("customer");
   const router = useRouter();
 
@@ -30,6 +36,7 @@ const Home: React.FC = () => {
           setUserType(data.user.userType);
         }
       } catch (error) {
+        console.error( error);
 
       }
     };
@@ -41,7 +48,7 @@ const Home: React.FC = () => {
     if (userType === 'admin') {
       router.push('/admin/dashboard');
     }
-  }, [userType]);
+  }, [userType, router]);
 
   // Fetch Products (All Products)
   useEffect(() => {
@@ -50,8 +57,9 @@ const Home: React.FC = () => {
         const response = await fetch('/api/product');
         const data = await response.json();
         setProducts(data.products);
-      } catch (error: any) {
-        console.error('Error fetching products:', error.message);
+      } catch (error) {
+        console.error('Error fetching products:', (error as Error));
+
       }
     };
     fetchProducts();
@@ -149,7 +157,7 @@ const Home: React.FC = () => {
             <div className="content-side-right">
               <span className="section-tagline">Handmade Gifts</span>
               <p className="section-description">Unique, handcrafted gifts that bring a personal touch to every occasion. Each item is made with love and care, perfect for showing appreciation or celebrating special moments.</p>
-              <a href="/handmadegift" className="collection-button">View Collections</a>
+              <Link href="/handmadegift" className="collection-button">View Collections</Link>
             </div>
 
 
@@ -160,7 +168,7 @@ const Home: React.FC = () => {
             <div className="content-side">
               <span className="section-tagline">Resin Arts</span>
               <p className="section-description">These resin artworks are beautifully crafted by combining colors, shapes, and unique designs. Each art piece is handcrafted and features a touch of art and beautiful design. They will help add a touch of grandeur and artistic flair to your home or office.</p>
-              <a href="/resinart" className="collection-button">View Collections</a>
+              <Link href="/resinart" className="collection-button">View Collections</Link>
             </div>
             <div className="image-side" >
               <Image src={resinArt} alt="resinArt" width={500} height={600} />
@@ -176,7 +184,7 @@ const Home: React.FC = () => {
             <div className="content-side-right">
               <span className="section-tagline">Frames</span>
               <p className="section-description">Elegant, stylish photo frames designed to showcase your most cherished memories. Crafted with attention to detail, these frames bring your photos to life and add a touch of sophistication to any room.</p>
-              <a href="/frame" className="collection-button">View Collections</a>
+              <Link href="/frame" className="collection-button">View Collections</Link>
             </div>
 
           </div>
@@ -185,7 +193,7 @@ const Home: React.FC = () => {
             <div className="content-side">
               <span className="section-tagline">Wallet Cards</span>
               <p className="section-description">Thoughtful and practical wallet cards that offer a meaningful message or sentiment. Perfect as keepsakes or small gifts, these cards are designed to fit easily into your wallet and serve as a reminder of love and positivity.</p>
-              <a href="/walletcard" className="collection-button">View Collections</a>
+              <Link href="/walletcard" className="collection-button">View Collections</Link>
             </div>
             <div className="image-side" >
               <Image src={walletcard} alt="walletcard" width={500} height={600} objectFit='cover' />

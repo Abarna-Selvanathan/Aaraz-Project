@@ -2,7 +2,6 @@ import React from "react";
 import Link from "next/link";
 import './Footer.css';
 import "../../src/app/globals.css";
-import { Collection } from "mongoose";
 import {FaFacebookF, FaTiktok, FaWhatsapp} from "react-icons/fa"; // Import Icons
 
 

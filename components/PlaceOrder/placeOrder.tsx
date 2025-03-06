@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "../PlaceOrder/placeOrder.css";
 import { useRouter } from "next/router";
-import Image from "next/image";
 
 interface UserData {
   _id: string;
@@ -19,7 +18,7 @@ interface DeliveryData {
   district: string;
   postalCode: string;
   additionalNotes: string;
-  deliveryDate: string;  
+  deliveryDate: string;
 }
 
 const OrderForm = () => {
@@ -38,8 +37,8 @@ const OrderForm = () => {
     customizationImage: null as File | null,
   });
   const [productId, setProductId] = useState<string | null>(null);
-  const [preview, setPreview] = useState<string>("");
-  const [quantity, setQuantity] = useState<number>(1);
+  // const [preview, setPreview] = useState<string>("");
+  const quantity = 1;
   const router = useRouter();
 
   useEffect(() => {
@@ -79,7 +78,6 @@ const OrderForm = () => {
     const file = e.target.files?.[0];
     if (file) {
       setCustomization((prev) => ({ ...prev, customizationImage: file }));
-      setPreview(URL.createObjectURL(file));
     }
   };
 
@@ -100,8 +98,9 @@ const OrderForm = () => {
     formData.append("quantity", quantity.toString());
     formData.append("deliveryCharge", "500");
     formData.append("deliveryDetails", JSON.stringify(deliveryDetails));
+
     // ✅ Debugging FormData to ensure data is appended correctly
-    for (let pair of formData.entries()) {
+    for (const pair of formData.entries()) {
       console.log(pair[0], pair[1]);
     }
 
@@ -119,6 +118,7 @@ const OrderForm = () => {
       alert("Failed to place order. Please try again.");
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="form-container-placeOrder">

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../profile/profile.css"; 
@@ -10,7 +9,7 @@ import axios from "axios";
 import { XCircle } from "lucide-react";
 
 const Profile = () => {
-  const [preview, setPreview] = useState<string>('');
+  // const [preview, setPreview] = useState<string>('');
   const router = useRouter();
   const [userData, setUserData] = useState({
     _id: "",
@@ -79,16 +78,16 @@ const Profile = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userData),
         });
-
+  
         if (!response.ok) {
           const { error } = await response.json();
           throw new Error(error || "Failed to update user.");
         }
-
+  
         const updatedUser = await response.json();
-        localStorage.setItem("user", JSON.stringify(updatedUser.updatedUser)); 
+        localStorage.setItem("user", JSON.stringify(updatedUser.updatedUser));
         setUserData(updatedUser.updatedUser);
-
+  
         toast.success("Profile updated successfully!", {
           position: "top-center",
           autoClose: 3000,
@@ -99,18 +98,32 @@ const Profile = () => {
           progress: undefined,
           theme: "dark",
         });
-      } catch (error: any) {
-        console.error("Error updating profile:", error.message);
-        toast.error(`Error: ${error.message}`, {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+      } catch (error: unknown) { // Narrowing the error type to 'unknown'
+        if (error instanceof Error) { // Checking if the error is an instance of Error
+          console.error("Error updating profile:", error);
+          toast.error(`Error: ${error.message}`, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        } else {
+          console.error("Unexpected error:", error);
+          toast.error("An unexpected error occurred.", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
       } finally {
         setIsModified(false);
       }
@@ -126,13 +139,14 @@ const Profile = () => {
         theme: "dark",
       });
     }
-
+  
     setIsEditing({
       name: false,
       email: false,
       phoneNumber: false,
     });
   };
+  
 
   return ( 
     <div className="profileContainer">

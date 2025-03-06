@@ -67,12 +67,12 @@ export async function POST(req: NextRequest) {
       JSON.stringify({ message: 'Product added successfully', product: newProduct }),
       { status: 201, headers: { 'Content-Type': 'application/json' } }
     );
-  } catch (error: any) {
-    console.error('Error uploading product:', error.message);
+  } catch (error) {
+    console.error('Error uploading product:', (error as Error).message);
     return new Response(
       JSON.stringify({
         error: 'Failed to upload product',
-        details: error.message || 'Unknown error',
+        details: (error as Error).message || 'Unknown error',
       }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );

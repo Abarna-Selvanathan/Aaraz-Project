@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Truck, Gift, CheckCircle, XCircle } from "lucide-react";
 import "../Tracking/tracking.css";
@@ -23,7 +23,8 @@ const OrderTracking = () => {
 
   const currentStepIndex = Math.max(0, steps.findIndex((step) => step.value === status));
 
-  const fetchLastOrder = async () => {
+  // Use useCallback to memoize the function
+  const fetchLastOrder = useCallback(async () => {
     if (!orderId) {
       setError("No order ID provided.");
       return;
@@ -42,7 +43,7 @@ const OrderTracking = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [orderId]); // Only depends on orderId
 
   useEffect(() => {
     fetchLastOrder(); // Initial fetch
@@ -52,7 +53,7 @@ const OrderTracking = () => {
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
-  }, [orderId]);
+  }, [fetchLastOrder]);
 
   const handleClose = () => {
     router.push("/account");
@@ -72,12 +73,10 @@ const OrderTracking = () => {
           <div key={index} className={`tracking-step ${index <= currentStepIndex ? "active" : ""}`}>
             <div
               className="tracking-icon"
-              style={{ color: index <= currentStepIndex ? "green" : "gray" }}
+              style={{ color: index <= currentStepIndex ? "green" : "gray" }} // Apply color to the container div
               aria-label={step.label}
             >
-              {React.cloneElement(step.icon as React.ReactElement, {
-                color: index <= currentStepIndex ? "green" : "gray",
-              })}
+              {step.icon}  {/* Directly use the icon component */}
             </div>
 
             {index < steps.length - 1 && (

@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-// import "../../../components/Admin/Order/order.css";
-// import "../../src/app/globals.css";
+import Image from "next/image";
 import React from "react";
 
+// Define the structure of the order
 interface Order {
   _id: string;
   userId: {
@@ -19,7 +19,7 @@ interface Order {
     _id: string;
     productName: string;
     price: number;
-  }[];
+  }[]; // productId is an array of products
   customization: {
     customizationDescription: string;
     customizationImage?: string;
@@ -30,7 +30,7 @@ interface Order {
 const Orders: React.FC = () => {
   const [order, setOrder] = useState<Order | null>(null);
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query; // Fetch order ID from query params
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -39,7 +39,7 @@ const Orders: React.FC = () => {
         if (id) {
           const response = await axios.get(`/api/order/${id}`);
           if (response.status === 200) {
-            setOrder(response.data);
+            setOrder(response.data);  // Store fetched order details
           }
         } else {
           console.error("Order ID is missing");
@@ -51,8 +51,8 @@ const Orders: React.FC = () => {
   
     fetchOrderDetails();
   }, [id]);
-  
 
+  // Handle accepting the order
   const handleAccept = async () => {
     try {
       if (order) {
@@ -69,6 +69,7 @@ const Orders: React.FC = () => {
     }
   };
 
+  // Handle deleting the order
   const handleDelete = async () => {
     try {
       if (order) {
@@ -94,22 +95,39 @@ const Orders: React.FC = () => {
               <p>User Name: {order.userId.name}</p>
               <p>Email: {order.userId.email}</p>
               <p>Phone Number: {order.userId.phoneNumber}</p>
+              
+              {/* Display product details */}
               <td>
-                {Array.isArray(order.productId) ? order.productId.map(product => product._id).join(", ") : order.productId._id}
+                {Array.isArray(order.productId) && order.productId.length > 0
+                  ? order.productId.map((product) => product._id).join(", ")
+                  : order.productId.length > 0
+                  ? order.productId[0]._id
+                  : "No product available"}
               </td>
+
               <td>
-                {Array.isArray(order.productId) ? order.productId.map(product => product.productName).join(", ") : order.productId.productName}
+                {Array.isArray(order.productId) && order.productId.length > 0
+                  ? order.productId.map((product) => product.productName).join(", ")
+                  : order.productId.length > 0
+                  ? order.productId[0].productName
+                  : "No product available"}
               </td>
+
+              {/* Display customization details */}
               <p>Customization Description: {order.customization.customizationDescription}</p>
-              {order.customization.customizationImage && <img src={order.customization.customizationImage} alt="Customization" />}
+              {order.customization.customizationImage && (
+                <Image src={order.customization.customizationImage} alt="Customization" width={100} height={100} />
+              )}
               <p>Status: {order.status}</p>
+
+              {/* Action buttons */}
               <div>
                 <button onClick={handleAccept}>Accept</button>
                 <button onClick={handleDelete}>Delete</button>
               </div>
             </div>
           ) : (
-            <p>Loading order details...</p>
+            <p>Loading order details...</p>  // Display loading message while fetching data
           )}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import mongoose from "mongoose";
 import dbConnect from "../../../../lib/dbConnect";
 import Order from "../../../../models/Order";
@@ -32,6 +32,7 @@ export const POST = async (req: NextRequest) => {
     const deliveryDetailsRaw = formData.get("deliveryDetails") as string;
     const deliveryDetails = deliveryDetailsRaw ? JSON.parse(deliveryDetailsRaw) : null;
     console.log('deliveryDetails:', deliveryDetails);
+
     // Validate required fields
     if (!userId || !productId || !customizationDescription || !quantity || !deliveryCharge || !deliveryDetails) {
       console.log("Missing required fields.");
@@ -55,25 +56,26 @@ export const POST = async (req: NextRequest) => {
     if (!product) return NextResponse.json({ error: "Product not found" }, { status: 404 });
 
     let customizationImageUrl = "";
+
     if (customizationImage) {
       const arrayBuffer = await customizationImage.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
-      const uploadResult = await new Promise((resolve, reject) => {
+      const uploadResult: UploadApiResponse = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           { folder: "order_images" },
           (error, result) => {
             if (error) {
               reject(error);
             } else {
-              resolve(result);
+              resolve(result as UploadApiResponse); // Ensure correct type
             }
           }
         );
         uploadStream.end(buffer);
       });
 
-      customizationImageUrl = (uploadResult as any).secure_url || "";
+      customizationImageUrl = uploadResult.secure_url || "";
     }
 
     const newOrder = new Order({
@@ -107,7 +109,7 @@ export const POST = async (req: NextRequest) => {
 export const PATCH = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    const { orderId, status } = body; // Default status if not provided
+    const { orderId, status } = body;
 
     if (!orderId) {
       return NextResponse.json({ message: "Missing orderId" }, { status: 400 });
@@ -140,7 +142,7 @@ export const GET = async () => {
     await dbConnect();
     const orders = await Order.find()
       .populate('userId')
-      .populate('productId')
+      .populate('productId');
 
     if (orders.length === 0) {
       return NextResponse.json({ message: "No orders found" }, { status: 404 });

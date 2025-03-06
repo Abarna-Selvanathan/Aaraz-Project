@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import DBconnect from "../../../../../lib/dbConnect";
 import UserSchema from "../../../../../models/User";
-import bcrypt from 'bcrypt';
-import jwt from "jsonwebtoken";
-
-const JWT_SECRET = process.env.JWT_SECRET;
 
 // Get user by ID
 export const POST = async (req: NextRequest) => {
@@ -19,8 +15,8 @@ export const POST = async (req: NextRequest) => {
         }
 
         return NextResponse.json(user, { status: 200 });
-    } catch (error: any) {
+    } catch (error) {
         console.log("Error fetching user:", error);
-        return NextResponse.json({ message: "Failed to fetch user", error: error.message }, { status: 500 });
+        return NextResponse.json({ message: "Failed to fetch user", error: (error as Error).message }, { status: 500 });
     }
 };

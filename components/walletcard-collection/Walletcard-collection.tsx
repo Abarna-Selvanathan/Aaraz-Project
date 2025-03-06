@@ -5,8 +5,15 @@ import { useRouter } from "next/navigation";
 import '../handmade-collection/Handmade-collection.css';
 import "../../src/app/globals.css";
 
+interface Product {
+    _id: string;
+    productName: string;
+    price: number;
+    image: string;
+}
+
 const WalletCardsCollection: React.FC = () => {
-    const [products, setProducts] = useState<any[]>([]);
+    const [products, setProducts] = useState<Product[]>([]); // Define products as an array or empty array
     const [page, setPage] = useState(1);
     const itemsPerPage = 12;
     const router = useRouter();
@@ -16,15 +23,15 @@ const WalletCardsCollection: React.FC = () => {
             try {
                 const response = await fetch('/api/product');
                 const data = await response.json();
-                setProducts(data.products);
-            } catch (error: any) {
-                console.error('Error fetching products:', error.message);
+                setProducts(data.products || []); // Fallback to an empty array if products is undefined
+            } catch (error) {
+                console.error('Error fetching products:', error);
             }
         };
         fetchProducts();
     }, []);
 
-    const paginatedProducts = products.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+    const paginatedProducts = products?.slice((page - 1) * itemsPerPage, page * itemsPerPage) || []; // Ensure pagination works with products being defined
 
     const handleProduct = (id: string) => {
         router.push(`/product/${id}`);

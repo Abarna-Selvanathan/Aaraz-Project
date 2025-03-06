@@ -1,8 +1,10 @@
+"use client";
+
 import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import "../Payment/payment.css";
 import Image from "next/image";
-import Loader from "../../components/Loader/loader"; 
+import Loader from "../../components/Loader/loader";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || "");
 
@@ -20,14 +22,14 @@ interface PaymentFormProps {
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({ order }) => {
-
-  if (!order || !order.productId) {
-      return <Loader />; 
-  }
-  
   const [loading, setLoading] = useState(false);
-  const deliveryCharge = 450;
 
+  // Ensure order exists before rendering
+  if (!order || !order.productId) {
+    return <Loader />;
+  }
+
+  const deliveryCharge = 450;
   const subtotal = order.productId.price * order.quantity || 0;
   const total = subtotal + deliveryCharge;
 
@@ -55,9 +57,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ order }) => {
       } else {
         throw new Error(data.error || "Payment failed, try again.");
       }
-    } catch (error:any) {
+    } catch (error) {
       console.error(error);
-      alert(error.message);
+      alert((error as Error).message);
       setLoading(false);
     }
   };

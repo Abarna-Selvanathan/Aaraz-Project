@@ -5,8 +5,16 @@ import { useRouter } from "next/navigation";
 import '../handmade-collection/Handmade-collection.css';
 import "../../src/app/globals.css";
 
+// Define the Product interface
+interface Product {
+    _id: string;
+    image: string;
+    productName: string;
+    price: number;
+}
+
 const HandmadegiftCollection: React.FC = () => {
-    const [products, setProducts] = useState<any[]>([]);
+    const [products, setProducts] = useState<Product[]>([]); // Initialize products as an empty array
     const [page, setPage] = useState(1);
     const itemsPerPage = 12;
     const router = useRouter();
@@ -16,14 +24,15 @@ const HandmadegiftCollection: React.FC = () => {
             try {
                 const response = await fetch('/api/product');
                 const data = await response.json();
-                setProducts(data.products);
-            } catch (error: any) {
-                console.error('Error fetching products:', error.message);
+                setProducts(data.products || []); // Ensure products is set to an empty array if undefined
+            } catch (error) {
+                console.error('Error fetching products:', (error as Error));
             }
         };
         fetchProducts();
     }, []);
 
+    // Ensure products is always an array before slicing
     const paginatedProducts = products.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
     const handleProduct = (id: string) => {

@@ -57,7 +57,7 @@ const UserDetails: React.FC<{ userId: string }> = ({ userId }) => {
 
   return (
     <div className="user-details">
-      <h1>{user.name}'s Details</h1>
+      <h1>{user.name}&apos;s Details</h1>
       <p><strong>Email:</strong> {user.email}</p>
       <p><strong>Phone:</strong> {user.phoneNumber}</p>
       <p><strong>Address:</strong> {user.address}</p>

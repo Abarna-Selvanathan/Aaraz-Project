@@ -36,31 +36,31 @@ const ContactForm: React.FC = () => {
 
     setErrors(newErrors);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //   e.preventDefault();
 
-      // Validation code...
+    
 
-      if (!newErrors.name && !newErrors.email && !newErrors.message) {
-        try {
-          const response = await fetch('/api/contact', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-          });
+    //   if (!newErrors.name && !newErrors.email && !newErrors.message) {
+    //     try {
+    //       const response = await fetch('/api/contact', {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(formData),
+    //       });
 
-          if (!response.ok) throw new Error('Failed to send');
+    //       if (!response.ok) throw new Error('Failed to send');
 
-          alert("Form submitted successfully!");
-          setFormData({ name: "", email: "", phoneNumber: "", message: "" });
-        } catch (error) {
-          console.error('Error:', error);
-          alert("Failed to send message");
-        }
-      }
-    };
+    //       alert("Form submitted successfully!");
+    //       setFormData({ name: "", email: "", phoneNumber: "", message: "" });
+    //     } catch (error) {
+    //       console.error('Error:', error);
+    //       alert("Failed to send message");
+    //     }
+    //   }
+    // };
   };
 
   return (

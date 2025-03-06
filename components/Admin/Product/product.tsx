@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from "next/navigation";
 import axios from 'axios';
 import "../../../components/Admin/Product/product.css"
 import Link from 'next/link';
@@ -9,6 +8,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Pencil, Trash2 } from "lucide-react";
 import Loader from '../../Loader/loader';
+import { useRouter } from 'next/router';
 
 interface Product {
   _id?: string;
@@ -21,13 +21,14 @@ interface Product {
   createdAt?: string; // Add this field if your backend provides it
 }
 
-const Product: React.FC = () => {
+const AllProduct: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const { id } = useParams(); // For GET by ID
-  const [productDetails, setProductDetails] = useState<Product | null>(null); // To hold the single product details
-  const [editProduct, setEditProduct] = useState<Product | null>(null); // State for editing product
-  const [showEditForm, setShowEditForm] = useState<boolean>(false); // New state to toggle the form and table
+  const router = useRouter();  // Use router for accessing dynamic params
+  const { id } = router.query;
+  const [editProduct, setEditProduct] = useState<Product | null>(null);
+  const [showEditForm, setShowEditForm] = useState<boolean>(false);
+  const [filterLetter, setFilterLetter] = useState<string>('');
 
   // Fetch all products for the table
   useEffect(() => {
@@ -36,8 +37,8 @@ const Product: React.FC = () => {
         const response = await axios.get('/api/product');
         if (response.status === 200) {
           // Sort products by _id in descending order (newest first)
-          const sortedProducts = response.data.products.sort((a, b) => {
-            return b._id.localeCompare(a._id);
+          const sortedProducts = response.data.products.sort((a: Product, b: Product) => {
+            return b._id?.localeCompare(a._id!); // Using optional chaining for safety
           });
           setProducts(sortedProducts);
         } else {
@@ -54,7 +55,6 @@ const Product: React.FC = () => {
         try {
           const response = await axios.get(`/api/product/${id}`);
           if (response.status === 200) {
-            setProductDetails(response.data.product);
             setEditProduct(response.data.product); // Set the product to be editable
             setShowEditForm(true); // Show the edit form
           } else {
@@ -69,7 +69,7 @@ const Product: React.FC = () => {
 
     fetchProducts();
     setLoading(false);
-  }, [id]); // Only re-run when `id` changes
+  }, [id]);
 
   // PUT - Update product
   const handleUpdateProduct = async (updatedProduct: Product) => {
@@ -77,12 +77,11 @@ const Product: React.FC = () => {
       const response = await axios.put(`/api/product/${updatedProduct._id}`, updatedProduct);
       if (response.status === 200) {
         alert('Product updated successfully');
-        setProductDetails(response.data.product); // Update the product details in the state
         setProducts(products.map(product =>
           product._id === updatedProduct._id ? updatedProduct : product
-        )); // Update the product in the list as well
-        setEditProduct(null); // Close the edit form after update
-        setShowEditForm(false); // Hide the edit form after updating
+        ));
+        setEditProduct(null);
+        setShowEditForm(false);
       } else {
         console.error('Failed to update product:', response.status);
       }
@@ -117,7 +116,20 @@ const Product: React.FC = () => {
     }
   };
 
-  if (loading) return <Loader/>;
+  // Filter products based on the selected letter
+  const filteredProducts = filterLetter
+    ? products.filter((product) =>
+      product.productName.toLowerCase().startsWith(filterLetter.toLowerCase())
+    )
+    : products;
+  console.log('Filtered Products:', filteredProducts);
+
+  // Handle filter letter change
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterLetter(e.target.value);
+  };
+  console.log('Filter Letter:', filterLetter);
+  if (loading) return <Loader />;
 
   return (
     <div className="main-content-Product">
@@ -128,6 +140,23 @@ const Product: React.FC = () => {
             <Link href="/admin/productfrom">
               <button>Add Products</button>
             </Link>
+          </div>
+
+          {/* Filter Input */}
+          <div className="filter-container">
+            <label htmlFor="filter-letter">Filter by Letter:</label>
+            <select
+              id="filter-letter"
+              value={filterLetter}
+              onChange={handleFilterChange}
+            >
+              <option value="">All</option>
+              {Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)).map((letter) => (
+                <option key={letter} value={letter}>
+                  {letter}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Show the table only when showEditForm is false */}
@@ -250,4 +279,4 @@ const Product: React.FC = () => {
   );
 };
 
-export default Product;
+export default AllProduct;

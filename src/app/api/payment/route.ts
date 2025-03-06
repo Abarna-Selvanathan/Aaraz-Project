@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
+// Make sure to set the correct API version (use the required version in your case)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2023-10-16",
+  apiVersion: "2025-01-27.acacia", // Replace with the correct version
 });
 
 export async function POST(req: NextRequest) {

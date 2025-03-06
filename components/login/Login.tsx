@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -40,8 +42,9 @@ const Loginpage: React.FC = () => {
       } else {
         toast.error(response.data.error);
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Something went wrong.");
+    } catch (error) {
+      console.log(error)
+      toast.error("Something went wrong.");
     }
   };
 

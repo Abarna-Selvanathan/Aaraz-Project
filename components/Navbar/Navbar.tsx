@@ -49,6 +49,7 @@ const Navbar: React.FC = () => {
 
 
       } catch (error) {
+        console.error(error);
         
       }
     };
@@ -57,11 +58,10 @@ const Navbar: React.FC = () => {
   }, []);
 
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  const [collectionDropdownOpen, setCollectionDropdownOpen] = useState(false);
+  // const [collectionDropdownOpen, setCollectionDropdownOpen] = useState(false);
   const [logoutDropdownOpen, setLogoutDropdownOpen] = useState(false);
-
   const toggleUserDropdown = () => setUserDropdownOpen(!userDropdownOpen);
-  const toggleCollectionDropdown = () => setCollectionDropdownOpen(!collectionDropdownOpen);
+  // const toggleCollectionDropdown = () => setCollectionDropdownOpen(!collectionDropdownOpen);
   const toggleLogoutDropdown = () => setLogoutDropdownOpen(!logoutDropdownOpen);
 
   const handleLogout = async () => {

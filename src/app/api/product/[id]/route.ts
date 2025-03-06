@@ -3,12 +3,18 @@ import mongoose from "mongoose";
 import DBconnect from "../../../../../lib/dbConnect";
 import Product from "../../../../../models/Product";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+// GET - Fetch product by ID
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
   try {
     await DBconnect();
 
-    const { id } = params;
-    console.log('[ID]: ', id)
+    if (!id) {
+      return NextResponse.json({ message: "Product ID is required" }, { status: 400 });
+    }
+
     console.log("Received Product ID:", id); // Debugging line
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -16,7 +22,6 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ message: "Invalid product ID" }, { status: 400 });
     }
 
-    // Find product by _id OR productId
     const product = await Product.findOne({
       $or: [{ _id: id }, { productId: id }]
     });
@@ -29,20 +34,27 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     console.log("Product found:", product); // Debugging line
     return NextResponse.json({ product }, { status: 200 });
 
-  } catch (error: any) {
-    console.error("Error fetching product:", error.message);
+  } catch (error) {
+    console.error("Error fetching product:", (error as Error).message);
     return NextResponse.json(
-      { message: "Failed to fetch product", error: error.message },
+      { message: "Failed to fetch product", error: (error as Error).message },
       { status: 500 }
     );
   }
 }
 
-// In backend for updating a product
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+// PUT - Update a product by ID
+export async function PUT(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
+  if (!id) {
+    return NextResponse.json({ message: "Product ID is required" }, { status: 400 });
+  }
+
+  const body = await req.json();
+
   try {
-    const { id } = params;
-    const body = await req.json();
     const updatedProduct = await Product.findByIdAndUpdate(id, body, { new: true });
 
     if (!updatedProduct) {
@@ -50,26 +62,30 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     return NextResponse.json({ product: updatedProduct }, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ message: 'Failed to update product', error: error.message }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ message: 'Failed to update product', error: (error as Error).message }, { status: 500 });
   }
 }
 
+// DELETE - Delete a product by ID
+export async function DELETE(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  if (!id) {
+    return NextResponse.json({ message: "Product ID is required" }, { status: 400 });
+  }
+
   try {
     await DBconnect();
 
-    const { id } = params;
     console.log("Received Product ID:", id); // Debugging line
 
-    // Check if the provided ID is valid
     if (!mongoose.Types.ObjectId.isValid(id)) {
       console.log("Invalid ObjectId format");
       return NextResponse.json({ message: "Invalid product ID" }, { status: 400 });
     }
 
-    // Find and delete the product
     const deletedProduct = await Product.findByIdAndDelete(id);
 
     if (!deletedProduct) {
@@ -80,12 +96,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     console.log("Product deleted:", deletedProduct); // Debugging line
     return NextResponse.json({ message: "Product deleted successfully" }, { status: 200 });
 
-  } catch (error: any) {
-    console.error("Error deleting product:", error.message);
+  } catch (error) {
+    console.error("Error deleting product:", (error as Error).message);
     return NextResponse.json(
-      { message: "Failed to delete product", error: error.message },
+      { message: "Failed to delete product", error: (error as Error).message },
       { status: 500 }
     );
   }
 }
-

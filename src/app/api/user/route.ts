@@ -51,10 +51,10 @@ export const POST = async (req: NextRequest)=> {
       { message: "Account created successfully", user: newUser, token },
       { status: 201 } 
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
-      { message: "Failed to create account.", error: error.message },
+      { message: "Failed to create account.", error: (error as Error).message },
       { status: 500 }
     );
   }
@@ -63,7 +63,7 @@ export const POST = async (req: NextRequest)=> {
 // get all
 
 
-export const GET = async (req: NextRequest): Promise<NextResponse> => {
+export const GET = async (): Promise<NextResponse> => {
   try {
     await DBconnect();
 
@@ -72,10 +72,10 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
       { users }, // Wrap users array in an object
       { status: 200 } // Use 200 for successful GET requests
     );
-  } catch (error: any) {
-    console.error("Error fetching users:", error.message);
+  } catch (error) {
+    console.error("Error fetching users:", (error as Error).message);
     return NextResponse.json(
-      { message: "Failed to fetch users.", error: error.message },
+      { message: "Failed to fetch users.", error: (error as Error).message },
       { status: 500 }
     );
   }

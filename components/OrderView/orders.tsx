@@ -21,6 +21,7 @@ interface Product {
     productName: string;
     stock: string;
     price: number;
+    quantity: number;
 }
 
 interface Customization {

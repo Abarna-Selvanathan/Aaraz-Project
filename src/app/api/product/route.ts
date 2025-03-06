@@ -1,24 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import DBconnect from "../../../../lib/dbConnect";
-import Product from "../../../../models/Product"; 
-import mongoose from "mongoose";
+import Product from "../../../../models/Product";
 
-
-
-export const GET = async (req: NextRequest): Promise<NextResponse> => {
+export const GET = async (): Promise<NextResponse> => {
   try {
-    await DBconnect(); 
-
-    const products = await Product.find(); 
+    await DBconnect();
+    const products = await Product.find();
     console.log(products)
     return NextResponse.json(
       { products },
       { status: 200 }
     );
-  } catch (error: any) {
-    console.error("Error fetching products:", error.message);
+  } catch (error) {
+    console.error("Error fetching products:", (error as Error).message);
     return NextResponse.json(
-      { message: "Failed to fetch products.", error: error.message },
+      { message: "Failed to fetch products.", error: (error as Error).message },
       { status: 500 }
     );
   }

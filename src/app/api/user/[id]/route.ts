@@ -4,10 +4,11 @@ import UserSchema from "../../../../../models/User";
 import bcrypt from 'bcrypt';
 
 // Update user by ID
-export const PUT = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export async function PUT(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
     await DBconnect();
-    const { id } = params;
     const updates = await req.json();
 
     if (updates.password) {
@@ -21,17 +22,18 @@ export const PUT = async (req: NextRequest, { params }: { params: { id: string }
     }
 
     return NextResponse.json({ message: "User updated successfully", user: updatedUser }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error updating user:", error);
-    return NextResponse.json({ message: "Failed to update user", error: error.message }, { status: 500 });
+    return NextResponse.json({ message: "Failed to update user", error: (error as Error).message }, { status: 500 });
   }
 };
 
 // Delete user by ID
-export const DELETE = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export async function DELETE(req: NextRequest) {
   try {
     await DBconnect();
-    const { id } = params;
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
 
     const deletedUser = await UserSchema.findByIdAndDelete(id);
     if (!deletedUser) {
@@ -39,8 +41,8 @@ export const DELETE = async (req: NextRequest, { params }: { params: { id: strin
     }
 
     return NextResponse.json({ message: "User deleted successfully" }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error deleting user:", error);
-    return NextResponse.json({ message: "Failed to delete user", error: error.message }, { status: 500 });
+    return NextResponse.json({ message: "Failed to delete user", error: (error as Error).message }, { status: 500 });
   }
 };

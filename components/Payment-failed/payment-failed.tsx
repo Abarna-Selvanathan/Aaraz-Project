@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "../Waiting-Message/waiting.css";
 import "../../src/app/globals.css";
-import { XCircle, RotateCcw } from "lucide-react"; // Import failure icons
+import { RotateCcw } from "lucide-react"; // Import failure icons
 
 const PaymentFailed = () => {
     const [isVisible, setIsVisible] = useState(true);

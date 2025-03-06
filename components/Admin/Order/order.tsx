@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import React from "react";
-import Image from "next/image";
-import Link from "next/link";
 import "../../../components/Admin/Product/product.css";
 import "../../../components/Admin/Order/order.css";
 import { CheckCircle, XCircle } from "lucide-react";
@@ -51,9 +49,10 @@ const Orders: React.FC = () => {
         const response = await axios.get("/api/order");
         if (response.status === 200) {
           // Sort orders by createdAt in descending order (newest first)
-          const sortedOrders = response.data.orders.sort((a, b) => {
-            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          const sortedOrders = response.data.orders.sort((a: Order, b: Order) => {
+            return new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime();
           });
+          
           setOrders(sortedOrders);
         }
       } catch (error) {

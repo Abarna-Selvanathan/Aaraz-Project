@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,9 +6,17 @@ import { useRouter } from "next/navigation";
 import '../handmade-collection/Handmade-collection.css';
 import "../../src/app/globals.css";
 
+// Define the Product type
+interface Product {
+    _id: string;
+    image?: string;
+    productName: string;
+    price: number;
+}
+
 const ResinArtsCollection: React.FC = () => {
-    const [products, setProducts] = useState<any[]>([]);
-    const [page, setPage] = useState(1);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [page, setPage] = useState<number>(1);
     const itemsPerPage = 12;
     const router = useRouter();
 
@@ -15,10 +24,10 @@ const ResinArtsCollection: React.FC = () => {
         const fetchProducts = async () => {
             try {
                 const response = await fetch('/api/product');
-                const data = await response.json();
+                const data: { products: Product[] } = await response.json();
                 setProducts(data.products);
-            } catch (error: any) {
-                console.error('Error fetching products:', error.message);
+            } catch (error) {
+                console.log('Error fetching products:', error as Error);
             }
         };
         fetchProducts();

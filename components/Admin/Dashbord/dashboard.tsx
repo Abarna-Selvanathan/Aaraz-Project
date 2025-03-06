@@ -5,10 +5,10 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import '../../../components/Admin/Dashbord/dashboard.css';
 import Users from '../User/user';
-import Payments from '../Payment/payment';
+// import Payments from '../Payment/payment';
 import Product from '../Product/product';
 import Orders from '../Order/order';
-import DeliveryDetails from '../Delivery/delivery';
+// import DeliveryDetails from '../Delivery/delivery';
 import Loader from '../../Loader/loader';
 
 const Dashboard: React.FC = () => {
@@ -112,9 +112,9 @@ const Dashboard: React.FC = () => {
         )}
         {activeTab === "User" && <Users />}
         {activeTab === "Products" && <Product />}
-        {activeTab === "Payments" && <Payments />}
+        {/* {activeTab === "Payments" && <Payments />} */}
         {activeTab === "Orders" && <Orders />}
-        {/* {activeTab === "Delivery Details" && <DeliveryDetails />} */}
+
       </div>
     </div>
   );

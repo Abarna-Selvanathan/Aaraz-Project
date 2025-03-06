@@ -6,14 +6,13 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 import ReLogo from "../../public/Image/logo-removebg-preview.png";
-import jwt from "jsonwebtoken";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 
 const Signuppage: React.FC = () => {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [userName, setUserName] = useState("");
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -25,33 +24,33 @@ const Signuppage: React.FC = () => {
 
   const router = useRouter();
 
-  const handleSignup = async (event: React.FormEvent) => {
-    event.preventDefault();
+  // const handleSignup = async (event: React.FormEvent) => {
+  //   event.preventDefault();
 
-    const response = await fetch("/api/signup", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  //   const response = await fetch("/api/signup", {
+  //     method: "POST",
+  //     body: JSON.stringify({ email, password }),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
 
-    if (response.ok) {
-      const data = await response.json();
+  //   if (response.ok) {
+  //     const data = await response.json();
 
-      localStorage.setItem("token", data.token);
+  //     localStorage.setItem("token", data.token);
 
 
-      const decoded: any = jwt.decode(data.token);
-      if (decoded) {
-        setIsLoggedIn(true);
-        setUserName(decoded.email.split("@")[0]);
-      }
-      router.push("/");
-    } else {
-      console.error("Signup failed");
-    }
-  };
+  //     const decoded: any = jwt.decode(data.token);
+  //     if (decoded) {
+  //       setIsLoggedIn(true);
+  //       setUserName(decoded.email.split("@")[0]);
+  //     }
+  //     router.push("/");
+  //   } else {
+  //     console.error("Signup failed");
+  //   }
+  // };
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
@@ -130,71 +129,62 @@ const Signuppage: React.FC = () => {
           },
         });
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Something went wrong.", {
-        style: {
-          width: "400px",
-          height: "60px",
-          display: "flex",
-          justifyContent: "center",
-        },
-      });
+    } catch (error) {
+      console.log(error)
     }
   };
 
   return (
-    <>
-      <div className="signup-container">
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-logo">
-            <Image
-              src={ReLogo}
-              alt="Logo"
-              width={280}
-              height={280}
-            />
-          </div>
-          <h2>Signup</h2>
+    <div className="signup-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <div className="form-logo">
+          <Image
+            src={ReLogo}
+            alt="Logo"
+            width={280}
+            height={280}
+          />
+        </div>
+        <h2>Signup</h2>
 
-          <input onChange={(e) => setFirstName(e.target.value)} type="text" placeholder="First Name" required />
-          <input onChange={(e) => setLastName(e.target.value)} type="text" placeholder="Last Name" required />
-          <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" required />
-          <input onChange={(e) => setAddress(e.target.value)} type="text" placeholder="Address" required />
-          <input onChange={(e) => setPhoneNumber(e.target.value)} type="text" placeholder="Phone Number" required />
+        <input onChange={(e) => setFirstName(e.target.value)} type="text" placeholder="First Name" required />
+        <input onChange={(e) => setLastName(e.target.value)} type="text" placeholder="Last Name" required />
+        <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" required />
+        <input onChange={(e) => setAddress(e.target.value)} type="text" placeholder="Address" required />
+        <input onChange={(e) => setPhoneNumber(e.target.value)} type="text" placeholder="Phone Number" required />
 
-          <div className="password-container">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-            />
-            <span className="icon" onClick={togglePassword}>
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-            
-          </div>
-          <div className="password-container">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your confirm password"
-            />
-            <span className="icon" onClick={togglePassword}>
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-            
-          </div>
+        <div className="password-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+          />
+          <span className="icon" onClick={togglePassword}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
 
-          <button type="submit" className="login-button">
-            Sign Up
-          </button>
-        </form >
-      </div >
-    </>
+        </div>
+        <div className="password-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your confirm password"
+          />
+          <span className="icon" onClick={togglePassword}>
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+
+        </div>
+
+        <button type="submit" className="login-button">
+          Sign Up
+        </button>
+      </form >
+    </div >
   );
 }
 

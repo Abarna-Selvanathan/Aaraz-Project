@@ -5,9 +5,12 @@ function PaymentSuccessPage() {
   const searchParams = useSearchParams();
   const orderId = searchParams?.get("oid");
 
+  // Check if orderId is null and handle accordingly
+  const validOrderId: string | undefined = orderId ?? undefined;
+
   return (
     <div>
-      <PaymentSuccess orderId={orderId} />
+      <PaymentSuccess orderId={validOrderId} />
     </div>
   );
 }
